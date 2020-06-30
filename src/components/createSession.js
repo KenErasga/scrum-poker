@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import UserPool from '../userPool';
 
-const SignUp = () => {
+const CreateSession = () => {
     const [sessionName, setSessionName] = useState('')
     const [password, setPassword] = useState('');
 
@@ -31,4 +31,4 @@ const SignUp = () => {
     )
 }
 
-export default SignUp;
+export default CreateSession;

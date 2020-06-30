@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { AccountContext } from './accounts';
+import { AccountContext } from './Accounts';
 
 const Status = () => {
     const [status, setStatus] = useState(false)
@@ -8,7 +8,7 @@ const Status = () => {
 
     useEffect(() => { 
         getSession().then(session => {
-            console.log('Session:', session)
+            console.log('Sessionssss:', session)
             setStatus(true);
         })
     }, []);

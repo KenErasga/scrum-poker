@@ -1,16 +1,16 @@
 import React, { useState, useContext } from 'react';
-import { AccountContext } from './accounts';
+import { AccountContext } from './Accounts';
 
-const Login = () => {
+const JoinSession = () => {
     const [sessionName, setSessionName] = useState('')
     const [password, setPassword] = useState('');
 
     const { authenticate } = useContext(AccountContext);
 
-    const onSubmit = event => {
+    const onSubmit = async (event) => {
         event.preventDefault();
 
-        authenticate(sessionName, password)
+        await authenticate(sessionName, password)
             .then(data => {
                 console.log('Logged in!', data);
             })
@@ -36,4 +36,4 @@ const Login = () => {
     )
 }
 
-export default Login;
+export default JoinSession;
