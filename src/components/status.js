@@ -1,14 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AccountContext } from './Accounts';
-
+import {Typography, Button, Box} from '@material-ui/core';
 const Status = () => {
     const [status, setStatus] = useState(false)
 
     const { getSession, logout } = useContext(AccountContext)
 
-    useEffect(() => { 
-        getSession().then(session => {
-            console.log('Sessionssss:', session)
+    useEffect(() => {
+        getSession().then(() => {
             setStatus(true);
         })
     }, []);
@@ -16,11 +15,12 @@ const Status = () => {
     return (
         <div>
             {status ? (
-                <div>
-                    You are logged in.
-                    <button onClick={logout}>Logout</button>
-                </div>
-            ) : 'Please login below'}
+                <Typography  variant="h4" component="h4">
+                    You are in a session.
+                    <Button onClick={logout} variant="contained">Logout</Button>
+                    </Typography>
+            ) : (
+                <Typography variant="h4" component="h4">Please join session below</Typography>)}
         </div>
     )
 };

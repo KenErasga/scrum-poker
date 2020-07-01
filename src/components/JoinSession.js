@@ -1,5 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { AccountContext } from './Accounts';
+import { Box } from '@material-ui/core'
+import FormInput from '../commonComponents/FormInput';
+import ButtonSubmit from '../commonComponents/ButtonSubmit';
 
 const JoinSession = () => {
     const [sessionName, setSessionName] = useState('')
@@ -21,17 +24,14 @@ const JoinSession = () => {
 
     return (
         <div>
-            <form onSubmit={onSubmit}>
-                <input
-                    value={sessionName}
-                    onChange={event => setSessionName(event.target.value)}
-                />
-                <input
-                    value={password}
-                    onChange={event => setPassword(event.target.value)}
-                />
-                <button type='submit'>Join</button>
-            </form>
+            <Box style={{ display: "flex", justifyContent: "center", margin: 10, padding: 10 }} >
+                <form style={{ width: "70%" }} onSubmit={onSubmit}>
+                    <h4>Join a session</h4>
+                    {FormInput({ InputLabel: 'Session Name', type: '', value: sessionName, handleOnChange: setSessionName })}
+                    {FormInput({ InputLabel: 'Password', type: 'password', value: password, handleOnChange: setPassword })}
+                    {ButtonSubmit({ description: 'Join' })}
+                </form>
+            </Box>
         </div>
     )
 }
