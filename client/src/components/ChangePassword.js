@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { AccountContext } from './Accounts';
+import { AccountContext } from './Accounts/Accounts';
 
 const ChangePassword = () => {
     const [password, setPassword] = useState('')

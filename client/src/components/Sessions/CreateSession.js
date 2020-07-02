@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import UserPool from '../userPool';
+import UserPool from '../../userPool';
 import { Box } from '@material-ui/core'
-import FormInput from '../commonComponents/FormInput';
-import ButtonSubmit from '../commonComponents/ButtonSubmit';
+import FormInput from '../../commonComponents/FormInput';
+import ButtonSubmit from '../../commonComponents/ButtonSubmit';
 
 const CreateSession = () => {
     const [sessionName, setSessionName] = useState('')

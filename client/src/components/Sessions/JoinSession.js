@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { AccountContext } from './Accounts';
+import { AccountContext } from '../Accounts/Accounts';
 import { Box } from '@material-ui/core'
-import FormInput from '../commonComponents/FormInput';
-import ButtonSubmit from '../commonComponents/ButtonSubmit';
+import FormInput from '../../commonComponents/FormInput';
+import ButtonSubmit from '../../commonComponents/ButtonSubmit';
 
 const JoinSession = () => {
     const [sessionName, setSessionName] = useState('')

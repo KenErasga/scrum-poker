@@ -1,7 +1,7 @@
 import React from 'react';
 import { Account } from './components/Accounts/Accounts';
 import NavBar from './components/NavBar/NavBar';
-import { makeStyles } from './node_modules/@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 
 // import HandleSessions from './components/Sessions/HandleSessions';
 import Join from './components/Join';

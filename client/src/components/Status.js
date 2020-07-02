@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { AccountContext } from './Accounts';
+import { AccountContext } from './Accounts/Accounts';
 import {Typography, Button, Box} from '@material-ui/core';
 const Status = () => {
     const [status, setStatus] = useState(false)
