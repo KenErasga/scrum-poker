@@ -4,8 +4,8 @@ import NavBar from './components/NavBar/NavBar';
 import { makeStyles } from '@material-ui/core'
 
 // import HandleSessions from './components/Sessions/HandleSessions';
-import Join from './components/Join';
-import Chat from './components/Chat'
+import Join from './components/Join/Join';
+import Chat from './components/Chat/Chat';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
