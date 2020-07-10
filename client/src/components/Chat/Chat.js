@@ -40,11 +40,11 @@ const Chat = ({ location }) => {
     useEffect(() => {
         socket.on('message', (message) => {
             setMessages([...messages, message])
-        })
+        });
 
         socket.on('roomData', ({ users }) => {
             setUsers(users);
-        })
+        });
 
     }, [messages])
 
@@ -53,8 +53,8 @@ const Chat = ({ location }) => {
 
         if (message) {
             socket.emit('sendMessage', message, () => setMessage(''))
-        }
-    }
+        };
+    };
 
     console.log(users);
 

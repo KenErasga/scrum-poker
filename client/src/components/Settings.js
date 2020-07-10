@@ -6,8 +6,8 @@ const Settings = () => {
     const [loggedIn, setLoggedIn] = useState(false);
     const { getSession } = useContext(AccountContext);
 
-    useEffect(() => {
-        getSession().then(() => {
+    useEffect( () => {
+         getSession().then(() => {
             setLoggedIn(true)
         });
     });

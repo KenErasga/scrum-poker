@@ -13,7 +13,7 @@ const addUser = ({ id, name, room }) => {
     const user = { id, name, room };
 
     users.push(user);
-    console.log("---------USERS--------",users)
+    console.log("---------USER-ADDED--------",users);
     return { user }
 }
 
@@ -21,18 +21,20 @@ const removeUser = (id) => {
     const index = users.findIndex(user => user.id === id);
 
     if (index !== 1) {
+        console.log("---------USER-REMOVED--------",users);
         return users.splice(index, 1)[0];
     }
 }
 
 const getUser = (id) => {
     const user = users.find(user => user.id === id);
-    console.log("------------USER-GETUSER", user)
+    console.log("-----------GET-USER------------", user)
     return user;
 }
 
 const getUsersInRoom = (room) => {
-    return users.filter(user => user.room === room) 
+    console.log("--------GET-USERS-IN-ROOM-------",users);
+    return users.filter(user => user.room === room);
 }
 
 module.exports = {addUser, removeUser, getUser, getUsersInRoom}

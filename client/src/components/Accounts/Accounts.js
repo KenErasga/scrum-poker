@@ -1,10 +1,13 @@
-import React, { createContext } from 'react'
+import React, { createContext, useState } from 'react'
 import { CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js';
 import UserPool from '../../userPool';
 
 const AccountContext = createContext();
 
+
+
 const Account = props => {
+
     const getSession = async () => {
         return await new Promise((resolve, reject) => {
             const user = UserPool.getCurrentUser();
@@ -50,19 +53,24 @@ const Account = props => {
     const logout = () => {
         const user = UserPool.getCurrentUser();
         if (user) {
+            console.log("logging out...")
             user.signOut();
         };
-    };
+    };  
+
+    const [loggedIn, setLoggedIn] = useState(null);
 
     return (
         <AccountContext.Provider value={{
             authenticate,
             getSession,
-            logout
+            logout,
+            loggedIn,
+            setLoggedIn
         }}>
-            {props.children}
+                {props.children}
         </AccountContext.Provider>
-    )
+    );
 };
 
 export { Account, AccountContext }

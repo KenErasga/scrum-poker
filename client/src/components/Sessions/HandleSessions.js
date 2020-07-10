@@ -1,7 +1,4 @@
 import React from 'react'
-
-import Status from '../Status';
-import Settings from '../Settings';
 import CreateSession from '../Sessions/CreateSession';
 import JoinSession from '../Sessions/JoinSession';
 import { Paper, Grid, Container, Box, makeStyles } from '@material-ui/core';
@@ -40,7 +37,6 @@ const HandleSessions = () => {
               padding: 20
             }}
             fontFamily="Monospace">
-            <Status></Status>
             </Box>
           </Grid>
           <Grid item xs={6}>
@@ -53,7 +49,6 @@ const HandleSessions = () => {
             <JoinSession></JoinSession>
             </Paper>
           </Grid>
-          <Settings></Settings>
         </Grid>
       </Container>
     );

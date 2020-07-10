@@ -1,12 +1,16 @@
 import React from 'react';
 
-import { Button } from '@material-ui/core'
+import { Button } from '@material-ui/core';
 
-const ButtonSubmit = props => {
+const ButtonSubmit = ({ description, sessionName, name }) => {
     return (
-        <Button type='submit' fullWidth
-            variant="contained"
-            color="primary">{props.description}</Button>
+            <Button
+                type='submit' fullWidth
+                variant="contained"
+                color="primary"
+                >
+                    {description}
+            </Button>
     );
 }
 

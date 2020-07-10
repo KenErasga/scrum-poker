@@ -8,9 +8,9 @@ const NavBar = () => {
         <div>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography variant="title" color="inherit">
+                    <Typography variant="h4" component="h4">
                         Scrum Poker Online
-                </Typography>
+                    </Typography>
                 </Toolbar>
             </AppBar>
         </div>
