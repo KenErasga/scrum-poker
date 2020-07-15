@@ -2,7 +2,7 @@ const express = require('express')
 const socketio = require('socket.io')
 const http = require('http')
 
-const {addUser, removeUser, getUser, getUsersInRoom} = require('./user');
+const {addUser, changeUserEstimate, removeUser, getUser, getUsersInRoom} = require('./user');
 const PORT = process.env.PORT || 5000;
 
 const router = require('./router');
@@ -12,42 +12,49 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 io.on('connection', (socket) => {
-    socket.on('join', ({name, room}, callback)=> {
+    socket.on('join', ({name, room, number}, callback)=> {
 
-        const { error, user } = addUser({id: socket.id, name, room});
+        const { error, user } = addUser({id: socket.id, name, room, number});
         
         if (error) {
             return callback(error)
         };
 
-        socket.emit('message',  {user: 'admin', text: `${user.name}, Welcome to the room ${user.name}`})
-        socket.broadcast.to(user.room).emit('message', {user: 'admin', text: `${user.name} has joined`})
-
         socket.join(user.room);
 
-        io.to(user.room).emit('roomData', {room:user.room, users:getUsersInRoom(user.room)});
+        io.to(user.room).emit('estimate', { room: user.room, users: getUsersInRoom(user.room) });
+
         callback();
     });
 
-    socket.on('sendMessage', (message, callback) => {
-        const user = getUser(socket.id)
-        console.log("SEND MESSAGE USER", user)
+    socket.on('sendEstimate', (number, callback) => {
+        const user = getUser(socket.id);
 
-        io.to(user.room).emit('message', {user: user.name, text: message})
-        console.log(getUsersInRoom(user.room))
+        const usersInRoom = changeUserEstimate(socket.id, number);
 
-        io.to(user.room).emit('roomData', {room: user.room, users: getUsersInRoom(user.room)})
-        
+        io.to(user.room).emit('estimate', { room: user.room, users: usersInRoom });
+
+        callback();
+    });
+
+    socket.on('clickExpand', (isExpanded, callback) => {
+        const user = getUser(socket.id);
+
+        const expanded = isExpanded;
+
+        io.to(user.room).emit('expand', {room: user.room, expand: expanded});
+
         callback();
     });
 
     socket.on('disconnect', () => {
+
         const user = removeUser(socket.id);
 
         if (user) {
-            io.to(user.room).emit('message', {user: 'admin', text: `${user.room} has left.`})
+            console.log("User has left room")
         }
-        console.log('User has disconnect')
+
     });
 });
 
