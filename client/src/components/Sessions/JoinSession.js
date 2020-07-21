@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { AccountContext } from '../Accounts/Accounts';
-import { Box } from '@material-ui/core'
+import { AccountContext, useAppContext } from '../Accounts/Accounts';
+import { Box } from '@material-ui/core';
 import FormInput from '../../commonComponents/FormInput';
 import ButtonSubmit from '../../commonComponents/ButtonSubmit';
 import { useHistory } from 'react-router-dom';
@@ -10,6 +10,7 @@ const JoinSession = () => {
     const [password, setPassword] = useState('');
 
     const { getSession, authenticate, setLoggedIn } = useContext(AccountContext);
+    const { userHasAuthenticated } = useAppContext();
 
     const history = useHistory();
     const onSubmit = async (event) => {
@@ -19,6 +20,7 @@ const JoinSession = () => {
             .then(async data => {
                 console.log('Logged in!', data);
                 await getSession().then(() => setLoggedIn(true))
+                userHasAuthenticated(true);
                 history.push(`/scrum-poker?name=${name}&room=${sessionName}`);
             })
             .catch(err => {

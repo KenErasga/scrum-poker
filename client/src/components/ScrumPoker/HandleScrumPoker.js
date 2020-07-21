@@ -75,19 +75,12 @@ const HandleScrumPoker = ({ location }) => {
     };
 
     const exit = () => {
-
-        if (estimates.length < 1) {
+        console.log(estimates.length)
+        if (estimates.length < 2) {
             logout();
         }
-
-        socket.emit('disconnect', { name, room }, () => {
-            console.log("USER HAS LEFT!");
-
-        });
-
-        socket.off();
-
-        history.push('/')
+        history.push('/');
+        history.go();
     };
 
     const ScrumPoker = () => {

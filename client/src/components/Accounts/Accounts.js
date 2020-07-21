@@ -1,10 +1,12 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState, useContext } from 'react'
 import { CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js';
 import UserPool from '../../userPool';
 
 const AccountContext = createContext();
-
-
+const AppContext = createContext(null);
+function useAppContext() {
+    return useContext(AppContext);
+};
 
 const Account = props => {
 
@@ -58,7 +60,7 @@ const Account = props => {
         };
     };  
 
-    const [loggedIn, setLoggedIn] = useState(null);
+    const [loggedIn, setLoggedIn] = useState(false);
 
     return (
         <AccountContext.Provider value={{
@@ -73,4 +75,4 @@ const Account = props => {
     );
 };
 
-export { Account, AccountContext }
+export { Account, AccountContext, AppContext, useAppContext }
