@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-const ButtonSubmit = ({ description, sessionName, name }) => {
+const ButtonSubmit = ({ description }) => {
     return (
             <Button
                 type='submit' fullWidth

@@ -1,7 +1,7 @@
 import React from 'react'
 import CreateSession from '../Sessions/CreateSession';
 import JoinSession from '../Sessions/JoinSession';
-import { Paper, Grid, Container, Box, makeStyles } from '@material-ui/core';
+import { Paper, Grid, Container } from '@material-ui/core';
 
 const HandleSessions = () => (
   <Container component="main" maxWidth="sm">

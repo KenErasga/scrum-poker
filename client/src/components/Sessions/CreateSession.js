@@ -1,37 +1,25 @@
 import React, { useState, useContext } from 'react';
 import {useHistory} from 'react-router-dom';
-import UserPool from '../../userPool';
 import { Box } from '@material-ui/core'
 import FormInput from '../../commonComponents/FormInput';
 import ButtonSubmit from '../../commonComponents/ButtonSubmit';
-import { AccountContext } from '../Accounts/Accounts';
-
+import { AccountContext } from '../Accounts/CognitoProvider';
 const CreateSession = () => {
     const [name, setName] = useState('');
     const [sessionName, setSessionName] = useState('');
     const [password, setPassword] = useState('');
 
-    const { getSession, authenticate, setLoggedIn } = useContext(AccountContext);
+    const { authenticate, signUp } = useContext(AccountContext);
 
     const history = useHistory();
-    const onSubmit = event => {
+    const onSubmit = async (event) => {
         event.preventDefault();
 
-        UserPool.signUp(sessionName, password, [], null, (err, data) => {
-            if (err) {
-                console.error(err);
-            }
+        signUp(sessionName, password);
+        authenticate(sessionName, password);
 
-            authenticate(sessionName, password)
-            .then(async data => {
-                console.log('Logged in!', data);
-                await getSession().then(() => setLoggedIn(true))
-                history.push(`/scrum-poker?name=${name}&room=${sessionName}`);
-            })
-            .catch(err => {
-                console.error('Failed to login', err)
-            });
-        })
+        console.log('Logged in!');
+        history.push(`/scrum-poker?name=${name}&room=${sessionName}`);
     };
 
     return (
@@ -42,7 +30,7 @@ const CreateSession = () => {
                     {FormInput({ InputLabel: 'Name', type: '', value: name, handleOnChange: setName })}
                     {FormInput({ InputLabel: 'Session Name', type: '', value: sessionName, handleOnChange: setSessionName })}
                     {FormInput({ InputLabel: 'Password', type: 'password', value: password, handleOnChange: setPassword })}
-                    {ButtonSubmit({ description: 'create', sessionName, name })}
+                    {ButtonSubmit({ description: 'create' })}
                 </form>
             </Box>
         </div>

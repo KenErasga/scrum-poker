@@ -5,7 +5,7 @@ const FormInput = props => {
     return (
         <FormControl margin="normal" fullWidth>
             <InputLabel htmlFor="component-simple">{props.InputLabel}</InputLabel>
-            <Input id="component-simple" type={props.type} value={props.value} onChange={e => props.handleOnChange(e.target.value)} />
+            <Input type={props.type} value={props.value} onChange={e => props.handleOnChange(e.target.value)} />
         </FormControl>
     );
 };

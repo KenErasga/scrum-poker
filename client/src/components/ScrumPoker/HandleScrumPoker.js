@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AccountContext } from '../Accounts/Accounts';
+import { AccountContext, useAppContext } from '../Accounts/CognitoProvider';
 import { Typography, Button, Grid, makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
@@ -10,27 +10,28 @@ let socket;
 
 const HandleScrumPoker = ({ location }) => {
     const [room, setRoom] = useState('');
-    const [name, setName] = useState('');
+    // const [name, setName] = useState('');
     const [number, setNumber] = useState("1");
     const [isExpanded, setIsExpanded] = useState(false);
-    const [expandAll, setExpandAll] = useState(false)
-    const [estimates, setEstimates] = useState([])
-    const numberList = ["1", "2", "3", "5", "8", "13", "20"];
+    const [expandAll, setExpandAll] = useState(false);
+    const [estimates, setEstimates] = useState([]);
+    const numberList = ["1", "2", "3", "5", "8", "13", "20", "40"];
 
-    const ENDPOINT = "localhost:5000";
+    const ENDPOINT = process.env.SOCKETIO_HOST || '192.168.64.2:30001';
+    // const ENDPOINT = process.env.SOCKETIO_HOST || "localhost:3001";
 
-    const { getSession, logout, loggedIn, setLoggedIn } = useContext(AccountContext);
+    const { logout } = useContext(AccountContext);
+    const { userHasAuthenticated } = useAppContext();
 
     const history = useHistory();
     const classes = useStyles();
 
     useEffect(() => {
-        getSession().then(() => setLoggedIn(true))
         const { name, room } = queryString.parse(location.search);
 
         socket = io(ENDPOINT);
 
-        setName(name);
+        // setName(name);
         setRoom(room);
 
         socket.emit('join', { name, room, number }, () => {
@@ -40,7 +41,7 @@ const HandleScrumPoker = ({ location }) => {
         return () => {
             socket.emit('disconnect');
             socket.off();
-        }
+        };
     }, [ENDPOINT, location.search]);
 
     useEffect(() => {
@@ -50,15 +51,15 @@ const HandleScrumPoker = ({ location }) => {
     }, [number]);
 
     useEffect(() => {
-        socket.on('expand', ({expand}) => {
+        socket.on('expand', ({ expand }) => {
             setExpandAll(!expand.isExpanded);
-            console.log("is expandedsas2", !expand.isExpanded);
+            console.log("is expanded", !expand.isExpanded);
         });
     }, [isExpanded]);
 
     const handleExpandClick = async (e) => {
         e.preventDefault();
-        
+
         setIsExpanded(!isExpanded);
 
         socket.emit('clickExpand', { isExpanded }, () => {
@@ -69,16 +70,13 @@ const HandleScrumPoker = ({ location }) => {
     const handleEstimate = (e) => {
         setNumber(e);
         if (e) {
-            console.log("estimate in front end", e)
             socket.emit('sendEstimate', e, () => console.log("Estimate CHANGE!"));
         };
     };
 
-    const exit = () => {
-        console.log(estimates.length)
-        if (estimates.length < 2) {
-            logout();
-        }
+    const exit = async () => {
+        logout();
+        userHasAuthenticated(false);
         history.push('/');
         history.go();
     };
@@ -119,7 +117,7 @@ const HandleScrumPoker = ({ location }) => {
     };
 
     return (<div>
-        {loggedIn && <ScrumPoker />}
+        <ScrumPoker />
     </div>
     )
 };
