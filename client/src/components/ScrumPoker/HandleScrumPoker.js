@@ -17,7 +17,7 @@ const HandleScrumPoker = ({ location }) => {
     const [estimates, setEstimates] = useState([]);
     const numberList = ["1", "2", "3", "5", "8", "13", "20", "40"];
 
-    const ENDPOINT = process.env.SOCKETIO_HOST || '192.168.64.2:30001';
+    const ENDPOINT = process.env.REACT_APP_SOCKETIO_HOST || '192.168.64.2:30001';
     // const ENDPOINT = process.env.SOCKETIO_HOST || "localhost:3001";
 
     const { logout } = useContext(AccountContext);
