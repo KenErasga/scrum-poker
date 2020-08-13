@@ -1,6 +1,6 @@
-let users = [];
+let users: any[] = [];
 
-const addUser = ({ id, name, room }) => {
+const addUser = ({ id, name, room }: any) => {
     name = name.trim().toLowerCase();
     room = room.trim().toLowerCase();
     console.log();
@@ -17,21 +17,22 @@ const addUser = ({ id, name, room }) => {
     return { user };
 };
 
-const changeUserEstimate = ( id, number ) => {
+const changeUserEstimate = ( id: any, number: any ) => {
     console.log("USERS ID AND NUMBER", id, number);
     users = users.map(user => {
-        if(user.id === id)
+        if(user.id === id) {
            return {
              ...user,
              number,
            };
+        }
         return user;
       });
     console.log("---------USER-CHANGE_ESTIMATE--------",users);
     return users;
 };
 
-const removeUser = (id) => {
+const removeUser = (id: any) => {
     const index = users.findIndex(user => user.id === id);
 
     if (index !== 1) {
@@ -40,15 +41,15 @@ const removeUser = (id) => {
     }
 };
 
-const getUser = (id) => {
+const getUser = (id: any) => {
     const user = users.find(user => user.id === id);
     // console.log("-----------GET-USER------------", user)
     return user;
 };
 
-const getUsersInRoom = (room) => {
+const getUsersInRoom = (room: any) => {
     // console.log("--------GET-USERS-IN-ROOM-------", users);
     return users.filter(user => user.room === room);
 };
 
-module.exports = {addUser, changeUserEstimate, removeUser, getUser, getUsersInRoom};
+export {addUser, changeUserEstimate, removeUser, getUser, getUsersInRoom};
