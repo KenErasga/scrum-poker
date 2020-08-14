@@ -103,7 +103,7 @@ const HandleScrumPoker = ({ location }) => {
                 </Grid>
                 {estimates.map(item => {
                     return (
-                        <Grid item xs={2}>
+                        <Grid key={`${item.name}${item.number}`}item xs={2}>
                             <PokerCard name={item.name} number={item.number} isExpanded={expandAll}></PokerCard>
                         </Grid>
                     );

@@ -25,7 +25,7 @@ const DropDownList = ({number, numberList, setNumber}) => {
           onChange={e => setNumber(e.target.value)}
         >
             {numberList.map(number => {
-                return (<MenuItem value={number}>{number}</MenuItem>)
+                return (<MenuItem key={`MenuItem${number}`} value={number}>{number}</MenuItem>)
             })}
         </Select>
       </FormControl>
