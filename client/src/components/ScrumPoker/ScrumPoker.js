@@ -3,7 +3,7 @@ import { AccountContext, AuthContext } from '../Accounts/CognitoProvider';
 import { Typography, Button, Grid, makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import PokerCard from '../Card/Card';
+import PokerCard from '../../commonComponents/Card';
 import DropDownList from '../Dropdown/Dropdown'
 import io from 'socket.io-client';
 let socket;
@@ -20,7 +20,7 @@ const HandleScrumPoker = ({ location }) => {
     // const ENDPOINT = process.env.SOCKETIO_HOST || "localhost:3001";
 
     const { logout } = useContext(AccountContext);
-    const { userHasAuthenticated } = useContext(AuthContext);
+    const { setIsAuthenticated } = useContext(AuthContext);
 
     const history = useHistory();
     const classes = useStyles();
@@ -74,7 +74,7 @@ const HandleScrumPoker = ({ location }) => {
 
     const exit = async () => {
         logout();
-        userHasAuthenticated(false);
+        setIsAuthenticated(false);
 
         history.push('/');
         history.go();

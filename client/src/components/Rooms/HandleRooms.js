@@ -1,25 +1,25 @@
 import React from 'react'
-import CreateSession from '../Sessions/CreateSession';
-import JoinSession from '../Sessions/JoinSession';
+import CreateRoom from '../Rooms/CreateRoom';
+import JoinRoom from '../Rooms/JoinRoom';
 import { Paper, Grid, Container } from '@material-ui/core';
 
-const HandleSessions = () => (
+const HandleRooms = () => (
   <Container component="main" maxWidth="sm">
     <Grid container spacing={3}>
       <Grid item xs={8}>
       </Grid>
       <Grid item xs={6}>
         <Paper elevation={0} variant="outlined">
-          <CreateSession></CreateSession>
+          <CreateRoom></CreateRoom>
         </Paper>
       </Grid>
       <Grid item xs={6}>
         <Paper elevation={0} variant="outlined">
-          <JoinSession></JoinSession>
+          <JoinRoom></JoinRoom>
         </Paper>
       </Grid>
     </Grid>
   </Container>
 );
 
-export default HandleSessions;
+export default HandleRooms;

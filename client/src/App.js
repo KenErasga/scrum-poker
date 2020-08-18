@@ -1,32 +1,25 @@
-import React, { useState } from 'react';
-import { Auth } from "aws-amplify";
+import React from 'react';
 
-import { Account, AuthContext } from './components/Accounts/CognitoProvider';
+import { Account, Authentication } from './components/Accounts/CognitoProvider';
 
 import PrivateRoute from './commonComponents/PrivateRoute';
-import NavBar from './components/NavBar/NavBar';
 
-import HandleSessions from './components/Sessions/HandleSessions';
-import HandleScrumPoker from './components/ScrumPoker/HandleScrumPoker';
+import NavBar from './components/NavBar/NavBar';
+import HandleRooms from './components/Rooms/HandleRooms';
+import HandleScrumPoker from './components/ScrumPoker/ScrumPoker';
 
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const App = () => {
-  const [isAuthenticated, userHasAuthenticated] = useState(false);
-
-  Auth.currentSession().then(e => {
-    userHasAuthenticated(true);
-  });
-  
   return (<div>
     <Account>
-      <AuthContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+      <Authentication>
         <NavBar />
         <Router>
-         <Route path='/' exact component={HandleSessions} />
-         <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated}/>
+         <Route path='/' exact component={HandleRooms} />
+         <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} />
         </Router>
-      </AuthContext.Provider>
+      </Authentication>
     </Account>
   </div>
   )
