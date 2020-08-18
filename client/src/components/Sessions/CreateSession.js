@@ -3,23 +3,25 @@ import {useHistory} from 'react-router-dom';
 import { Box } from '@material-ui/core'
 import FormInput from '../../commonComponents/FormInput';
 import ButtonSubmit from '../../commonComponents/ButtonSubmit';
-import { AccountContext } from '../Accounts/CognitoProvider';
+import { AccountContext, AuthContext } from '../Accounts/CognitoProvider';
 const CreateSession = () => {
     const [name, setName] = useState('');
-    const [sessionName, setSessionName] = useState('');
+    const [room, setRoom] = useState('');
     const [password, setPassword] = useState('');
 
-    const { authenticate, signUp } = useContext(AccountContext);
+    const { signIn, signUp } = useContext(AccountContext);
+    const { userHasAuthenticated } = useContext(AuthContext);
 
     const history = useHistory();
+    
     const onSubmit = async (event) => {
         event.preventDefault();
 
-        signUp(sessionName, password);
-        authenticate(sessionName, password);
+        signUp(room, password);
+        signIn(room, password);
+        userHasAuthenticated(true);
 
-        console.log('Logged in!');
-        history.push(`/scrum-poker?name=${name}&room=${sessionName}`);
+        history.push(`/scrum-poker?name=${name}&room=${room}`);
     };
 
     return (
@@ -28,7 +30,7 @@ const CreateSession = () => {
                 <form style={{ width: "70%" }} onSubmit={onSubmit}>
                     <h4>Create a session</h4>
                     {FormInput({ InputLabel: 'Name', type: '', value: name, handleOnChange: setName })}
-                    {FormInput({ InputLabel: 'Session Name', type: '', value: sessionName, handleOnChange: setSessionName })}
+                    {FormInput({ InputLabel: 'Session Name', type: '', value: room, handleOnChange: setRoom })}
                     {FormInput({ InputLabel: 'Password', type: 'password', value: password, handleOnChange: setPassword })}
                     {ButtonSubmit({ description: 'create' })}
                 </form>

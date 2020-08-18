@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-// import { Account, AppContext } from './components/Accounts/Accounts';
-import { Account, AppContext } from './components/Accounts/CognitoProvider';
+import React, { useState } from 'react';
 import { Auth } from "aws-amplify";
 
+import { Account, AuthContext } from './components/Accounts/CognitoProvider';
+
+import PrivateRoute from './commonComponents/PrivateRoute';
 import NavBar from './components/NavBar/NavBar';
 
 import HandleSessions from './components/Sessions/HandleSessions';
@@ -12,35 +13,21 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const App = () => {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
-  const [isAuthenticating, setIsAuthenticating] = useState(true);
 
-  useEffect(() => {
-    onLoad();
-  }, []);
-
-  async function onLoad() {
-    try {
-      await Auth.currentSession();
-      userHasAuthenticated(true);
-    }
-    catch (e) {
-      if (e !== 'No current user') {
-        alert(e);
-      }
-    }
-
-    setIsAuthenticating(false);
-  }
+  Auth.currentSession().then(e => {
+    userHasAuthenticated(true);
+  });
   
   return (<div>
-    {!isAuthenticating && <Account>
-      <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+    <Account>
+      <AuthContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
         <NavBar />
         <Router>
-          {isAuthenticated ? <Route path='/scrum-poker' exact component={HandleScrumPoker} /> : <Route path='/' exact component={HandleSessions} />}
+         <Route path='/' exact component={HandleSessions} />
+         <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated}/>
         </Router>
-      </AppContext.Provider>
-    </Account>}
+      </AuthContext.Provider>
+    </Account>
   </div>
   )
 }

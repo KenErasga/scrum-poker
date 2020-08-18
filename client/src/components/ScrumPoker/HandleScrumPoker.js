@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AccountContext, useAppContext } from '../Accounts/CognitoProvider';
+import { AccountContext, AuthContext } from '../Accounts/CognitoProvider';
 import { Typography, Button, Grid, makeStyles } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
@@ -10,7 +10,6 @@ let socket;
 
 const HandleScrumPoker = ({ location }) => {
     const [room, setRoom] = useState('');
-    // const [name, setName] = useState('');
     const [number, setNumber] = useState("1");
     const [isExpanded, setIsExpanded] = useState(false);
     const [expandAll, setExpandAll] = useState(false);
@@ -21,7 +20,7 @@ const HandleScrumPoker = ({ location }) => {
     // const ENDPOINT = process.env.SOCKETIO_HOST || "localhost:3001";
 
     const { logout } = useContext(AccountContext);
-    const { userHasAuthenticated } = useAppContext();
+    const { userHasAuthenticated } = useContext(AuthContext);
 
     const history = useHistory();
     const classes = useStyles();
@@ -31,7 +30,6 @@ const HandleScrumPoker = ({ location }) => {
 
         socket = io(ENDPOINT);
 
-        // setName(name);
         setRoom(room);
 
         socket.emit('join', { name, room, number }, () => {
@@ -77,6 +75,7 @@ const HandleScrumPoker = ({ location }) => {
     const exit = async () => {
         logout();
         userHasAuthenticated(false);
+
         history.push('/');
         history.go();
     };
@@ -123,7 +122,6 @@ const HandleScrumPoker = ({ location }) => {
 };
 
 export default HandleScrumPoker;
-
 
 const useStyles = makeStyles((theme) => ({
     gridItem: {
