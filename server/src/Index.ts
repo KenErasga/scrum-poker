@@ -91,6 +91,7 @@ class Index {
 
                 if (user) {
                     console.log("User has left room");
+                    io.to((user as any).room).emit("estimate", { room: (user as any).room, users: getUsersInRoom((user as any).room) });
                 }
 
             });

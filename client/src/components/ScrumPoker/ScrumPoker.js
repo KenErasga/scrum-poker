@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AccountContext, AuthContext } from '../Accounts/CognitoProvider';
 import { Typography, Button, Grid, makeStyles } from '@material-ui/core';
+import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import PokerCard from '../../commonComponents/Card';
@@ -14,7 +15,7 @@ const HandleScrumPoker = ({ location }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [expandAll, setExpandAll] = useState(false);
     const [estimates, setEstimates] = useState([]);
-    const numberList = ["1", "2", "3", "5", "8", "13", "20", "40"];
+    const numberList = config.numberList;
 
     const ENDPOINT = process.env.REACT_APP_SOCKETIO_HOST || '192.168.64.2:30001';
     // const ENDPOINT = process.env.SOCKETIO_HOST || "localhost:3001";
@@ -28,7 +29,7 @@ const HandleScrumPoker = ({ location }) => {
     useEffect(() => {
         const { name, room } = queryString.parse(location.search);
 
-        socket = io(ENDPOINT);
+        socket = io(ENDPOINT, { transports: ['websocket', 'polling'] });
 
         setRoom(room);
 
@@ -46,7 +47,7 @@ const HandleScrumPoker = ({ location }) => {
         socket.on('estimate', ({ users }) => {
             setEstimates(users);
         });
-    }, [number]);
+    }, [estimates]);
 
     useEffect(() => {
         socket.on('expand', ({ expand }) => {
@@ -77,7 +78,7 @@ const HandleScrumPoker = ({ location }) => {
         setIsAuthenticated(false);
 
         history.push('/');
-        history.go();
+        history.go()
     };
 
     const ScrumPoker = () => {
@@ -102,7 +103,7 @@ const HandleScrumPoker = ({ location }) => {
                 </Grid>
                 {estimates.map(item => {
                     return (
-                        <Grid key={`${item.name}${item.number}`}item xs={2}>
+                        <Grid key={`${item.name}${item.number}`} item xs={2}>
                             <PokerCard name={item.name} number={item.number} isExpanded={expandAll}></PokerCard>
                         </Grid>
                     );

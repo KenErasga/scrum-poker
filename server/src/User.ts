@@ -28,16 +28,16 @@ const changeUserEstimate = ( id: any, number: any ) => {
         }
         return user;
       });
-    console.log("---------USER-CHANGE_ESTIMATE--------",users);
+    // console.log("---------USER-CHANGE_ESTIMATE--------",users);
     return users;
 };
 
 const removeUser = (id: any) => {
     const index = users.findIndex(user => user.id === id);
-
-    if (index !== 1) {
-        // console.log("---------USER-REMOVED--------",users);
-        return users.splice(index, 1)[0];
+    // console.log('removeUser function', users.splice(index, 1)[0])
+    if (index !== -1) {
+        const user = users.splice(index, 1)[0];
+        return user;
     }
 };
 

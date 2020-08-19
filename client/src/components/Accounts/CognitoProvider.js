@@ -1,5 +1,5 @@
 import {Auth} from 'aws-amplify'
-import React, { createContext, useState } from 'react'
+import React, { createContext } from 'react'
 
 const AccountContext = createContext();
 const Account = props => {
@@ -43,14 +43,4 @@ const Account = props => {
 
 const AuthContext = createContext();
 
-const Authentication = props => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-            {props.children}
-        </AuthContext.Provider>
-    )
-}
-
-export { Account, AccountContext, Authentication, AuthContext }
+export { Account, AccountContext, AuthContext }

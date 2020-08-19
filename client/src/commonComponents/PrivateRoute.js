@@ -1,11 +1,8 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { AuthContext } from '../components/Accounts/CognitoProvider';
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { isAuthenticated } = useContext(AuthContext);
-  return (
-    <Route
+const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
+  return (<Route
       {...rest}
       render={props =>
         isAuthenticated ? (

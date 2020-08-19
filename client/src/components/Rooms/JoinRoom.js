@@ -18,7 +18,7 @@ const JoinRoom = () => {
     const onSubmit = (event) => {
         event.preventDefault();
 
-        signIn(room, password)
+        signIn(room, password);
         setIsAuthenticated(true);
 
         history.push(`/scrum-poker?name=${name}&room=${room}`);
