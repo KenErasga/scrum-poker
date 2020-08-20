@@ -35,6 +35,7 @@ const HandleScrumPoker = ({ location }) => {
 
         socket.emit('join', { users_name: name, room, estimate: number }, (data) => {
             console.log("USER JOINED!");
+            console.log(data, "this is where u error handle ken")
         });
 
         return () => {
