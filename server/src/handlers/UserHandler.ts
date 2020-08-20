@@ -1,5 +1,6 @@
 import IUser from "../interfaces/IUser";
 import socketio, { Socket } from "socket.io";
+import User from "../dto/User.dto";
 
 /**
  * A static in memory user store & handler
@@ -42,10 +43,11 @@ export default class UserHandler {
     }
 
     /**
-     * Finds the next available index
+     * Finds the next available index for a given nulled array
+     *
      * @returns The next available the index, if the index is -1, the store is full
      */
-    private getNextAvailableIndex<T>(storeLength: number, store: T[]): number {
+    private static getNextAvailableIndex<T>(storeLength: number, store: T[]): number {
         for (let i = 0; i < storeLength; i++) {
             if (store[i] === null) {
                 return i;
@@ -55,22 +57,20 @@ export default class UserHandler {
     }
 
     /**
-     * Add a user to the _USER_STORE if a given index is available
+     * Adds a user to the _USER_STORE if a given index is available
      *
-     * //users_name = users_name.trim().toLowerCase();
-        room = room.trim().toLowerCase();
-     * @param param0
+     * @param {User} user : The user we wish to add to the local store
+     * @returns {User | null} Will return the user back if successful, otherwise null
      */
-    public static addUserToLocalStore({ id, users_name, room, estimate }: any): IUser {
-        users_name = users_name.trim().toLowerCase();
-        room = room.trim().toLowerCase();
+    public static addUserToLocalStore(user: User): User | null {
+        const potentialUser = UserHandler._USER_STORE.find(u => u?.id === user.id);
 
-        const existingUser = UserHandler._USER_STORE.find(u => u?.room === room && u?.users_name === users_name);
+        if (potentialUser) {
+            return null;
+        }
 
-        const user: IUser = { id, users_name, room, estimate };
-        console.log(user, "<-- userrr");
-        UserHandler._USER_STORE.push(user);
-        // console.log("---------USER-ADDED--------",users);
+        const nextIndex = UserHandler.getNextAvailableIndex(UserHandler._USER_CAP, UserHandler._USER_STORE);
+        UserHandler._USER_STORE[nextIndex] = user;
         return user;
     }
 
@@ -98,10 +98,15 @@ export default class UserHandler {
         }
     }
 
-    public static getUser (id: any) {
-        const user = UserHandler._USER_STORE.find(user => user?.id === id);
-        // console.log("-----------GET-USER------------", user)
-        return user;
+    /**
+     * Grabs a user from the local store via their socket id.
+     *
+     * @param {string} id : The users Socket.IO socket Id
+     * @returns {User | null} If we cannot find the user, returns null, otherwise returns the user
+     */
+    public static getUserBySocketId(id: string): User | null {
+        const user = UserHandler._USER_STORE.find(u => u?.id === id);
+        return user ? user : null;
     }
 
     public static getUsersInRoom(room: any) {

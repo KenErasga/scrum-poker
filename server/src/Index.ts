@@ -5,6 +5,7 @@ import routes from "./routes";
 import { addUser, changeUserEstimate, removeUser, getUser, getUsersInRoom } from "./User";
 import IUser from "./interfaces/IUser";
 import UserHandler from "./handlers/UserHandler";
+import User from "./dto/User.dto";
 
 /**
  * Server entry point
@@ -54,22 +55,28 @@ class Index {
             console.log("connection made.");
 
             /**
-             * @param {string}
              * @param {Function<any[], Function>} acknowledgeFn : is an event to emit back to the frontend to run the 'ack' function
              */
             socket.on("join", ({ users_name, room, estimate }: IUser, acknowledgeFn) => {
-                UserHandler.addUserToLocalStore({ id: socket.id, users_name, room, estimate });
+                UserHandler.addUserToLocalStore(new User(
+                    users_name.trim().toLowerCase(),
+                    room.trim().toLowerCase(),
+                    estimate,
+                    socket.id)
+                );
                 UserHandler.addUserToRoom(socket, room);
                 UserHandler.broadcastNewEstimates(io, room)
                     ?
-                    acknowledgeFn("estimates-updated")
+                    acknowledgeFn("estimates-update-successful")
                     :
-                    acknowledgeFn("estimates-failed-to-update");
+                    acknowledgeFn("estimates-update-failed");
             });
 
-
+            /**
+             * Estimes bit
+             */
             socket.on("sendEstimate", (number, callback) => {
-                const user = UserHandler.getUser(socket.id) as IUser;
+                const user = UserHandler.getUserBySocketId(socket.id) as IUser;
 
                 const usersInRoom = UserHandler.changeUserEstimate(socket.id, number);
 
@@ -79,7 +86,7 @@ class Index {
             });
 
             socket.on("clickExpand", (isExpanded, callback) => {
-                const user = UserHandler.getUser(socket.id) as IUser;
+                const user = UserHandler.getUserBySocketId(socket.id) as IUser;
 
                 const expanded = isExpanded;
 
