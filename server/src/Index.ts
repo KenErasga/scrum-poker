@@ -3,6 +3,7 @@ import socketio, { Socket } from "socket.io";
 import http, { Server } from "http";
 import routes from "./routes";
 import { addUser, changeUserEstimate, removeUser, getUser, getUsersInRoom } from "./User";
+import IUser from "./socketio-events/scrum-poker/interfaces/IUser";
 
 /**
  * Server entry point
@@ -50,13 +51,14 @@ class Index {
     private registerSocketIOEvents(io: socketio.Server): void {
         io.on("connection", (socket: Socket) => {
             console.log("connection made.");
-            socket.on("join", ({ name, room, number }, callback) => {
-                console.log("Session joined");
-                const { error, user } = addUser({ id: socket.id, name, room, number });
 
-                if (error) {
-                    return callback(error);
-                }
+            /**
+             * @param {string}
+             * @param {Function<any[], Function>} : Callback is an event to emit back to the frontend to run the 'ack' function
+             */
+            socket.on("join", ({ users_name, room, estimate }: IUser, callback) => {
+                console.log("Session joined");
+                const { error, user } = addUser({ id: socket.id, users_name, room, estimate });
 
                 socket.join((user as any).room);
 
@@ -64,6 +66,7 @@ class Index {
 
                 callback();
             });
+
 
             socket.on("sendEstimate", (number, callback) => {
                 const user = getUser(socket.id);

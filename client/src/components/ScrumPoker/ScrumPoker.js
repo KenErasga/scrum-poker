@@ -33,7 +33,7 @@ const HandleScrumPoker = ({ location }) => {
 
         setRoom(room);
 
-        socket.emit('join', { name, room, number }, () => {
+        socket.emit('join', { users_name: name, room, estimate: number }, (data) => {
             console.log("USER JOINED!");
         });
 
