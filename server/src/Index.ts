@@ -75,14 +75,13 @@ class Index {
             /**
              * Estimes bit
              */
-            socket.on("sendEstimate", (number, callback) => {
-                const user = UserHandler.getUserBySocketId(socket.id) as IUser;
-
-                const usersInRoom = UserHandler.changeUserEstimate(socket.id, number);
-
-                io.to(user.room as string).emit("estimate", { room: user.room, users: usersInRoom });
-
-                callback();
+            socket.on("sendEstimate", (number, acknowledgeFn) => {
+                try {
+                    const user = UserHandler.getUserBySocketId(socket.id);
+                    const usersInRoom = UserHandler.changeUserEstimate(socket.id, number);
+                    io.to(user?.room as string).emit("estimate", { room: user?.room, users: usersInRoom });
+                } catch (e) {}
+                acknowledgeFn();
             });
 
             socket.on("clickExpand", (isExpanded, callback) => {
