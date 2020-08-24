@@ -26,7 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "startbuild": "npm run build && serve ./build"
+    "startbuild": "yarn run build && serve ./build"
   },
   "eslintConfig": {
     "extends": "react-app"

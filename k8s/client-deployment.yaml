@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: client-container
-          image: klae01/client-scrum-poker:1.0.2
+          image: klae01/client-scrum-poker:1.0.4
           env:
             - name: REACT_APP_COGNITO_REGION
               value: eu-west-2
@@ -31,6 +31,6 @@ spec:
                   name: cognitoappclientid
                   key: REACT_APP_COGNITO_APP_CLIENT_ID
             - name: REACT_APP_SOCKETIO_HOST
-              value: backend-service
+              value: 192.168.99.101:30001
           ports:
             - containerPort: 5000
