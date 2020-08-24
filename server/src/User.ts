@@ -1,16 +1,16 @@
 let users: any[] = [];
 
-const addUser = ({ id, users_name, room }: any) => {
-    users_name = users_name.trim().toLowerCase();
+const addUser = ({ id, name, room }: any) => {
+    name = name.trim().toLowerCase();
     room = room.trim().toLowerCase();
     console.log();
-    const existingUser = users.find(user => user.room === room && user.users_name === users_name);
+    const existingUser = users.find(user => user.room === room && user.name === name);
 
     if (existingUser) {
         return { error: "Name is taken" };
     }
 
-    const user = { id, users_name, room };
+    const user = { id, name, room };
 
     users.push(user);
     // console.log("---------USER-ADDED--------",users);

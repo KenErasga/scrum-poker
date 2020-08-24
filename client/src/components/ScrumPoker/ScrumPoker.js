@@ -17,7 +17,7 @@ const HandleScrumPoker = ({ location }) => {
     const [estimates, setEstimates] = useState([]);
     const numberList = config.numberList;
 
-    const ENDPOINT = process.env.REACT_APP_SOCKETIO_HOST || '192.168.64.2:30001';
+    const ENDPOINT = process.env.REACT_APP_SOCKETIO_HOST || '192.168.99.101:30001';
     // const ENDPOINT = process.env.SOCKETIO_HOST || "localhost:3001";
 
     const { logout } = useContext(AccountContext);
@@ -33,7 +33,7 @@ const HandleScrumPoker = ({ location }) => {
 
         setRoom(room);
 
-        socket.emit('join', { users_name: name, room, estimate: number }, (data) => {
+        socket.emit('join', { name, room, number }, () => {
             console.log("USER JOINED!");
         });
 

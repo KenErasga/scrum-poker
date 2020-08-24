@@ -56,9 +56,9 @@ class Index {
              * @param {string}
              * @param {Function<any[], Function>} : Callback is an event to emit back to the frontend to run the 'ack' function
              */
-            socket.on("join", ({ users_name, room, estimate }: IUser, callback) => {
+            socket.on("join", ({ name, room, number }: IUser, callback) => {
                 console.log("Session joined");
-                const { error, user } = addUser({ id: socket.id, users_name, room, estimate });
+                const { error, user } = addUser({ id: socket.id, name, room, number });
 
                 socket.join((user as any).room);
 

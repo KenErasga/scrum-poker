@@ -1,6 +1,6 @@
 export default interface IUser {
     id?: string;
-    users_name: string;
+    name: string;
     room: string;
-    estimate: string;
+    number: string;
 }
