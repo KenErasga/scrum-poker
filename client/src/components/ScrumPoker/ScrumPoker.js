@@ -62,8 +62,9 @@ const HandleScrumPoker = ({ location }) => {
 
         setIsExpanded(!isExpanded);
 
-        socket.emit('clickExpand', { isExpanded }, () => {
+        socket.emit('clickExpand', { isExpanded }, (data) => {
             console.log("Show Estimate is clicked");
+            console.log(data, "this is where u handle the expaded errors ken");
         });
     };
 

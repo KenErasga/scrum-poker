@@ -43,6 +43,22 @@ export default class UserHandler {
     }
 
     /**
+     * Updates the expands or contracts the estimates view for all connected clients in
+     * a given room
+     *
+     * @param {socketio.Server} io : The socketio server instance
+     * @param {string} room : The room to broadcast to
+     * @param {boolean} expanded : Whether to contract or expand the estimates
+     * @returns {boolean} Whether or not the expansion event emitted successfully
+     */
+    public static broadcastExpandChange(io: socketio.Server, room: string, expanded: boolean): boolean {
+        return io.to(room as string).emit("expand", {
+            room,
+            expand: expanded
+        });
+    }
+
+    /**
      * Finds the next available index for a given nulled array
      *
      * @returns The next available the index, if the index is -1, the store is full
@@ -74,6 +90,11 @@ export default class UserHandler {
         return user;
     }
 
+    /**
+     *
+     * @param id
+     * @param number
+     */
     public static changeUserEstimate( id: any, number: any ) {
         console.log("USERS ID AND NUMBER", id, number);
         UserHandler._USER_STORE = UserHandler._USER_STORE.map(user => {
@@ -89,6 +110,10 @@ export default class UserHandler {
         return UserHandler._USER_STORE.filter(u => u !== null);
     }
 
+    /**
+     *
+     * @param id
+     */
     public static removeUser(id: any) {
         const index = UserHandler._USER_STORE.findIndex(user => user?.id === id);
         // console.log('removeUser function', users.splice(index, 1)[0])
@@ -109,7 +134,12 @@ export default class UserHandler {
         return user ? user : null;
     }
 
-    public static getUsersInRoom(room: any) {
+    /**
+     * Gets all user objects in the local store from a given room.
+     *
+     * @param {string} room : The room we wish to filter users from
+     */
+    public static getUsersInRoom(room: string) {
         // console.log("--------GET-USERS-IN-ROOM-------", users);
         return UserHandler._USER_STORE.filter(user => user?.room === room);
     }
