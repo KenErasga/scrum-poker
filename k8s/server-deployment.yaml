@@ -16,6 +16,6 @@ spec:
     spec:
         containers:
           - name: server-container
-            image: klae01/server-scrum-poker:1.0.0
+            image: klae01/server-scrum-poker:1.0.1
             ports:
               - containerPort: 3001
