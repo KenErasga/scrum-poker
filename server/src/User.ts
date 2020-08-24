@@ -1,29 +1,29 @@
 let users: any[] = [];
 
-const addUser = ({ id, name, room }: any) => {
-    name = name.trim().toLowerCase();
+const addUser = ({ id, users_name, room }: any) => {
+    users_name = users_name.trim().toLowerCase();
     room = room.trim().toLowerCase();
     console.log();
-    const existingUser = users.find(user => user.room === room && user.name === name);
+    const existingUser = users.find(user => user.room === room && user.users_name === users_name);
 
     if (existingUser) {
         return { error: "Name is taken" };
     }
 
-    const user = { id, name, room };
+    const user = { id, users_name, room };
 
     users.push(user);
     // console.log("---------USER-ADDED--------",users);
     return { user };
 };
 
-const changeUserEstimate = ( id: any, number: any ) => {
-    console.log("USERS ID AND NUMBER", id, number);
+const changeUserEstimate = ( id: any, estimate: any ) => {
+    console.log("USERS ID AND estimate", id, estimate);
     users = users.map(user => {
         if(user.id === id) {
            return {
              ...user,
-             number,
+             estimate,
            };
         }
         return user;

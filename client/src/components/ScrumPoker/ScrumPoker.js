@@ -11,14 +11,13 @@ let socket;
 
 const HandleScrumPoker = ({ location }) => {
     const [room, setRoom] = useState('');
-    const [number, setNumber] = useState("1");
+    const [estimate, setNumber] = useState("1");
     const [isExpanded, setIsExpanded] = useState(false);
     const [expandAll, setExpandAll] = useState(false);
     const [estimates, setEstimates] = useState([]);
     const numberList = config.numberList;
 
     const ENDPOINT = process.env.REACT_APP_SOCKETIO_HOST || '192.168.99.101:30001';
-    // const ENDPOINT = process.env.SOCKETIO_HOST || "localhost:3001";
 
     const { logout } = useContext(AccountContext);
     const { setIsAuthenticated } = useContext(AuthContext);
@@ -33,7 +32,7 @@ const HandleScrumPoker = ({ location }) => {
 
         setRoom(room);
 
-        socket.emit('join', { name, room, number }, () => {
+        socket.emit('join', { users_name: name, room, estimate }, () => {
             console.log("USER JOINED!");
         });
 
@@ -103,13 +102,13 @@ const HandleScrumPoker = ({ location }) => {
                 </Grid>
                 {estimates.map(item => {
                     return (
-                        <Grid key={`${item.name}${item.number}`} item xs={2}>
-                            <PokerCard name={item.name} number={item.number} isExpanded={expandAll}></PokerCard>
+                        <Grid key={`${item.users_name}${item.estimate}`} item xs={2}>
+                            <PokerCard name={item.users_name} estimate={item.estimate} isExpanded={expandAll}></PokerCard>
                         </Grid>
                     );
                 })}
                 <Grid item xs={2}>
-                    <DropDownList number={number} numberList={numberList} setNumber={handleEstimate}></DropDownList>
+                    <DropDownList estimate={estimate} numberList={numberList} setNumber={handleEstimate}></DropDownList>
                 </Grid>
             </Grid>
         </div>
