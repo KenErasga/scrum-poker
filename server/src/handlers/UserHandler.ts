@@ -113,10 +113,12 @@ export default class UserHandler {
     }
 
     /**
+     * Resets a user back to null in the local store
      *
-     * @param id
+     * @param {string} id : The users socket id
+     * @returns {boolean} Whether or not the user was set to null at their index
      */
-    public static removeUserFromLocalStore(id: any) {
+    public static removeUserFromLocalStore(id: string): boolean {
         const index = UserHandler._USER_STORE.findIndex(user => user?.id === id);
         if (index !== -1) {
             UserHandler._USER_STORE[index] = null;
