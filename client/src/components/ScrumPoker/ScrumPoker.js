@@ -1,13 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AccountContext, AuthContext } from '../Accounts/CognitoProvider';
+import { AccountContext, AuthContext } from '../../providers/Cognito/Cognito';
 import { Typography, Button, Grid, makeStyles } from '@material-ui/core';
 import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import PokerCard from '../../commonComponents/Card';
+import PokerCard from '../../commonComponents/PokerCard';
 import DropDownList from '../Dropdown/Dropdown';
-
-import { emitJoin, emitDisconnect, emitExpand, emitSendEstimate, onEstimate, onExpand } from '../SocketIO/SocketIO';
+import {
+    emitJoin,
+    emitDisconnect,
+    emitExpand,
+    emitSendEstimate,
+    onEstimate,
+    onExpand
+} from '../../providers/SocketIO/SocketIO';
 
 const HandleScrumPoker = ({ location }) => {
     const [room, setRoom] = useState('');
@@ -15,9 +21,6 @@ const HandleScrumPoker = ({ location }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [expandAll, setExpandAll] = useState(false);
     const [estimates, setEstimates] = useState([]);
-    const numberList = config.numberList;
-
-    const ENDPOINT = process.env.REACT_APP_SOCKETIO_HOST || '192.168.99.101:30001';
 
     const { logout } = useContext(AccountContext);
     const { setIsAuthenticated } = useContext(AuthContext);
@@ -33,7 +36,7 @@ const HandleScrumPoker = ({ location }) => {
         return () => {
             emitDisconnect();
         };
-    }, [ENDPOINT, location.search]);
+    }, [config.SOCKET_IO_HOST, location.search]);
 
     useEffect(() => {
         onEstimate(setEstimates);
@@ -91,7 +94,7 @@ const HandleScrumPoker = ({ location }) => {
                     );
                 })}
                 <Grid item xs={2}>
-                    <DropDownList estimate={estimate} numberList={numberList} setNumber={handleEstimate}></DropDownList>
+                    <DropDownList estimate={estimate} numberList={config.numberList} setNumber={handleEstimate}></DropDownList>
                 </Grid>
             </Grid>
         </div>

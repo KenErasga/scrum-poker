@@ -1,9 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core';
-import FormInput from '../../commonComponents/FormInput';
-import ButtonSubmit from '../../commonComponents/ButtonSubmit';
-import { AccountContext, AuthContext } from '../Accounts/CognitoProvider';
+import { AccountContext, AuthContext } from '../../providers/Cognito/Cognito';
+import { FormInput, ButtonSubmit } from '../../commonComponents/index';
 
 const JoinRoom = () => {
     const [name, setName] = useState('');
