@@ -46,6 +46,7 @@ const HandleScrumPoker = ({ location }) => {
 
     useEffect(() => {
         socket.on('estimate', ({ users }) => {
+            // console.log(users) <-- BUG HERE, EVENTS AREN'T REMOVED ON CLEANUP!
             setEstimates(users);
         });
     }, [estimates]);
@@ -71,7 +72,8 @@ const HandleScrumPoker = ({ location }) => {
     const handleEstimate = (e) => {
         setNumber(e);
         if (e) {
-            socket.emit('sendEstimate', e, () => console.log("Estimate CHANGE!"));
+            console.log("Changing estimate...");
+            socket.emit('sendEstimate', e, (data) => console.log(data));
         };
     };
 

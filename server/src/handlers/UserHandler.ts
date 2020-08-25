@@ -16,7 +16,7 @@ export default class UserHandler {
     /**
      * @property {IUser[]} _USER_STORE : A capped store of {_USER_CAP} users
      */
-    private static _USER_STORE: IUser[] = new Array(UserHandler._USER_CAP).fill(null);
+    private static _USER_STORE: (IUser | null)[] = new Array(UserHandler._USER_CAP).fill(null);
 
     /**
      * Adds a user to a given room
@@ -97,6 +97,7 @@ export default class UserHandler {
      */
     public static changeUserEstimate( id: any, number: any ) {
         console.log("USERS ID AND NUMBER", id, number);
+        console.log("Users index before map: ", UserHandler._USER_STORE.findIndex(u => u?.id === id));
         UserHandler._USER_STORE = UserHandler._USER_STORE.map(user => {
             if(user?.id === id) {
                return {
@@ -105,8 +106,9 @@ export default class UserHandler {
                };
             }
             return user;
-          });
-        // console.log("---------USER-CHANGE_ESTIMATE--------",users);
+          }) as (IUser | null)[];
+        console.log("Users index after map: ", UserHandler._USER_STORE.findIndex(u => u?.id === id));
+        console.log("Index of user 77: ", UserHandler._USER_STORE[77]);
         return UserHandler._USER_STORE.filter(u => u !== null);
     }
 
@@ -114,12 +116,13 @@ export default class UserHandler {
      *
      * @param id
      */
-    public static removeUser(id: any) {
+    public static removeUserFromLocalStore(id: any) {
         const index = UserHandler._USER_STORE.findIndex(user => user?.id === id);
-        // console.log('removeUser function', users.splice(index, 1)[0])
         if (index !== -1) {
-            const user = UserHandler._USER_STORE.splice(index, 1)[0];
-            return user;
+            UserHandler._USER_STORE[index] = null;
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -140,7 +143,6 @@ export default class UserHandler {
      * @param {string} room : The room we wish to filter users from
      */
     public static getUsersInRoom(room: string) {
-        // console.log("--------GET-USERS-IN-ROOM-------", users);
         return UserHandler._USER_STORE.filter(user => user?.room === room);
     }
 }

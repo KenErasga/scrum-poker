@@ -63,14 +63,16 @@ class Index {
                 UserHandler.addUserToRoom(socket, room);
                 UserHandler.broadcastNewEstimates(io, room)
                     ?
-                    acknowledgeFn("estimates-update-successful")
+                    acknowledgeFn("user-join-successful")
                     :
-                    acknowledgeFn("estimates-update-failed");
+                    acknowledgeFn("user-join-failed");
             });
 
             socket.on("sendEstimate", (estimate, acknowledgeFn) => {
                 const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;
+
                 UserHandler.changeUserEstimate(socket.id, estimate);
+
                 if (usersRoom) {
                     UserHandler.broadcastNewEstimates(io, usersRoom)
                         ?
@@ -95,11 +97,14 @@ class Index {
                 }
             });
 
-            socket.on("disconnect", (acknowledgeFn) => {
-                const user = UserHandler.removeUser(socket.id);
-                if (user) {
+            socket.on("disconnect", () => {
+                const room = UserHandler.getUserBySocketId(socket.id)?.room as string;
+                if (UserHandler.removeUserFromLocalStore(socket.id)) {
                     console.log("User has left room");
-                    io.to((user as any).room).emit("estimate", { room: (user as any).room, users: UserHandler.getUsersInRoom((user as any).room) });
+                    io.clients((err: any, client: any) => {
+                        console.log(client);
+                    });
+                    io.to(room).emit("estimate", { room, users: UserHandler.getUsersInRoom(room) });
                 }
 
             });
