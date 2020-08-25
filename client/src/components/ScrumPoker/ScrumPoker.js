@@ -6,21 +6,13 @@ import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import PokerCard from '../../commonComponents/PokerCard';
 import DropDownList from '../Dropdown/Dropdown';
-import {
-    emitJoin,
-    emitDisconnect,
-    emitExpand,
-    emitSendEstimate,
-    onEstimate,
-    onExpand
-} from '../../providers/SocketIO/SocketIO';
+import { emitJoin, emitDisconnect } from '../../providers/SocketIO/SocketIO';
+import useEstimate from './useEstimate';
+import useExpand from './useExpand';
 
 const HandleScrumPoker = ({ location }) => {
     const [room, setRoom] = useState('');
-    const [estimate, setNumber] = useState("1");
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [expandAll, setExpandAll] = useState(false);
-    const [estimates, setEstimates] = useState([]);
+
 
     const { logout } = useContext(AccountContext);
     const { setIsAuthenticated } = useContext(AuthContext);
@@ -38,25 +30,8 @@ const HandleScrumPoker = ({ location }) => {
         };
     }, [config.SOCKET_IO_HOST, location.search]);
 
-    useEffect(() => {
-        onEstimate(setEstimates);
-    }, [estimates]);
-
-    useEffect(() => {
-        onExpand(setExpandAll, isExpanded);
-    }, [isExpanded]);
-
-    const handleExpandClick = async (e) => {
-        e.preventDefault();
-
-        setIsExpanded(!isExpanded);
-
-        emitExpand(isExpanded);
-    };
-
-    const handleEstimate = (e) => {
-        emitSendEstimate(setNumber, e);
-    };
+    const { estimate, estimates, handleEstimate } = useEstimate();
+    const { expandAll, handleExpandClick } = useExpand();
 
     const exit = async () => {
         logout();
