@@ -5,9 +5,9 @@ import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import PokerCard from '../../commonComponents/Card';
-import DropDownList from '../Dropdown/Dropdown'
-import io from 'socket.io-client';
-let socket;
+import DropDownList from '../Dropdown/Dropdown';
+
+import { emitJoin, emitDisconnect, emitExpand, emitSendEstimate, onEstimate, onExpand } from '../SocketIO/SocketIO';
 
 const HandleScrumPoker = ({ location }) => {
     const [room, setRoom] = useState('');
@@ -28,31 +28,19 @@ const HandleScrumPoker = ({ location }) => {
     useEffect(() => {
         const { name, room } = queryString.parse(location.search);
 
-        socket = io(ENDPOINT, { transports: ['websocket', 'polling'] });
-
-        setRoom(room);
-
-        socket.emit('join', { users_name: name, room, estimate }, () => {
-            console.log("USER JOINED!");
-        });
+        emitJoin(setRoom, name, room, estimate);
 
         return () => {
-            socket.emit('disconnect');
-            socket.off();
+            emitDisconnect();
         };
     }, [ENDPOINT, location.search]);
 
     useEffect(() => {
-        socket.on('estimate', ({ users }) => {
-            setEstimates(users);
-        });
+        onEstimate(setEstimates);
     }, [estimates]);
 
     useEffect(() => {
-        socket.on('expand', ({ expand }) => {
-            setExpandAll(!expand.isExpanded);
-            console.log("is expanded", !expand.isExpanded);
-        });
+        onExpand(setExpandAll, isExpanded);
     }, [isExpanded]);
 
     const handleExpandClick = async (e) => {
@@ -60,16 +48,11 @@ const HandleScrumPoker = ({ location }) => {
 
         setIsExpanded(!isExpanded);
 
-        socket.emit('clickExpand', { isExpanded }, () => {
-            console.log("Show Estimate is clicked");
-        });
+        emitExpand(isExpanded);
     };
 
     const handleEstimate = (e) => {
-        setNumber(e);
-        if (e) {
-            socket.emit('sendEstimate', e, () => console.log("Estimate CHANGE!"));
-        };
+        emitSendEstimate(setNumber, e);
     };
 
     const exit = async () => {
