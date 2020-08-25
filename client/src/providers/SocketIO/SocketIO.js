@@ -8,8 +8,9 @@ const emitJoin = (setRoom, name, room, estimate) => {
 
     setRoom(room);
 
-    socket.emit('join', { users_name: name, room, estimate }, () => {
+    socket.emit('join', { users_name: name, room, estimate }, (data) => {
         console.log("USER JOINED!");
+        console.log(data);
     });
 };
 
@@ -19,15 +20,18 @@ const emitDisconnect = () => {
 };
 
 const emitExpand = (isExpanded) => {
-    socket.emit('clickExpand', {isExpanded }, () => {
-        console.log("Show Estimate is clicked");
+    socket.emit('clickExpand', {isExpanded}, (data) => {
+        console.log(data);
     });
 };
 
 const emitSendEstimate = (setNumber, e) => {
     setNumber(e);
     if (e) {
-        socket.emit('sendEstimate', e, () => console.log("Estimate CHANGE!"));
+        socket.emit('sendEstimate', e, (data) => {
+            console.log("Estimate CHANGE!")
+            console.log(data);
+        });
     };
 };
 
