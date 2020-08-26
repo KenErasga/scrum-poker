@@ -17,20 +17,23 @@ const CreateRoom = () => {
     const onSubmit = async (event) => {
         event.preventDefault();
 
-        signUp(room, password);
-        signIn(room, password);
-        setIsAuthenticated(true);
-
-        history.push(`/scrum-poker?name=${name}&room=${room}`);
+        signUp(room, password).then(() => {
+            signIn(room, password);
+            setIsAuthenticated(true);
+            history.push(`/scrum-poker?name=${name}&room=${room}`);
+        }).catch(error => {
+            console.error(error)
+            alert(error.message);
+        })
     };
 
     return (
         <div>
             <Box style={{ display: "flex", justifyContent: "center", margin: 10, padding: 10 }} >
                 <form style={{ width: "70%" }} onSubmit={onSubmit}>
-                    <h4>Create a session</h4>
+                    <h4>Create a room</h4>
                     {FormInput({ InputLabel: 'Name', type: '', value: name, handleOnChange: setName })}
-                    {FormInput({ InputLabel: 'Session Name', type: '', value: room, handleOnChange: setRoom })}
+                    {FormInput({ InputLabel: 'Room Name', type: '', value: room, handleOnChange: setRoom })}
                     {FormInput({ InputLabel: 'Password', type: 'password', value: password, handleOnChange: setPassword })}
                     {ButtonSubmit({ description: 'create' })}
                 </form>

@@ -12,27 +12,23 @@ const signUp = async (room, password) => {
             password: password
         })
     } catch (e) {
-        console.error(e.message)
-        throw new Error(e)
+        throw e
     }
 };
 
 const signIn = async (room, password) => {
     try {
-        await Auth.signIn(room, password);
+        return await Auth.signIn(room, password);
     } catch (e) {
-        console.error(e.message)
-        throw new Error(e)
+        throw e
     }
 };
 
 const logout = async () => {
     try {
-        await Auth.signOut();
-        console.log("logout");
+        return await Auth.signOut();
     } catch (e) {
-        console.error(e.message)
-        throw new Error(e)
+        throw e
     }
 };
 

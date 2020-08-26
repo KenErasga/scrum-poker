@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+
 import { AccountContext, AuthContext } from '../../providers/Cognito/Cognito';
 import { FormInput, ButtonSubmit } from '../../commonComponents/index';
 
@@ -17,19 +19,23 @@ const JoinRoom = () => {
     const onSubmit = (event) => {
         event.preventDefault();
 
-        signIn(room, password);
-        setIsAuthenticated(true);
-
-        history.push(`/scrum-poker?name=${name}&room=${room}`);
+        signIn(room, password).then(() => {
+            setIsAuthenticated(true);
+            history.push(`/scrum-poker?name=${name}&room=${room}`);
+        }).catch(error => {
+            console.error(error)
+            alert(error.message);
+        })
+        
     };
 
     return (
         <div>
             <Box style={{ display: "flex", justifyContent: "center", margin: 10, padding: 10 }} >
                 <form style={{ width: "70%" }} onSubmit={onSubmit}>
-                    <h4>Join a session</h4>
+                    <h4>Join a room</h4>
                     {FormInput({ InputLabel: 'Name', type: '', value: name, handleOnChange: setName })}
-                    {FormInput({ InputLabel: 'Session Name', type: '', value: room, handleOnChange: setRoom })}
+                    {FormInput({ InputLabel: 'Room Name', type: '', value: room, handleOnChange: setRoom })}
                     {FormInput({ InputLabel: 'Password', type: 'password', value: password, handleOnChange: setPassword })}
                     {ButtonSubmit({ description: 'Join' })}
                 </form>
