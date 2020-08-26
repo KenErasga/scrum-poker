@@ -13,7 +13,6 @@ import useExpand from './useExpand';
 const HandleScrumPoker = ({ location }) => {
     const [room, setRoom] = useState('');
 
-
     const { logout } = useContext(AccountContext);
     const { setIsAuthenticated } = useContext(AuthContext);
 
@@ -37,8 +36,8 @@ const HandleScrumPoker = ({ location }) => {
         logout();
         setIsAuthenticated(false);
 
+        localStorage.clear();
         history.push('/');
-        history.go()
     };
 
     const ScrumPoker = () => {

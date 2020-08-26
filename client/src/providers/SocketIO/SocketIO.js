@@ -16,7 +16,7 @@ const emitJoin = (setRoom, name, room, estimate) => {
 
 const emitDisconnect = () => {
     socket.emit('disconnect');
-    socket.off();
+    socket.close();
 };
 
 const emitExpand = (isExpanded) => {
@@ -36,7 +36,7 @@ const emitSendEstimate = (setNumber, e) => {
 };
 
 const onEstimate = (setEstimates) => {
-    socket.on('estimate', ({ users }) => {
+    socket.once('estimate', ({ users }) => {
         setEstimates(users);
     });
 };
