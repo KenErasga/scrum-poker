@@ -71,9 +71,8 @@ class Index {
             socket.on("sendEstimate", (estimate, acknowledgeFn) => {
                 const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;
 
-                UserHandler.changeUserEstimate(socket.id, estimate);
-
                 if (usersRoom) {
+                    UserHandler.changeUserEstimate(socket.id, estimate);
                     UserHandler.broadcastNewEstimates(io, usersRoom)
                         ?
                         acknowledgeFn("estimates-update-successful")

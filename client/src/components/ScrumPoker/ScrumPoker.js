@@ -45,10 +45,9 @@ const HandleScrumPoker = ({ location }) => {
     }, [ENDPOINT, location.search]);
 
     useEffect(() => {
-        socket.on('estimate', ({ users }) => {
-            // console.log(users) <-- BUG HERE, EVENTS AREN'T REMOVED ON CLEANUP!
+        socket.once('estimate', ({ users }) => {
             setEstimates(users);
-        });
+        })
     }, [estimates]);
 
     useEffect(() => {
@@ -107,8 +106,8 @@ const HandleScrumPoker = ({ location }) => {
                 </Grid>
                 {estimates.map(item => {
                     return (
-                        <Grid key={`${item.name}${item.number}`} item xs={2}>
-                            <PokerCard name={item.name} number={item.number} isExpanded={expandAll}></PokerCard>
+                        <Grid key={`${item.name}${item.estimate}`} item xs={2}>
+                            <PokerCard name={item.name} number={item.estimate} isExpanded={expandAll}></PokerCard>
                         </Grid>
                     );
                 })}

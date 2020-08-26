@@ -91,25 +91,16 @@ export default class UserHandler {
     }
 
     /**
+     * Updates a given users *current* estimate
      *
-     * @param id
-     * @param number
+     * @param {string} id : The users id, denoted by their socket id
+     * @param {string} estimate : The users *current* estimate
      */
-    public static changeUserEstimate( id: any, number: any ) {
-        console.log("USERS ID AND NUMBER", id, number);
-        console.log("Users index before map: ", UserHandler._USER_STORE.findIndex(u => u?.id === id));
-        UserHandler._USER_STORE = UserHandler._USER_STORE.map(user => {
-            if(user?.id === id) {
-               return {
-                 ...user,
-                 number,
-               };
-            }
-            return user;
-          }) as (IUser | null)[];
-        console.log("Users index after map: ", UserHandler._USER_STORE.findIndex(u => u?.id === id));
-        console.log("Index of user 77: ", UserHandler._USER_STORE[77]);
-        return UserHandler._USER_STORE.filter(u => u !== null);
+    public static changeUserEstimate(id: string, estimate: string): void {
+        const user = UserHandler._USER_STORE[UserHandler._USER_STORE.findIndex(u => u?.id === id)];
+        if (user) {
+            user.estimate = estimate;
+        }
     }
 
     /**
@@ -120,6 +111,7 @@ export default class UserHandler {
      */
     public static removeUserFromLocalStore(id: string): boolean {
         const index = UserHandler._USER_STORE.findIndex(user => user?.id === id);
+
         if (index !== -1) {
             UserHandler._USER_STORE[index] = null;
             return true;
