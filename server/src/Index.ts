@@ -2,8 +2,9 @@ import express, { Express } from "express";
 import socketio, { Socket } from "socket.io";
 import http, { Server } from "http";
 import routes from "./routes";
-import { addUser, changeUserEstimate, removeUser, getUser, getUsersInRoom } from "./User";
-import IUser from "./socketio-events/scrum-poker/interfaces/IUser";
+import IUser from "./interfaces/IUser";
+import UserHandler from "./handlers/UserHandler";
+import User from "./dto/User.dto";
 
 /**
  * Server entry point
@@ -50,51 +51,60 @@ class Index {
      */
     private registerSocketIOEvents(io: socketio.Server): void {
         io.on("connection", (socket: Socket) => {
-            console.log("connection made.");
+            console.log("Client connection made.");
 
-            /**
-             * @param {string}
-             * @param {Function<any[], Function>} : Callback is an event to emit back to the frontend to run the 'ack' function
-             */
-            socket.on("join", ({ users_name, room, estimate }: IUser, callback) => {
-                console.log("Session joined");
-                const { error, user } = addUser({ id: socket.id, users_name, room, estimate });
 
-                socket.join((user as any).room);
 
-                io.to((user as any).room).emit("estimate", { room: (user as any).room, users: getUsersInRoom((user as any).room) });
-
-                callback();
+            socket.on("join", ({ users_name, room, estimate }: IUser, acknowledgeFn) => {
+                UserHandler.addUserToLocalStore(new User(
+                    users_name.trim().toLowerCase(),
+                    room.trim().toLowerCase(),
+                    estimate,
+                    socket.id)
+                );
+                UserHandler.addUserToRoom(socket, room);
+                UserHandler.broadcastNewEstimates(io, room)
+                    ?
+                    acknowledgeFn("user-join-successful")
+                    :
+                    acknowledgeFn("user-join-failed");
             });
 
+            socket.on("sendEstimate", (estimate, acknowledgeFn) => {
+                const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;
 
-            socket.on("sendEstimate", (estimate, callback) => {
-                const user = getUser(socket.id);
-
-                const usersInRoom = changeUserEstimate(socket.id, estimate);
-
-                io.to(user.room).emit("estimate", { room: user.room, users: usersInRoom });
-
-                callback();
+                if (usersRoom) {
+                    UserHandler.changeUserEstimate(socket.id, estimate);
+                    UserHandler.broadcastNewEstimates(io, usersRoom)
+                        ?
+                        acknowledgeFn("estimates-update-successful")
+                        :
+                        acknowledgeFn("estimates-update-failed");
+                } else {
+                    acknowledgeFn("user-has-no-room");
+                }
             });
 
-            socket.on("clickExpand", (isExpanded, callback) => {
-                const user = getUser(socket.id);
-
-                const expanded = isExpanded;
-
-                io.to(user.room).emit("expand", { room: user.room, expand: expanded });
-
-                callback();
+            socket.on("clickExpand", (isExpanded, acknowledgeFn) => {
+                const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;
+                if (usersRoom) {
+                    UserHandler.broadcastExpandChange(io, usersRoom, isExpanded)
+                        ?
+                        acknowledgeFn("expand-update-successful")
+                        :
+                        acknowledgeFn("expand-update-failed");
+                } else {
+                    acknowledgeFn("user-has-no-room");
+                }
             });
 
             socket.on("disconnect", () => {
+                const room = UserHandler.getUserBySocketId(socket.id)?.room as string;
 
-                const user = removeUser(socket.id);
-
-                if (user) {
+                if (UserHandler.removeUserFromLocalStore(socket.id)) {
+                    socket.disconnect(true);
+                    UserHandler.broadcastNewEstimates(io, room);
                     console.log("User has left room");
-                    io.to((user as any).room).emit("estimate", { room: (user as any).room, users: getUsersInRoom((user as any).room) });
                 }
 
             });
