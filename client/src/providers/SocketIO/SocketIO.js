@@ -12,6 +12,8 @@ const emitJoin = (setRoom, name, room, estimate) => {
         console.log("USER JOINED!");
         console.log(data);
     });
+
+    emitExpand({isExpanded: true});     // temporary fix for when a new user joins it automatically set the expanded card to not show
 };
 
 const emitDisconnect = () => {
