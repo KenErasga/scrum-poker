@@ -5,6 +5,7 @@ import routes from "./routes";
 import IUser from "./interfaces/IUser";
 import UserHandler from "./handlers/UserHandler";
 import User from "./dto/User.dto";
+import sioEvents from "./socketio-events/scrum-poker/events";
 
 /**
  * Server entry point
@@ -46,6 +47,8 @@ class Index {
 
     /**
      * Registers all socket.io events
+     * Takes the array import and reduces through each event object passing it
+     * into this given users socket
      *
      * @param {socketio.Server} io : Our socketio server instance
      */
@@ -53,22 +56,11 @@ class Index {
         io.on("connection", (socket: Socket) => {
             console.log("Client connection made.");
 
-
-
-            socket.on("join", ({ users_name, room, estimate }: IUser, acknowledgeFn) => {
-                UserHandler.addUserToLocalStore(new User(
-                    users_name.trim().toLowerCase(),
-                    room.trim().toLowerCase(),
-                    estimate,
-                    socket.id)
-                );
-                UserHandler.addUserToRoom(socket, room);
-                UserHandler.broadcastNewEstimates(io, room)
-                    ?
-                    acknowledgeFn("user-join-successful")
-                    :
-                    acknowledgeFn("user-join-failed");
-            });
+            sioEvents.reduce((sock, acc) => {
+                const e = new acc(io, socket).getEventObject();
+                sock.on(e.eventName, e.eventCb);
+                return sock;
+            }, socket);
 
             socket.on("sendEstimate", (estimate, acknowledgeFn) => {
                 const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;

@@ -31,6 +31,7 @@ export default class UserHandler {
     /**
      * Broadcasts the new estimates to all users in a room
      *
+     * @fires UserHandler#broadcastNewEstimates:estimate
      * @param {socketio.Server} io : The socketio server instance
      * @param {string} room : The room to broadcast to
      * @returns {boolean} Whether or not the new estimates emitted successfully
@@ -46,6 +47,7 @@ export default class UserHandler {
      * Updates the expands or contracts the estimates view for all connected clients in
      * a given room
      *
+     * @fires UserHandler#broadcastExpandChange:expand
      * @param {socketio.Server} io : The socketio server instance
      * @param {string} room : The room to broadcast to
      * @param {boolean} expanded : Whether to contract or expand the estimates
