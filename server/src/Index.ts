@@ -53,6 +53,8 @@ class Index {
         io.on("connection", (socket: Socket) => {
             console.log("Client connection made.");
 
+
+
             socket.on("join", ({ users_name, room, estimate }: IUser, acknowledgeFn) => {
                 UserHandler.addUserToLocalStore(new User(
                     users_name.trim().toLowerCase(),
@@ -98,12 +100,11 @@ class Index {
 
             socket.on("disconnect", () => {
                 const room = UserHandler.getUserBySocketId(socket.id)?.room as string;
+
                 if (UserHandler.removeUserFromLocalStore(socket.id)) {
+                    socket.disconnect(true);
+                    UserHandler.broadcastNewEstimates(io, room);
                     console.log("User has left room");
-                    io.clients((err: any, client: any) => {
-                        console.log(client);
-                    });
-                    io.to(room).emit("estimate", { room, users: UserHandler.getUsersInRoom(room) });
                 }
 
             });

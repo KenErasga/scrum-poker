@@ -40,7 +40,7 @@ const HandleScrumPoker = ({ location }) => {
 
         return () => {
             socket.emit('disconnect');
-            socket.off();
+            socket.close();
         };
     }, [ENDPOINT, location.search]);
 
