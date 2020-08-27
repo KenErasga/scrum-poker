@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
 
 import { AccountContext, AuthContext } from '../../providers/Cognito/Cognito';
 import { FormInput, ButtonSubmit } from '../../commonComponents/index';
