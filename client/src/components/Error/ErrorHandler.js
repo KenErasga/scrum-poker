@@ -20,7 +20,8 @@ const ErrorHandler = props => {
             errorMessage === "user-has-no-room" ||
             errorMessage === "expand-update-failed" ||
             errorMessage === "Error on connection" ||
-            errorMessage === 'Error in server'
+            errorMessage === 'Error in server'||
+            errorMessage === "Connection Timeout"
         ) { 
             return <Page500 />
         };

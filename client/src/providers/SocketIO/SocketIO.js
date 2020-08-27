@@ -15,6 +15,7 @@ const Socket = props => {
 
         onConnectionError();
         onError();
+        onTimeout();
     };
 
     const emitJoin = (setRoom, name, room, estimate) => {
@@ -59,16 +60,23 @@ const Socket = props => {
     };
 
     const onConnectionError = () => {
-        socket.on('connect_error', function () {
-            console.log("Sorry, there seems to be an issue with the connection!");
+        socket.on('connect_error', function (error) {
+            console.error(error);
             setErrorMessage('Error on connection')
         });
     };
 
     const onError = () => {
-        socket.on('error', function () {
-            console.log("Sorry, there seems to be an issue with the connection!");
+        socket.on('error', function (error) {
+            console.error(error);
             setErrorMessage('Error in server')
+        });
+    };
+
+    const onTimeout = () => {
+        socket.on('connect_timeout', function (timeout) {
+            console.log(timeout);
+            setErrorMessage('Connection Timeout')
         });
     };
 
