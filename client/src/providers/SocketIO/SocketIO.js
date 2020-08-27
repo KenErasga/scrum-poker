@@ -10,94 +10,71 @@ const Socket = props => {
 
     const { setErrorMessage } = useErrorHandler();
 
+    const initialiseSocket = () => {
+        socket = io(ENDPOINT, { transports: ['websocket', 'polling'] });
+
+        onConnectionError();
+        onError();
+    };
+
     const emitJoin = (setRoom, name, room, estimate) => {
-        try {
-            socket = io(ENDPOINT, { transports: ['websocket', 'polling'] });
-
-            socket.on('connect_error', function () {
-                console.log("Sorry, there seems to be an issue with the connection!");
-                setErrorMessage('Error on connection')
-            });
-
-            setRoom(room);
-
-            socket.emit('join', { users_name: name, room, estimate }, (data) => {
-                console.log("USER JOINED!");
-                console.log(data);
-            });
-
-            emitExpand({ isExpanded: true });     // temporary fix for when a new user joins it automatically set the expanded card to not show
-
-        } catch (error) {
-            console.log(error)
-            throw error
-        }
+        setRoom(room);
+        socket.emit('join', { users_name: name, room, estimate }, (data) => {
+            console.log(data);
+        });
     };
 
     const emitDisconnect = () => {
-        try {
-            socket.emit('disconnect');
-            socket.close();
-        } catch (error) {
-            console.log(error)
-            throw error
-        };
+        socket.emit('disconnect');
+        socket.close();
     };
 
     const emitExpand = (isExpanded) => {
-        try {
-            socket.emit('clickExpand', { isExpanded }, (data) => {
-                console.log(data);
-            });
-        } catch (error) {
-            console.log(error)
-            throw error
-        };
-
+        socket.emit('clickExpand', { isExpanded }, (data) => {
+            console.log(data);
+        });
     };
 
     const emitSendEstimate = (setNumber, e) => {
-        try {
-            setNumber(e);
-            if (e) {
-                socket.emit('sendEstimate', e, (data) => {
-                    console.log("Estimate CHANGE!")
-                    console.log(data);
-                });
-            };
-        } catch (error) {
-            throw error
+        setNumber(e);
+        if (e) {
+            socket.emit('sendEstimate', e, (data) => {
+                console.log(data);
+            });
         };
-
     };
 
     const onEstimate = (setEstimates) => {
-        try {
-            socket.once('estimate', ({ users }) => {
-                setEstimates(users);
-            });
-        } catch (error) {
-            console.log(error)
-            throw error
-        };
+        socket.once('estimate', ({ users }) => {
+            setEstimates(users);
+        });
 
     };
 
     const onExpand = (setExpandAll) => {
-        try {
-            socket.on('expand', ({ expand }) => {
-                setExpandAll(!expand.isExpanded);
-                console.log("is expanded", !expand.isExpanded);
-            });
-        } catch (error) {
-            console.log(error)
-            throw error
-        };
+        socket.on('expand', ({ expand }) => {
+            setExpandAll(!expand.isExpanded);
+            console.log("is expanded", !expand.isExpanded);
+        });
+    };
 
+    const onConnectionError = () => {
+        socket.on('connect_error', function () {
+            console.log("Sorry, there seems to be an issue with the connection!");
+            setErrorMessage('Error on connection')
+        });
+    };
+
+    const onError = () => {
+        socket.on('error', function () {
+            console.log("Sorry, there seems to be an issue with the connection!");
+            setErrorMessage('Error in server')
+        });
     };
 
     return (
         <SocketContext.Provider value={{
+            initialiseSocket,
             emitJoin,
             emitDisconnect,
             emitExpand,

@@ -19,12 +19,17 @@ const HandleScrumPoker = ({ location }) => {
     const history = useHistory();
     const classes = useStyles();
 
-    const { emitJoin, emitDisconnect }  = useSocket();
+    const { initialiseSocket, emitJoin, emitDisconnect, emitExpand } = useSocket();
 
     useEffect(() => {
         const { name, room } = queryString.parse(location.search);
 
+        initialiseSocket();
+        
         emitJoin(setRoom, name, room, estimate);
+
+        // temporary fix for when a new user joins it automatically set the expanded card to not show
+        emitExpand({ isExpanded: true });
 
         return () => {
             emitDisconnect();

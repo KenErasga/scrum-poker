@@ -19,7 +19,8 @@ const ErrorHandler = props => {
             errorMessage === "estimates-update-failed" ||
             errorMessage === "user-has-no-room" ||
             errorMessage === "expand-update-failed" ||
-            errorMessage === "Error on connection"
+            errorMessage === "Error on connection" ||
+            errorMessage === 'Error in server'
         ) { 
             return <Page500 />
         };
