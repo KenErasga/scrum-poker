@@ -6,7 +6,7 @@ import PrivateRoute from './commonComponents/PrivateRoute';
 import NavBar from './components/NavBar/NavBar';
 import HandleRooms from './components/Rooms/HandleRooms';
 import HandleScrumPoker from './components/ScrumPoker/ScrumPoker';
-
+import { ErrorHandler } from './components/Error/ErrorHandler'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const App = () => {
@@ -36,8 +36,10 @@ const App = () => {
         <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
           <NavBar />
           <Router>
-            <Route path='/' exact component={HandleRooms} />
-            <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated} />
+            <ErrorHandler>
+              <Route path='/' exact component={HandleRooms} />
+              <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated} />
+            </ErrorHandler>
           </Router>
         </AuthContext.Provider>
       </Account>}

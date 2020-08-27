@@ -6,9 +6,9 @@ import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import PokerCard from '../../commonComponents/PokerCard';
 import DropDownList from '../Dropdown/Dropdown';
-import { emitJoin, emitDisconnect } from '../../providers/SocketIO/SocketIO';
 import useEstimate from './useEstimate';
 import useExpand from './useExpand';
+import { useSocket } from '../../providers/SocketIO/SocketIO';
 
 const HandleScrumPoker = ({ location }) => {
     const [room, setRoom] = useState('');
@@ -19,11 +19,13 @@ const HandleScrumPoker = ({ location }) => {
     const history = useHistory();
     const classes = useStyles();
 
+    const { emitJoin, emitDisconnect }  = useSocket();
+
     useEffect(() => {
         const { name, room } = queryString.parse(location.search);
 
         emitJoin(setRoom, name, room, estimate);
-        
+
         return () => {
             emitDisconnect();
         };

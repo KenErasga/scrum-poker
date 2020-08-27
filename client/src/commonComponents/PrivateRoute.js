@@ -1,17 +1,21 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
+import { Socket } from '../providers/SocketIO/SocketIO';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
-  return (<Route
-      {...rest}
-      render={props =>
-        isAuthenticated ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-        )
-      }
-    />
+  return (
+    <Socket>
+      <Route
+        {...rest}
+        render={props =>
+          isAuthenticated ? (
+            <Component {...props} />
+          ) : (
+              <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+            )
+        }
+      />
+    </Socket>
   )
 };
 

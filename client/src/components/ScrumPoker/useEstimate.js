@@ -1,14 +1,16 @@
-import {useState, useEffect} from 'react';
-import {onEstimate, emitSendEstimate} from '../../providers/SocketIO/SocketIO';
+import { useState, useEffect } from 'react';
+import { useSocket } from '../../providers/SocketIO/SocketIO';
 
 const useEstimate = () => {
     const [estimate, setEstimate] = useState("1");
     const [estimates, setEstimates] = useState([]);
 
+    const { onEstimate, emitSendEstimate } = useSocket();
+
     useEffect(() => {
         onEstimate(setEstimates);
     }, [estimates]);
-    
+
     const handleEstimate = (e) => {
         emitSendEstimate(setEstimate, e);
     };
