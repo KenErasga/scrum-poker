@@ -23,7 +23,7 @@ const HandleScrumPoker = ({ location }) => {
         const { name, room } = queryString.parse(location.search);
 
         emitJoin(setRoom, name, room, estimate);
-
+        
         return () => {
             emitDisconnect();
         };
@@ -37,6 +37,7 @@ const HandleScrumPoker = ({ location }) => {
         setIsAuthenticated(false);
 
         localStorage.clear();
+        emitDisconnect();
         history.push('/');
     };
 
