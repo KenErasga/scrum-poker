@@ -2,9 +2,7 @@ import express, { Express } from "express";
 import socketio, { Socket } from "socket.io";
 import http, { Server } from "http";
 import routes from "./routes";
-import IUser from "./interfaces/IUser";
 import UserHandler from "./handlers/UserHandler";
-import User from "./dto/User.dto";
 import sioEvents from "./socketio-events/scrum-poker/events";
 
 /**
@@ -61,45 +59,6 @@ class Index {
                 sock.on(e.eventName, e.eventCb);
                 return sock;
             }, socket);
-
-            socket.on("sendEstimate", (estimate, acknowledgeFn) => {
-                const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;
-
-                if (usersRoom) {
-                    UserHandler.changeUserEstimate(socket.id, estimate);
-                    UserHandler.broadcastNewEstimates(io, usersRoom)
-                        ?
-                        acknowledgeFn("estimates-update-successful")
-                        :
-                        acknowledgeFn("estimates-update-failed");
-                } else {
-                    acknowledgeFn("user-has-no-room");
-                }
-            });
-
-            socket.on("clickExpand", (isExpanded, acknowledgeFn) => {
-                const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;
-                if (usersRoom) {
-                    UserHandler.broadcastExpandChange(io, usersRoom, isExpanded)
-                        ?
-                        acknowledgeFn("expand-update-successful")
-                        :
-                        acknowledgeFn("expand-update-failed");
-                } else {
-                    acknowledgeFn("user-has-no-room");
-                }
-            });
-
-            socket.on("disconnect", () => {
-                const room = UserHandler.getUserBySocketId(socket.id)?.room as string;
-
-                if (UserHandler.removeUserFromLocalStore(socket.id)) {
-                    socket.disconnect(true);
-                    UserHandler.broadcastNewEstimates(io, room);
-                    console.log("User has left room");
-                }
-
-            });
         });
     }
 }
