@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import React, { useState, useEffect, useMemo, createContext, useContext } from 'react';
 
-import { Page500 } from './ErrorPages';
+import { Page400 } from './ErrorPages';
 
 const ErrorHandlerContext = createContext();
 
@@ -23,7 +23,7 @@ const ErrorHandler = props => {
             errorMessage === 'Error in server'||
             errorMessage === "Connection Timeout"
         ) { 
-            return <Page500 />
+            return <Page400 />
         };
 
         return props.children;

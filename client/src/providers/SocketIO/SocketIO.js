@@ -22,6 +22,7 @@ const Socket = props => {
         setRoom(room);
         socket.emit('join', { users_name: name, room, estimate }, (data) => {
             console.log(data);
+            setErrorMessage(data)
         });
     };
 
@@ -33,6 +34,7 @@ const Socket = props => {
     const emitExpand = (isExpanded) => {
         socket.emit('clickExpand', { isExpanded }, (data) => {
             console.log(data);
+            setErrorMessage(data)
         });
     };
 
@@ -41,6 +43,7 @@ const Socket = props => {
         if (e) {
             socket.emit('sendEstimate', e, (data) => {
                 console.log(data);
+                setErrorMessage(data);
             });
         };
     };
