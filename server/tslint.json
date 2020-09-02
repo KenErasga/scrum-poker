@@ -28,18 +28,13 @@
 		"no-arg": true,
 		"no-bitwise": false,
 		"no-construct": false,
-		"no-constructor-vars": true,
 		"no-shadowed-variable": true,
 		"no-duplicate-variable": true,
 		"no-empty": false,
 		"no-eval": true,
 		"no-require-imports": false,
-		"no-trailing-comma": true,
 		"no-trailing-whitespace": true,
-		"no-unreachable": true,
-		"no-unused-variable": true,
 		"no-unused-expression": false,
-		"no-use-before-declare": true,
 		"one-variable-per-declaration": false,
 		"no-var-keyword": true,
 		"no-console": false,
@@ -60,10 +55,6 @@
 		"triple-equals": [
 			true,
 			"allow-null-check"
-		],
-		"use-strict": [
-			true,
-			"check-module"
 		],
 		"variable-name": [
 			true,

@@ -2,7 +2,6 @@ import express, { Express } from "express";
 import socketio, { Socket } from "socket.io";
 import http, { Server } from "http";
 import routes from "./routes";
-import UserHandler from "./handlers/UserHandler";
 import sioEvents from "./socketio-events/scrum-poker/events";
 
 /**

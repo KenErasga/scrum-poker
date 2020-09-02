@@ -15,9 +15,9 @@ export default abstract class SocketIOEvent implements ISocketIOEvent {
     /**
      * @property {(...args: Object[]) => void} eventCallback : The callback to register with this given event
      */
-    protected eventCallback: (...args: any[]) => void;
+    protected eventCallback: (...args: object[]) => void;
 
-    constructor(eventName: string, eventCallback: (...args: any[]) => void) {
+    constructor(eventName: string, eventCallback: (...args: object[]) => void) {
         this.eventName = eventName;
         this.eventCallback = eventCallback;
     }

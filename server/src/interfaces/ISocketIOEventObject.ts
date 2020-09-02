@@ -7,5 +7,5 @@
  */
 export default interface ISocketIOEventObject {
     eventName: string;
-    eventCb: (...args: any[]) => void;
+    eventCb: (...args: object[]) => void;
 }
