@@ -1,40 +1,42 @@
 import React, { useState, useContext } from 'react';
-import {useHistory} from 'react-router-dom';
-import { Box } from '@material-ui/core'
+import { useHistory } from 'react-router-dom';
+import { Box } from '@material-ui/core';
 import FormInput from '../../commonComponents/FormInput';
 import ButtonSubmit from '../../commonComponents/ButtonSubmit';
-import { AccountContext } from '../Accounts/CognitoProvider';
-const CreateSession = () => {
+import { AccountContext, AuthContext } from '../Accounts/CognitoProvider';
+
+const JoinRoom = () => {
     const [name, setName] = useState('');
-    const [sessionName, setSessionName] = useState('');
+    const [room, setRoom] = useState('');
     const [password, setPassword] = useState('');
 
-    const { authenticate, signUp } = useContext(AccountContext);
+    const { signIn } = useContext(AccountContext);
+    const { setIsAuthenticated } = useContext(AuthContext);
 
     const history = useHistory();
-    const onSubmit = async (event) => {
+
+    const onSubmit = (event) => {
         event.preventDefault();
 
-        signUp(sessionName, password);
-        authenticate(sessionName, password);
+        signIn(room, password);
+        setIsAuthenticated(true);
 
-        console.log('Logged in!');
-        history.push(`/scrum-poker?name=${name}&room=${sessionName}`);
+        history.push(`/scrum-poker?name=${name}&room=${room}`);
     };
 
     return (
         <div>
             <Box style={{ display: "flex", justifyContent: "center", margin: 10, padding: 10 }} >
                 <form style={{ width: "70%" }} onSubmit={onSubmit}>
-                    <h4>Create a session</h4>
+                    <h4>Join a session</h4>
                     {FormInput({ InputLabel: 'Name', type: '', value: name, handleOnChange: setName })}
-                    {FormInput({ InputLabel: 'Session Name', type: '', value: sessionName, handleOnChange: setSessionName })}
+                    {FormInput({ InputLabel: 'Session Name', type: '', value: room, handleOnChange: setRoom })}
                     {FormInput({ InputLabel: 'Password', type: 'password', value: password, handleOnChange: setPassword })}
-                    {ButtonSubmit({ description: 'create' })}
+                    {ButtonSubmit({ description: 'Join' })}
                 </form>
             </Box>
         </div>
     )
 }
 
-export default CreateSession;
+export default JoinRoom;

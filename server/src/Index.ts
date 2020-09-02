@@ -2,7 +2,8 @@ import express, { Express } from "express";
 import socketio, { Socket } from "socket.io";
 import http, { Server } from "http";
 import routes from "./routes";
-import { addUser, changeUserEstimate, removeUser, getUser, getUsersInRoom } from "./User";
+import UserHandler from "./handlers/UserHandler";
+import sioEvents from "./socketio-events/scrum-poker/events";
 
 /**
  * Server entry point
@@ -44,56 +45,20 @@ class Index {
 
     /**
      * Registers all socket.io events
+     * Takes the array import and reduces through each event object passing it
+     * into this given users socket
      *
      * @param {socketio.Server} io : Our socketio server instance
      */
     private registerSocketIOEvents(io: socketio.Server): void {
         io.on("connection", (socket: Socket) => {
-            console.log("connection made.");
-            socket.on("join", ({ name, room, number }, callback) => {
-                console.log("Session joined");
-                const { error, user } = addUser({ id: socket.id, name, room, number });
+            console.log("Client connection made.");
 
-                if (error) {
-                    return callback(error);
-                }
-
-                socket.join((user as any).room);
-
-                io.to((user as any).room).emit("estimate", { room: (user as any).room, users: getUsersInRoom((user as any).room) });
-
-                callback();
-            });
-
-            socket.on("sendEstimate", (number, callback) => {
-                const user = getUser(socket.id);
-
-                const usersInRoom = changeUserEstimate(socket.id, number);
-
-                io.to(user.room).emit("estimate", { room: user.room, users: usersInRoom });
-
-                callback();
-            });
-
-            socket.on("clickExpand", (isExpanded, callback) => {
-                const user = getUser(socket.id);
-
-                const expanded = isExpanded;
-
-                io.to(user.room).emit("expand", { room: user.room, expand: expanded });
-
-                callback();
-            });
-
-            socket.on("disconnect", () => {
-
-                const user = removeUser(socket.id);
-
-                if (user) {
-                    console.log("User has left room");
-                }
-
-            });
+            sioEvents.reduce((sock, acc) => {
+                const e = new acc(io, socket).getEventObject();
+                sock.on(e.eventName, e.eventCb);
+                return sock;
+            }, socket);
         });
     }
 }

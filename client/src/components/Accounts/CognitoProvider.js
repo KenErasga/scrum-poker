@@ -1,41 +1,27 @@
 import {Auth} from 'aws-amplify'
-import React, { createContext, useState, useContext } from 'react'
-import UserPool from '../../userPool';
+import React, { createContext } from 'react'
 
 const AccountContext = createContext();
 const Account = props => {
 
-    const getSession = async () => {
-        return await new Promise((resolve, reject) => {
-            const user = UserPool.getCurrentUser();
-            user ? user.getSession((err, session) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(session);
-                }
-            }) : reject();
-        });
-    };
-
-    const signUp = async (sessionName, password) => {
+    const signUp = async (room, password) => {
         try {
             return await Auth.signUp({
-                username: sessionName,
+                username: room,
                 password: password
             })
         } catch (e) {
             console.error(e.message)
-            throw new Error(e.message)
+            throw new Error(e)
         }
     };
 
-    const authenticate = async (sessionName, password) => {
+    const signIn = async (room, password) => {
         try {
-            await Auth.signIn(sessionName, password);
+            await Auth.signIn(room, password);
           } catch (e) {
             console.error(e.message)
-            throw new Error(e.message)
+            throw new Error(e)
           }
     };
 
@@ -44,25 +30,17 @@ const Account = props => {
         console.log("logout");
     };  
 
-    const [loggedIn, setLoggedIn] = useState(false);
-
     return (
         <AccountContext.Provider value={{
-            authenticate,
+            signIn,
             signUp,
-            getSession,
             logout,
-            loggedIn,
-            setLoggedIn
         }}>
                 {props.children}
         </AccountContext.Provider>
     );
 };
 
-const AppContext = createContext(null);
-function useAppContext() {
-    return useContext(AppContext);
-};
+const AuthContext = createContext();
 
-export { Account, AccountContext, AppContext, useAppContext }
+export { Account, AccountContext, AuthContext }

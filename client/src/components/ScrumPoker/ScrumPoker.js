@@ -1,27 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AccountContext, useAppContext } from '../Accounts/CognitoProvider';
+import { AccountContext, AuthContext } from '../Accounts/CognitoProvider';
 import { Typography, Button, Grid, makeStyles } from '@material-ui/core';
+import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import PokerCard from '../Card/Card';
+import PokerCard from '../../commonComponents/Card';
 import DropDownList from '../Dropdown/Dropdown'
 import io from 'socket.io-client';
 let socket;
 
 const HandleScrumPoker = ({ location }) => {
     const [room, setRoom] = useState('');
-    // const [name, setName] = useState('');
     const [number, setNumber] = useState("1");
     const [isExpanded, setIsExpanded] = useState(false);
     const [expandAll, setExpandAll] = useState(false);
     const [estimates, setEstimates] = useState([]);
-    const numberList = ["1", "2", "3", "5", "8", "13", "20", "40"];
+    const numberList = config.numberList;
 
     const ENDPOINT = process.env.REACT_APP_SOCKETIO_HOST || '192.168.64.2:30001';
     // const ENDPOINT = process.env.SOCKETIO_HOST || "localhost:3001";
 
     const { logout } = useContext(AccountContext);
-    const { userHasAuthenticated } = useAppContext();
+    const { setIsAuthenticated } = useContext(AuthContext);
 
     const history = useHistory();
     const classes = useStyles();
@@ -29,26 +29,26 @@ const HandleScrumPoker = ({ location }) => {
     useEffect(() => {
         const { name, room } = queryString.parse(location.search);
 
-        socket = io(ENDPOINT);
+        socket = io(ENDPOINT, { transports: ['websocket', 'polling'] });
 
-        // setName(name);
         setRoom(room);
 
-        socket.emit('join', { name, room, number }, () => {
+        socket.emit('join', { users_name: name, room, estimate: number }, (data) => {
             console.log("USER JOINED!");
+            console.log(data, "this is where u error handle ken")
         });
 
         return () => {
             socket.emit('disconnect');
-            socket.off();
+            socket.close();
         };
     }, [ENDPOINT, location.search]);
 
     useEffect(() => {
-        socket.on('estimate', ({ users }) => {
+        socket.once('estimate', ({ users }) => {
             setEstimates(users);
-        });
-    }, [number]);
+        })
+    }, [estimates]);
 
     useEffect(() => {
         socket.on('expand', ({ expand }) => {
@@ -62,23 +62,26 @@ const HandleScrumPoker = ({ location }) => {
 
         setIsExpanded(!isExpanded);
 
-        socket.emit('clickExpand', { isExpanded }, () => {
+        socket.emit('clickExpand', { isExpanded }, (data) => {
             console.log("Show Estimate is clicked");
+            console.log(data, "this is where u handle the expaded errors ken");
         });
     };
 
     const handleEstimate = (e) => {
         setNumber(e);
         if (e) {
-            socket.emit('sendEstimate', e, () => console.log("Estimate CHANGE!"));
+            console.log("Changing estimate...");
+            socket.emit('sendEstimate', e, (data) => console.log(data));
         };
     };
 
     const exit = async () => {
         logout();
-        userHasAuthenticated(false);
+        setIsAuthenticated(false);
+
         history.push('/');
-        history.go();
+        history.go()
     };
 
     const ScrumPoker = () => {
@@ -103,8 +106,8 @@ const HandleScrumPoker = ({ location }) => {
                 </Grid>
                 {estimates.map(item => {
                     return (
-                        <Grid item xs={2}>
-                            <PokerCard name={item.name} number={item.number} isExpanded={expandAll}></PokerCard>
+                        <Grid key={`${item.name}${item.estimate}`} item xs={2}>
+                            <PokerCard name={item.name} number={item.estimate} isExpanded={expandAll}></PokerCard>
                         </Grid>
                     );
                 })}
@@ -123,7 +126,6 @@ const HandleScrumPoker = ({ location }) => {
 };
 
 export default HandleScrumPoker;
-
 
 const useStyles = makeStyles((theme) => ({
     gridItem: {
