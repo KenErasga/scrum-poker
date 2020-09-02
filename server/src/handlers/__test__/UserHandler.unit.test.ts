@@ -4,7 +4,7 @@ import { Server } from "net";
 
 describe("UserHandler", () => {
     let server: Server;
-    let socket: SocketIOClient.Socket;
+    let socket: (SocketIOClient.Socket | undefined);
 
     beforeAll((done) => {
         server = new App().SERVER.listen(global.__SIO_PORT__, () => {
@@ -21,7 +21,6 @@ describe("UserHandler", () => {
     });
 
     beforeEach(() => {
-        console.log("before each!");
         socket = io(global.__SIO_URI__, { transports: ["websocket", "polling"] });
     });
 
@@ -30,12 +29,12 @@ describe("UserHandler", () => {
          * This isn't like the real behaviour, we're closing client side but realistically,
          * the server would close it.
          */
-        socket.close();
+        socket?.close();
+        socket = undefined;
     });
 
     it("should join successfully", (done) => {
-        socket.emit("join", { users_name: "testing", room: "test", estimate: "1" }, (data: string) => {
-            console.log(data, "<----------------");
+        socket?.emit("join", { users_name: "testing", room: "test", estimate: "1" }, (data: string) => {
             expect(data).toBe("user-join-successful");
             done();
         });

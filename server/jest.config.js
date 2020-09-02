@@ -1,6 +1,4 @@
-// const dotenv = require("dotenv"); // needs adding...
 const tsJest = require("ts-jest/jest-preset");
-// dotenv.config();
 
 /**
  * For multiple presets, ...spread them into this final object.
