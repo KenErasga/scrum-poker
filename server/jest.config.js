@@ -12,6 +12,7 @@ module.exports =  {
     name: "Scrum Poker Online Bois",
     testEnvironment: "node",
     reporters: ["default"],
-    __SIO_URI__: "bob",
+    __SIO_URI__: "localhost:3001",
+    __SIO_PORT__: "3001"
   }
 };

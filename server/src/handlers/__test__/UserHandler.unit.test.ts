@@ -1,14 +1,43 @@
 import io from "socket.io-client";
+import App from "../../App";
+import { Server } from "net";
 
 describe("UserHandler", () => {
-    //let socket: SocketIOClient.Socket;
+    let server: Server;
+    let socket: SocketIOClient.Socket;
 
     beforeAll((done) => {
-        //socket = io("ENDPOINT", { transports: ["websocket", "polling"] });
-        done();
+        server = new App().SERVER.listen(global.__SIO_PORT__, () => {
+            console.log("Test Server started successfully...");
+            done();
+        });
     });
 
-    it("should have max value of 100", () => {
-        expect(global.__SIO_URI__).toBe("bob");
+    afterAll((done) => {
+        server.close((err) => {
+            console.log("Test Server close successfully...");
+            done();
+        });
+    });
+
+    beforeEach(() => {
+        console.log("before each!");
+        socket = io(global.__SIO_URI__, { transports: ["websocket", "polling"] });
+    });
+
+    afterEach(() => {
+        /**
+         * This isn't like the real behaviour, we're closing client side but realistically,
+         * the server would close it.
+         */
+        socket.close();
+    });
+
+    it("should join successfully", (done) => {
+        socket.emit("join", { users_name: "testing", room: "test", estimate: "1" }, (data: string) => {
+            console.log(data, "<----------------");
+            expect(data).toBe("user-join-successful");
+            done();
+        });
     });
 });

@@ -5,7 +5,8 @@
  */
 declare namespace NodeJS {
     interface Global {
-        /** The URI to use for testing within Jest */
+        /** The URI / PORT to use for testing within Jest */
         __SIO_URI__: string;
+        __SIO_PORT__: string;
     }
 }

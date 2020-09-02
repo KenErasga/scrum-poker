@@ -1,3 +1,5 @@
+ /* tslint:disable:variable-name */
+
 import IUser from "../interfaces/IUser";
 
 /**
@@ -7,7 +9,6 @@ import IUser from "../interfaces/IUser";
  */
 export default class User implements IUser {
     public id?: string;
-    /* tslint:disable:variable-name */
     public users_name: string;
     public room: string;
     public estimate: string;
