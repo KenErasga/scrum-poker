@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core'
 import { AccountContext, AuthContext } from '../../providers/Cognito/Cognito';
 import { FormInput, ButtonSubmit } from '../../commonComponents';
+import { useErrorHandler } from '../Error/ErrorHandler';
 
 const CreateRoom = () => {
     const [name, setName] = useState('');
@@ -11,6 +12,8 @@ const CreateRoom = () => {
 
     const { signIn, signUp } = useContext(AccountContext);
     const { setIsAuthenticated } = useContext(AuthContext);
+
+    const {setIsError, setErrorMessage} = useErrorHandler();
 
     const history = useHistory();
 
@@ -22,8 +25,8 @@ const CreateRoom = () => {
             setIsAuthenticated(true);
             history.push(`/scrum-poker?name=${name}&room=${room}`);
         }).catch(error => {
-            console.error(error)
-            alert(error.message);
+            setErrorMessage(error.message);
+            setIsError(true)
         })
     };
 

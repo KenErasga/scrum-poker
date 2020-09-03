@@ -18,6 +18,7 @@ const useExpand = () => {
 
         emitExpand(isExpanded);
     };
+    
     return {
         isExpanded,
         expandAll,

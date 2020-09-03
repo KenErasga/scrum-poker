@@ -8,6 +8,7 @@ import HandleRooms from './components/Rooms/HandleRooms';
 import HandleScrumPoker from './components/ScrumPoker/ScrumPoker';
 import { ErrorHandler } from './components/Error/ErrorHandler'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { ErrorAlert } from './components/Error/ErrorPages';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,17 +33,19 @@ const App = () => {
 
   return (
     <div>
-      {!isAuthenticating && <Account>
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-          <NavBar />
-          <Router>
-            <ErrorHandler>
-              <Route path='/' exact component={HandleRooms} />
-              <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated} />
-            </ErrorHandler>
-          </Router>
-        </AuthContext.Provider>
-      </Account>}
+      {!isAuthenticating &&
+        <Account>
+          <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+              <NavBar />
+              <Router>
+              <ErrorHandler>
+                <Route path='/' exact component={HandleRooms} />
+                <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated} />
+                <ErrorAlert />
+              </ErrorHandler>
+              </Router>
+          </AuthContext.Provider>
+        </Account>}
     </div>
   )
 }

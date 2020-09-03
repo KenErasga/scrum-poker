@@ -4,6 +4,7 @@ import { Box } from '@material-ui/core';
 
 import { AccountContext, AuthContext } from '../../providers/Cognito/Cognito';
 import { FormInput, ButtonSubmit } from '../../commonComponents/index';
+import { useErrorHandler, useErrorStatus } from '../Error/ErrorHandler';
 
 const JoinRoom = () => {
     const [name, setName] = useState('');
@@ -12,7 +13,8 @@ const JoinRoom = () => {
 
     const { signIn } = useContext(AccountContext);
     const { setIsAuthenticated } = useContext(AuthContext);
-
+    const { setErrorMessage, setIsError } = useErrorHandler();
+    
     const history = useHistory();
 
     const onSubmit = (event) => {
@@ -22,9 +24,9 @@ const JoinRoom = () => {
             setIsAuthenticated(true);
             history.push(`/scrum-poker?name=${name}&room=${room}`);
         }).catch(error => {
-            console.error(error)
-            alert(error.message);
-        })
+            setIsError(true)
+            setErrorMessage(error.message);
+        });
         
     };
 
