@@ -1,8 +1,8 @@
 import io from "socket.io-client";
-import App from "../../App";
+import App from "../../../../App";
 import { Server } from "net";
 
-describe("UserHandler", () => {
+describe("UserJoin", () => {
     let server: Server;
     let socket: (SocketIOClient.Socket | undefined);
 
@@ -31,7 +31,7 @@ describe("UserHandler", () => {
         socket = undefined;
     });
 
-    it("(User) should join successfully", (done) => {
+    it("should join successfully", (done) => {
         socket?.emit("join", { users_name: "testing", room: "test", estimate: "1" }, (data: string) => {
             expect(data).toBe("user-join-successful");
             done();
