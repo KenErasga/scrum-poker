@@ -13,21 +13,28 @@ const CreateRoom = () => {
     const { signIn, signUp } = useContext(AccountContext);
     const { setIsAuthenticated } = useContext(AuthContext);
 
-    const {setIsError, setErrorMessage} = useErrorHandler();
+    const {setIsError, setErrorMessage, validationError} = useErrorHandler();
 
     const history = useHistory();
 
     const onSubmit = async (event) => {
         event.preventDefault();
 
-        signUp(room, password).then(() => {
-            signIn(room, password);
-            setIsAuthenticated(true);
-            history.push(`/scrum-poker?name=${name}&room=${room}`);
-        }).catch(error => {
-            setErrorMessage(error.message);
-            setIsError(true)
-        })
+        if (name === "") {
+            setErrorMessage("Your name cannot be empty");
+            setIsError(true);
+        } else if (password < 6){
+            setErrorMessage("Your password must have a length of 6 or more");
+            setIsError(true);
+        } else {
+            signUp(room, password).then(() => {
+                signIn(room, password);
+                setIsAuthenticated(true);
+                history.push(`/scrum-poker?name=${name}&room=${room}`);
+            }).catch(error => {
+                validationError(error.message);
+            })
+        }
     };
 
     return (

@@ -13,21 +13,26 @@ const JoinRoom = () => {
 
     const { signIn } = useContext(AccountContext);
     const { setIsAuthenticated } = useContext(AuthContext);
-    const { setErrorMessage, setIsError } = useErrorHandler();
-    
+    const { setErrorMessage, setIsError, validationError } = useErrorHandler();
+
     const history = useHistory();
 
     const onSubmit = (event) => {
         event.preventDefault();
 
-        signIn(room, password).then(() => {
-            setIsAuthenticated(true);
-            history.push(`/scrum-poker?name=${name}&room=${room}`);
-        }).catch(error => {
-            setIsError(true)
-            setErrorMessage(error.message);
-        });
-        
+        if (name === "") {
+            setErrorMessage("Your name cannot be empty");
+            setIsError(true);
+        } else {
+            console.log(event.target);
+            signIn(room, password).then(() => {
+                setIsAuthenticated(true);
+                history.push(`/scrum-poker?name=${name}&room=${room}`);
+            }).catch(error => {
+                validationError(error.message);
+            });
+        };
+
     };
 
     return (

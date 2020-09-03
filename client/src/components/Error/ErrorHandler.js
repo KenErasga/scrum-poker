@@ -30,11 +30,33 @@ const ErrorHandler = props => {
         if (errorMessage === "Username cannot be empty") {
             setIsError(true);
             setErrorMessage('Room Name cannot be empty');
-        }
+        };
+
+        if (errorMessage === "Incorrect username or password.") {
+            setIsError(true);
+            setErrorMessage('Incorrect username or password.');
+        };
+
+        if (errorMessage === "Custom auth lambda trigger is not configured for the user pool.") {
+            setIsError(true);
+            setErrorMessage('Incorrect password');
+        };
+
+        if (errorMessage === "User already exists") {
+            setIsError(true);
+            setErrorMessage('Room name already exists');
+        };
+
+        if (errorMessage) {
+            setIsError(true);
+            setErrorMessage(errorMessage);
+        };
+
+
     };
 
     return (
-        <ErrorHandlerContext.Provider value={{ socketError, errorMessage, setErrorMessage, isError, setIsError, disconnectError }}>
+        <ErrorHandlerContext.Provider value={{ socketError, errorMessage, setErrorMessage, isError, setIsError, disconnectError, validationError }}>
             {props.children}
         </ErrorHandlerContext.Provider>
     )
