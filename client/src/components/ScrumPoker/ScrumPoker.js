@@ -25,7 +25,7 @@ const HandleScrumPoker = ({ location }) => {
         const { name, room } = queryString.parse(location.search);
 
         initialiseSocket();
-        
+
         emitJoin(setRoom, name, room, estimate);
 
         // temporary fix for when a new user joins it automatically set the expanded card to not show
@@ -83,9 +83,10 @@ const HandleScrumPoker = ({ location }) => {
         );
     };
 
-    return (<div>
-        <ScrumPoker />
-    </div>
+    return (
+        <div>
+            <ScrumPoker />
+        </div>
     )
 };
 
