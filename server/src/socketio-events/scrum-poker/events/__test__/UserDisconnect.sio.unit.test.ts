@@ -31,7 +31,7 @@ describe("UserDisconnect", () => {
         socket = undefined;
     });
 
-    it("should disconnect successfully", async (done) => {
+    it("should disconnect successfully", (done) => {
         ([
             async () => {
                 socket?.emit("join", { users_name: "testing", room: "test", estimate: "1" }, (data: string) => {
