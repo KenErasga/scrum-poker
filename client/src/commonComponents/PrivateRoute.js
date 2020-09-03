@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { Socket } from '../providers/SocketIO/SocketIO';
+import { Socket } from '../providers/SocketIO';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
   return (

@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core';
 
-import { AccountContext, AuthContext } from '../../providers/Cognito/Cognito';
+import { AccountContext, AuthContext } from '../../providers/Cognito';
 import { FormInput, ButtonSubmit } from '../../commonComponents/index';
 import { useErrorHandler, useErrorStatus } from '../Error/ErrorHandler';
 

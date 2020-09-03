@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Auth } from 'aws-amplify'
-import { Account, AuthContext } from './providers/Cognito/Cognito';
+import { Account, AuthContext } from './providers/Cognito';
 import PrivateRoute from './commonComponents/PrivateRoute';
 
 import NavBar from './components/NavBar/NavBar';

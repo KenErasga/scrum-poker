@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import { useErrorHandler } from '../../components/Error/ErrorHandler'
+import { useErrorHandler } from '../components/Error/ErrorHandler'
 import React, { createContext, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -93,7 +93,6 @@ const Socket = props => {
         try {
             socket.on('expand', ({ expand }) => {
                 setExpandAll(!expand.isExpanded);
-                console.log("is expanded", !expand.isExpanded);
             });
         } catch (error) {
             disconnectError(error);

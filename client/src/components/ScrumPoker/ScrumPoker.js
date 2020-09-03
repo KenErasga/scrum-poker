@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AccountContext, AuthContext } from '../../providers/Cognito/Cognito';
+import { AccountContext, AuthContext } from '../../providers/Cognito';
 import { Typography, Button, Grid, makeStyles } from '@material-ui/core';
 import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
@@ -8,7 +8,7 @@ import PokerCard from '../../commonComponents/PokerCard';
 import DropDownList from '../Dropdown/Dropdown';
 import useEstimate from './useEstimate';
 import useExpand from './useExpand';
-import { useSocket } from '../../providers/SocketIO/SocketIO';
+import { useSocket } from '../../providers/SocketIO';
 
 const HandleScrumPoker = ({ location }) => {
     const [room, setRoom] = useState('');

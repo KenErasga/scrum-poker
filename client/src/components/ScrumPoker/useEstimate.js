@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSocket } from '../../providers/SocketIO/SocketIO';
+import { useSocket } from '../../providers/SocketIO';
 
 const useEstimate = () => {
     const [estimate, setEstimate] = useState("1");
