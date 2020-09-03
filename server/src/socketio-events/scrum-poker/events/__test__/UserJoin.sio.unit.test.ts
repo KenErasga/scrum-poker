@@ -13,7 +13,7 @@ describe("UserJoin", () => {
     });
 
     afterAll((done) => {
-        server.close((err) => {
+        server.close(() => {
             done();
         });
     });
@@ -34,6 +34,13 @@ describe("UserJoin", () => {
     it("should join successfully", (done) => {
         socket?.emit("join", { users_name: "testing", room: "test", estimate: "1" }, (data: string) => {
             expect(data).toBe("user-join-successful");
+            done();
+        });
+    });
+
+    it("should fail to join successfully with incorrect join data", (done) => {
+        socket?.emit("join", { users_name: "testing"}, (data: string) => {
+            expect(data).toBe("user-join-failed");
             done();
         });
     });

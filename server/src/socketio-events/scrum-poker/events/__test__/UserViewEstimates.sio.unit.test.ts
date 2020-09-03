@@ -1,8 +1,8 @@
 import io from "socket.io-client";
-import App from "../../App";
+import App from "../../../../App";
 import { Server } from "net";
 
-describe("UserHandler", () => {
+describe("UserViewEstimates", () => {
     let server: Server;
     let socket: (SocketIOClient.Socket | undefined);
 
@@ -13,7 +13,7 @@ describe("UserHandler", () => {
     });
 
     afterAll((done) => {
-        server.close((err) => {
+        server.close(() => {
             done();
         });
     });
@@ -31,10 +31,24 @@ describe("UserHandler", () => {
         socket = undefined;
     });
 
-    it("(User) should join successfully", (done) => {
+    it("should expand successfully", (done) => {
         socket?.emit("join", { users_name: "testing", room: "test", estimate: "1" }, (data: string) => {
             expect(data).toBe("user-join-successful");
-            done();
+            socket?.emit("clickExpand", true, (d: string) => {
+                expect(d).toBe("expand-update-successful");
+                done();
+            });
         });
     });
+
+    it("should fail to expand successfully with incorrect data type", (done) => {
+        socket?.emit("join", { users_name: "testing", room: "test", estimate: "1" }, (data: string) => {
+            expect(data).toBe("user-join-successful");
+            socket?.emit("clickExpand", "bob", (d: string) => {
+                expect(d).toBe("expand-update-failed:incorrect-data-type");
+                done();
+            });
+        });
+    });
+
 });

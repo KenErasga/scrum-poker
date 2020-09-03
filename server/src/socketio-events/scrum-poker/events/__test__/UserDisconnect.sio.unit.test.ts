@@ -32,7 +32,7 @@ describe("UserDisconnect", () => {
     });
 
     it("should disconnect successfully", (done) => {
-        ([
+        [
             async () => {
                 socket?.emit("join", { users_name: "testing", room: "test", estimate: "1" }, (data: string) => {
                     expect(data).toBe("user-join-successful");
@@ -48,8 +48,7 @@ describe("UserDisconnect", () => {
             }
         ].reduce((initialProm, nextProm) => {
                 return initialProm.then(nextProm);
-        }, Promise.resolve().then(() => done())));
-
+        }, Promise.resolve().then(() => done()));
     });
 
 });

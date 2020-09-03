@@ -14,18 +14,22 @@ import { USER_JOIN } from "../constants/EVENT_CONSTANTS";
 export default class UserJoin extends SocketIOEvent {
     constructor(io: socketio.Server , socket: Socket) {
         super(USER_JOIN, ({ users_name, room, estimate }: IUser, acknowledgeFn) => {
-            UserHandler.addUserToLocalStore(new User(
-                users_name.trim().toLowerCase(),
-                room.trim().toLowerCase(),
-                estimate,
-                socket.id)
-            );
-            UserHandler.addUserToRoom(socket, room);
-            UserHandler.broadcastNewEstimates(io, room)
-                ?
-                acknowledgeFn("user-join-successful")
-                :
+            if (users_name && room && estimate) {
+                UserHandler.addUserToLocalStore(new User(
+                    users_name.trim().toLowerCase(),
+                    room.trim().toLowerCase(),
+                    estimate,
+                    socket.id)
+                );
+                UserHandler.addUserToRoom(socket, room);
+                UserHandler.broadcastNewEstimates(io, room)
+                    ?
+                    acknowledgeFn("user-join-successful")
+                    :
+                    acknowledgeFn("user-join-failed");
+            } else {
                 acknowledgeFn("user-join-failed");
+            }
         });
     }
 }
