@@ -8,7 +8,7 @@ import HandleRooms from './components/Rooms/HandleRooms';
 import HandleScrumPoker from './components/ScrumPoker/ScrumPoker';
 import { ErrorHandler } from './components/Error/ErrorHandler'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { ErrorAlert } from './components/Error/ErrorPages';
+import { ErrorAlert } from './components/Error/ErrorAlert';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
