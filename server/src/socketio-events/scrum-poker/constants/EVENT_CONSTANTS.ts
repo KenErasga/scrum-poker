@@ -1,4 +1,4 @@
-const USER_JOIN = "join";
-const USER_SEND_ESTIMATE = "sendEstimate";
-const USER_VIEW_ESTIMATES = "clickExpand";
-const USER_DISCONNECT = "disconnect";
+export const USER_JOIN = "join";
+export const USER_SEND_ESTIMATE = "sendEstimate";
+export const USER_VIEW_ESTIMATES = "clickExpand";
+export const USER_DISCONNECT = "disconnect";
