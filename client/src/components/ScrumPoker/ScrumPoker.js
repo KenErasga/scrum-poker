@@ -10,6 +10,11 @@ import io from 'socket.io-client';
 let socket;
 
 const HandleScrumPoker = ({ location }) => {
+    const [isScrumMaster, setScrumMaster] = useState(true);
+    /**
+     * Could reduce the useState's here, the user based fields could be a single object
+     * with all user state inside. Until then I've added a new state for scrummy above ^.
+     */
     const [room, setRoom] = useState('');
     const [number, setNumber] = useState("1");
     const [isExpanded, setIsExpanded] = useState(false);
@@ -47,7 +52,8 @@ const HandleScrumPoker = ({ location }) => {
     useEffect(() => {
         socket.once('estimate', ({ users }) => {
             setEstimates(users);
-        })
+        });
+
     }, [estimates]);
 
     useEffect(() => {
@@ -56,6 +62,13 @@ const HandleScrumPoker = ({ location }) => {
             console.log("is expanded", !expand);
         });
     }, [isExpanded]);
+
+    /**
+     * Sets the scrum master once and initially.
+     */
+    useEffect(() => {
+        
+    }, [isScrumMaster]);
 
     const handleExpandClick = async (e) => {
         e.preventDefault();
@@ -84,14 +97,9 @@ const HandleScrumPoker = ({ location }) => {
         history.go()
     };
 
-    const ScrumPoker = () => {
-        return (<div>
-            <Grid container spacing={2}>
-                <Grid item xs={8}>
-                    <Typography className={classes.gridItem} variant="h4">
-                        Room Name: {room}
-                    </Typography>
-                </Grid>
+    const renderExpandEstimates = () => {
+        if (isScrumMaster) {
+            return (
                 <Grid item xs={2}>
                     <Button
                         className={classes.gridItem}
@@ -101,6 +109,21 @@ const HandleScrumPoker = ({ location }) => {
                         Show estimate
                         </Button>
                 </Grid>
+            )
+        } else {
+            return (<Grid item xs={2}></Grid>)
+        }
+    }
+
+    const ScrumPoker = () => {
+        return (<div>
+            <Grid container spacing={2}>
+                <Grid item xs={8}>
+                    <Typography className={classes.gridItem} variant="h4">
+                        Room Name: {room}
+                    </Typography>
+                </Grid>
+                {renderExpandEstimates()}
                 <Grid item xs={2}>
                     <Button className={classes.gridItem} onClick={exit} variant="contained">Exit room</Button>
                 </Grid>
