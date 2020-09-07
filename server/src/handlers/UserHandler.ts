@@ -98,6 +98,7 @@ export default class UserHandler {
      * Adds a user to the _USER_STORE if a given index is available
      *
      * @param {User} user : The user we wish to add to the local store
+     * @param {boolean} firstInRoom : Whether or not this user was the first to join their scrum-poker room
      * @returns {User | null} Will return the user back if successful, otherwise null
      */
     public static addUserToLocalStore(user: User): User | null {

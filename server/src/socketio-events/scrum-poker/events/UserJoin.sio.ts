@@ -19,6 +19,7 @@ export default class UserJoin extends SocketIOEvent {
         super(USER_JOIN, ({ users_name, room, estimate }: IUser, acknowledgeFn) => {
             if (users_name && room && estimate) {
                 /* We could pass a the method ref here (addUserToLocalStore), but to keep it simple? No need. */
+                /* If we face async issues, we'll have to however. */
                 const roomExistedPrior = UserHandler.addUserToRoom(socket, room, io);
                 /**
                  * Pass room exists to our local store creation, this will determine if they're
@@ -28,7 +29,8 @@ export default class UserJoin extends SocketIOEvent {
                     users_name.trim().toLowerCase(),
                     room.trim().toLowerCase(),
                     estimate,
-                    socket.id)
+                    !roomExistedPrior,
+                    socket.id),
                 );
                 UserHandler.broadcastNewEstimates(io, room)
                     ?
