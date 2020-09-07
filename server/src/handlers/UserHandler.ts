@@ -54,7 +54,6 @@ export default class UserHandler {
      * @returns {boolean} Whether or not the expansion event emitted successfully
      */
     public static broadcastExpandChange(io: socketio.Server, room: string, expanded: boolean): boolean {
-        console.log(expanded, "<----------")
         return io.to(room as string).emit("expand", {
             room,
             expand: expanded
