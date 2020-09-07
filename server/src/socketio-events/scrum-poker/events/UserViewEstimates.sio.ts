@@ -11,9 +11,8 @@ import { USER_VIEW_ESTIMATES  } from "../constants/EVENT_CONSTANTS";
  */
 export default class UserViewEstimates extends SocketIOEvent {
     constructor(io: socketio.Server , socket: Socket) {
-        super(USER_VIEW_ESTIMATES, (isExpanded, acknowledgeFn) => {
+        super(USER_VIEW_ESTIMATES, ({ isExpanded }, acknowledgeFn) => {
             const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;
-
             if (isExpanded === true || isExpanded === false) {
                 if (usersRoom) {
                     UserHandler.broadcastExpandChange(io, usersRoom, isExpanded)

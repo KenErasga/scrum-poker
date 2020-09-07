@@ -52,8 +52,8 @@ const HandleScrumPoker = ({ location }) => {
 
     useEffect(() => {
         socket.on('expand', ({ expand }) => {
-            setExpandAll(!expand.isExpanded);
-            console.log("is expanded", !expand.isExpanded);
+            setExpandAll(!expand);
+            console.log("is expanded", !expand);
         });
     }, [isExpanded]);
 
