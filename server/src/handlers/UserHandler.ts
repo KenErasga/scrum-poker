@@ -23,9 +23,29 @@ export default class UserHandler {
      *
      * @param {socketio.Socket} socket : This users socket
      * @param {string} room : The room to add this users socket to
+     * @returns {boolean} Whether or not the room existed prior to this user joining
      */
-    public static addUserToRoom(socket: Socket, room: string): void {
-        socket.join(room);
+    public static addUserToRoom(socket: Socket, room: string, io: socketio.Server): boolean {
+        /* Leave the pre-joined room with our socket ID */
+        socket.leave(socket.id);
+
+        /* Grab remaining rooms as array */
+        const rooms = io.nsps["/"].adapter.rooms;
+
+        /* Check if the given room we're about to join *already* exists */
+        const roomExists = Object.keys(rooms).includes(room);
+        console.log("Does room exist?", roomExists);
+
+        /* We join them either way, doesn't matter */
+        socket.join(room, (err) => {
+            /**
+             * @todo handle the error
+             */
+        });
+
+        /* We know if the room didn't exist prior to joining, then they're the first */
+        return roomExists;
+        /* This concludes this process. */
     }
 
     /**
