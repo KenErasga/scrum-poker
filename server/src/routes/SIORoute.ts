@@ -1,7 +1,6 @@
 import IRoute from "../interfaces/IRoute";
 import { Router } from "express";
-import PublicController from "../controllers/PublicController";
-import ScrumpokerController from "../controllers/ScrumPokerController";
+import ScrumPokerController from "../controllers/ScrumPokerController";
 
 /**
  * All SIO updates and/or actions primarily route
@@ -20,6 +19,7 @@ export default class SIORoute implements IRoute {
      * Middleware & controller setup
      */
     constructor() {
-        this.ROUTER.get(this.RESOURCE_LOC + "/scrum-poker/get-users", ScrumpokerController.getUsers);
+        this.ROUTER.get(this.RESOURCE_LOC + "/scrum-poker/get-users", ScrumPokerController.getUsers);
+        this.ROUTER.get(this.RESOURCE_LOC + "/scrum-poker/get-scrum-master", ScrumPokerController.checkForScrumMaster);
     }
 }

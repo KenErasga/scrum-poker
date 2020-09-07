@@ -10,7 +10,7 @@ import io from 'socket.io-client';
 let socket;
 
 const HandleScrumPoker = ({ location }) => {
-    const [isScrumMaster, setScrumMaster] = useState(true);
+    const [isScrumMaster, setScrumMaster] = useState(false);
     /**
      * Could reduce the useState's here, the user based fields could be a single object
      * with all user state inside. Until then I've added a new state for scrummy above ^.
@@ -41,6 +41,19 @@ const HandleScrumPoker = ({ location }) => {
         socket.emit('join', { users_name: name, room, estimate: number }, (data) => {
             console.log("USER JOINED!");
             console.log(data, "this is where u error handle ken")
+            /**
+             * As we're aware we joined, we'll now query the scrum master endpoint
+             */
+            fetch(
+                `http://${process.env.REACT_APP_SOCKETIO_HOST}/sio/scrum-poker/get-scrum-master?room=${room}&id=${socket.id}`
+            ).then(
+                res => res.json()
+            ).then(d => {
+                if (d.scrum_master) {
+                    console.log(d);
+                    setScrumMaster(true)
+                }
+            });
         });
 
         return () => {
@@ -62,13 +75,6 @@ const HandleScrumPoker = ({ location }) => {
             console.log("is expanded", !expand);
         });
     }, [isExpanded]);
-
-    /**
-     * Sets the scrum master once and initially.
-     */
-    useEffect(() => {
-        
-    }, [isScrumMaster]);
 
     const handleExpandClick = async (e) => {
         e.preventDefault();
