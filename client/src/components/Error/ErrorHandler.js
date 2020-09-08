@@ -27,32 +27,25 @@ const ErrorHandler = props => {
     };
 
     const validationError = (errorMessage) => {
-        if (errorMessage === "Username cannot be empty") {
-            setIsError(true);
-            setErrorMessage('Room Name cannot be empty');
-        };
-
-        if (errorMessage === "Incorrect username or password.") {
-            setIsError(true);
-            setErrorMessage('Incorrect username or password.');
-        };
-
-        if (errorMessage === "Custom auth lambda trigger is not configured for the user pool.") {
-            setIsError(true);
-            setErrorMessage('Incorrect password');
-        };
-
-        if (errorMessage === "User already exists") {
-            setIsError(true);
-            setErrorMessage('Room name already exists');
-        };
-
         if (errorMessage) {
             setIsError(true);
-            setErrorMessage(errorMessage);
-        };
-
-
+            switch (errorMessage) {
+                case "Username cannot be empty":
+                    setErrorMessage('Room Name cannot be empty');
+                    break
+                case "Incorrect username or password.":
+                    setErrorMessage('Incorrect username or password.');
+                    break
+                case "Custom auth lambda trigger is not configured for the user pool.":
+                    setErrorMessage('Incorrect password');
+                    break
+                case "User already exists":
+                    setErrorMessage('Room name already exists');
+                    break
+                default:
+                    setErrorMessage(errorMessage);
+            }
+        }
     };
 
     return (
