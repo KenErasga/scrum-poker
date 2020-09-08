@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSocket } from '../../providers/SocketIO';
 
 const useEstimate = () => {
-    const [estimate, setEstimate] = useState("1");
+    const [estimate, setEstimate] = useState("N/A");
     const [estimates, setEstimates] = useState([]);
 
     const { onEstimate, emitSendEstimate } = useSocket();
