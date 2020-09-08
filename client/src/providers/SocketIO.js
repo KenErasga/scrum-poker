@@ -31,12 +31,25 @@ const Socket = props => {
         }
     };
 
-    const emitJoin = (setRoom, name, room, estimate) => {
+    const emitJoin = (setRoom, name, room, estimate, setScrumMaster) => {
         try {
             setRoom(room);
             socket.emit('join', { users_name: name, room, estimate }, (data) => {
                 console.log(data);
                 socketError(data)
+                /**
+                 * As we're aware we joined, we'll now query the scrum master endpoint
+                 */
+                fetch(
+                    `http://${process.env.REACT_APP_SOCKETIO_HOST}/sio/scrum-poker/get-scrum-master?room=${room}&id=${socket.id}`
+                ).then(
+                    res => res.json()
+                ).then(d => {
+                    if (d.scrum_master) {
+                        console.log(d);
+                        setScrumMaster(true)
+                    }
+                });
             });
         } catch (error) {
             disconnectError(error);
@@ -56,7 +69,6 @@ const Socket = props => {
     const emitExpand = (isExpanded) => {
         try {
             socket.emit('clickExpand', { isExpanded }, (data) => {
-                console.log(data);
                 socketError(data)
             });
         } catch (error) {
@@ -92,7 +104,7 @@ const Socket = props => {
     const onExpand = (setExpandAll) => {
         try {
             socket.on('expand', ({ expand }) => {
-                setExpandAll(!expand.isExpanded);
+                setExpandAll(!expand);
             });
         } catch (error) {
             disconnectError(error);
