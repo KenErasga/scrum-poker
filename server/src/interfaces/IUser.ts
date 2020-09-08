@@ -9,6 +9,7 @@
  */
 export default interface IUser {
     id?: string;
+    scrum_master: boolean;
     users_name: string;
     room: string;
     estimate: string;

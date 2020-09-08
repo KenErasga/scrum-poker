@@ -2,6 +2,7 @@ import SocketIOEvent from "../../../abstracts/SocketIOEvent";
 import UserHandler from "../../../handlers/UserHandler";
 import socketio, { Socket } from "socket.io";
 import { USER_SEND_ESTIMATE } from "../constants/EVENT_CONSTANTS";
+import EstimatesSerivce from "../../../services/EstimatesService";
 
 /**
  * Sends a the entire list of new estimates to all users in a given room
@@ -10,19 +11,28 @@ import { USER_SEND_ESTIMATE } from "../constants/EVENT_CONSTANTS";
  * @event UserSendEstimate#constructor:estimate
  */
 export default class UserSendEstimate extends SocketIOEvent {
-    constructor(io: socketio.Server , socket: Socket) {
+    constructor(io: socketio.Server, socket: Socket) {
         super(USER_SEND_ESTIMATE, (estimate, acknowledgeFn) => {
-            const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;
 
-            if (usersRoom) {
-                UserHandler.changeUserEstimate(socket.id, estimate);
-                UserHandler.broadcastNewEstimates(io, usersRoom)
-                    ?
-                    acknowledgeFn("estimates-update-successful")
-                    :
-                    acknowledgeFn("estimates-update-failed");
+            if(isNaN(parseInt(estimate))) {
+                acknowledgeFn("estimates-update-failed:incorrect-data-type");
             } else {
-                acknowledgeFn("user-has-no-room");
+                if (!EstimatesSerivce.evaluateEstimate(parseInt(estimate))) {
+                    acknowledgeFn("estimates-update-failed:number-out-of-range");
+                } else {
+                    const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;
+
+                    if (usersRoom) {
+                        UserHandler.changeUserEstimate(socket.id, estimate);
+                        UserHandler.broadcastNewEstimates(io, usersRoom)
+                            ?
+                            acknowledgeFn("estimates-update-successful")
+                            :
+                            acknowledgeFn("estimates-update-failed");
+                    } else {
+                        acknowledgeFn("user-has-no-room");
+                    }
+                }
             }
         });
     }

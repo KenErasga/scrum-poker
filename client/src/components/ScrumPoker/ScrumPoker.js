@@ -11,6 +11,11 @@ import useExpand from './useExpand';
 import { useSocket } from '../../providers/SocketIO';
 
 const HandleScrumPoker = ({ location }) => {
+    const [isScrumMaster, setScrumMaster] = useState(false);
+    /**
+     * Could reduce the useState's here, the user based fields could be a single object
+     * with all user state inside. Until then I've added a new state for scrummy above ^.
+     */
     const [room, setRoom] = useState('');
 
     const { logout } = useContext(AccountContext);
@@ -26,7 +31,7 @@ const HandleScrumPoker = ({ location }) => {
 
         initialiseSocket();
 
-        emitJoin(setRoom, name, room, estimate);
+        emitJoin(setRoom, name, room, estimate, setScrumMaster);
 
         // temporary fix for when a new user joins it automatically set the expanded card to not show
         emitExpand({ isExpanded: true });
@@ -34,6 +39,7 @@ const HandleScrumPoker = ({ location }) => {
         return () => {
             emitDisconnect();
         };
+
     }, [config.SOCKET_IO_HOST, location.search]);
 
     const { estimate, estimates, handleEstimate } = useEstimate();
@@ -48,14 +54,10 @@ const HandleScrumPoker = ({ location }) => {
         history.push('/');
     };
 
-    const ScrumPoker = () => {
-        return (<div>
-            <Grid container spacing={2}>
-                <Grid item xs={8}>
-                    <Typography className={classes.gridItem} variant="h4">
-                        Room Name: {room}
-                    </Typography>
-                </Grid>
+    const renderExpandEstimates = () => {
+    console.log(estimates, '<<-------------------')
+        if (isScrumMaster) {
+            return (
                 <Grid item xs={2}>
                     <Button
                         className={classes.gridItem}
@@ -65,6 +67,21 @@ const HandleScrumPoker = ({ location }) => {
                         Show estimate
                         </Button>
                 </Grid>
+            )
+        } else {
+            return (<Grid item xs={2}></Grid>)
+        }
+    }
+
+    const ScrumPoker = () => {
+        return (<div>
+            <Grid container spacing={2}>
+                <Grid item xs={8}>
+                    <Typography className={classes.gridItem} variant="h4">
+                        Room Name: {room}
+                    </Typography>
+                </Grid>
+                {renderExpandEstimates()}
                 <Grid item xs={2}>
                     <Button className={classes.gridItem} onClick={exit} variant="contained">Exit room</Button>
                 </Grid>
