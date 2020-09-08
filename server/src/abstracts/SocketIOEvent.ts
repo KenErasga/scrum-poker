@@ -1,3 +1,5 @@
+/* tslint:disable:no-any */
+
 import ISocketIOEvent from "../interfaces/ISocketIOEvent";
 import ISocketIOEventObject from "../interfaces/ISocketIOEventObject";
 
@@ -13,7 +15,7 @@ export default abstract class SocketIOEvent implements ISocketIOEvent {
      */
     protected eventName: string;
     /**
-     * @property {(...args: Object[]) => void} eventCallback : The callback to register with this given event
+     * @property {(...args: any[]) => void} eventCallback : The callback to register with this given event
      */
     protected eventCallback: (...args: any[]) => void;
 

@@ -11,17 +11,20 @@ import { USER_VIEW_ESTIMATES  } from "../constants/EVENT_CONSTANTS";
  */
 export default class UserViewEstimates extends SocketIOEvent {
     constructor(io: socketio.Server , socket: Socket) {
-        super(USER_VIEW_ESTIMATES, (isExpanded, acknowledgeFn) => {
+        super(USER_VIEW_ESTIMATES, ({ isExpanded }, acknowledgeFn) => {
             const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;
-
-            if (usersRoom) {
-                UserHandler.broadcastExpandChange(io, usersRoom, isExpanded)
-                    ?
-                    acknowledgeFn("expand-update-successful")
-                    :
-                    acknowledgeFn("expand-update-failed");
+            if (isExpanded === true || isExpanded === false) {
+                if (usersRoom) {
+                    UserHandler.broadcastExpandChange(io, usersRoom, isExpanded)
+                        ?
+                        acknowledgeFn("expand-update-successful")
+                        :
+                        acknowledgeFn("expand-update-failed");
+                } else {
+                    acknowledgeFn("user-has-no-room");
+                }
             } else {
-                acknowledgeFn("user-has-no-room");
+                acknowledgeFn("expand-update-failed:incorrect-data-type");
             }
         });
     }

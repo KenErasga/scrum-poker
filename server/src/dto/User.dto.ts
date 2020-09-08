@@ -1,3 +1,5 @@
+ /* tslint:disable:variable-name */
+
 import IUser from "../interfaces/IUser";
 
 /**
