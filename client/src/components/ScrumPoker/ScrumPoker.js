@@ -27,6 +27,8 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import Divider from '@material-ui/core/Divider';
+import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
+import StarsIcon from '@material-ui/icons/Stars';
 
 // MUI Classes 
 const useStyles = makeStyles((theme) => ({
@@ -98,7 +100,6 @@ const HandleScrumPoker = ({ location }) => {
      */
     const handleUserListClick = (event, index) => {
         setSelectedUserIndex(prevIndex => {
-            console.log(prevIndex, "<---- PREV INDEX")
             if (prevIndex === index) {
                 setUserExpandState(prevExpandStates => {
                     prevExpandStates[prevExpandStates.findIndex(item => item === true)] = false;
@@ -224,9 +225,9 @@ const HandleScrumPoker = ({ location }) => {
                             :
                             null
                         }
-                        <Divider />
+                        
                     </List>
-
+                    <Divider />
                     <List component="user-list">
                         {estimates.map((user, i) =>
                             <UserListItem
@@ -260,13 +261,23 @@ const UserListItem = ({ selectedUserIndex, handleUserListClick, usersExpandState
                 <ListItemText primary={user.users_name} />
                 {usersExpandState[index] ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={usersExpandState[index]} timeout="auto" unmountOnExit>
+            <Collapse 
+                in={usersExpandState[index]} 
+                timeout="auto" 
+                style={{ borderBottom: "1px solid grey" }}
+                unmountOnExit>
                 <List component="div" disablePadding>
                     <ListItem button className={classes.nested}>
                         <ListItemIcon>
-                            <StarBorder />
+                            <StarsIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Starred" />
+                        <ListItemText primary="Set Scrum Master" />
+                    </ListItem>
+                    <ListItem button className={classes.nested}>
+                        <ListItemIcon>
+                            <PersonAddDisabledIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={`Kick User`}  />
                     </ListItem>
                 </List>
             </Collapse>
