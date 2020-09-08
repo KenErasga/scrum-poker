@@ -1,4 +1,5 @@
 import express, { Express } from "express";
+import cors from "cors";
 import socketio, { Socket } from "socket.io";
 import http, { Server } from "http";
 import routes from "./routes";
@@ -31,6 +32,7 @@ export default class App {
 
     constructor() {
         console.log("Server constructed");
+        this._APP.use(cors());
         this.registerHTTPRoutes();
         this.registerSocketIOEvents(this._IO);
     }
