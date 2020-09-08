@@ -34,7 +34,7 @@ describe("UserViewEstimates", () => {
     it("should expand successfully", (done) => {
         socket?.emit("join", { users_name: "testing", room: "test", estimate: "1" }, (data: string) => {
             expect(data).toBe("user-join-successful");
-            socket?.emit("clickExpand", true, (d: string) => {
+            socket?.emit("clickExpand", { isExpanded: true } , (d: string) => {
                 expect(d).toBe("expand-update-successful");
                 done();
             });
