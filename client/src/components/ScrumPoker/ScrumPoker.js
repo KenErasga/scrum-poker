@@ -1,3 +1,4 @@
+// General imports:
 import React, { useContext, useEffect, useState } from 'react';
 import { AccountContext, AuthContext } from '../../providers/Cognito';
 import { Typography, Button, Grid, makeStyles } from '@material-ui/core';
@@ -9,6 +10,41 @@ import DropDownList from '../Dropdown/Dropdown';
 import useEstimate from './useEstimate';
 import useExpand from './useExpand';
 import { useSocket } from '../../providers/SocketIO';
+
+// List imports:
+import ListSubheader from '@material-ui/core/ListSubheader';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
+
+// MUI Classes 
+const useStyles = makeStyles((theme) => ({
+    gridItem: {
+        display: "flex",
+        justifyContent: "center",
+        margin: 20,
+        padding: 20
+    },
+    root: {
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
+    },
+    nested: {
+        paddingLeft: theme.spacing(4),
+    },
+}));
+
 
 const HandleScrumPoker = ({ location }) => {
     const [isScrumMaster, setScrumMaster] = useState(false);
@@ -55,7 +91,7 @@ const HandleScrumPoker = ({ location }) => {
     };
 
     const renderExpandEstimates = () => {
-    console.log(estimates, '<<-------------------')
+        console.log(expandAll, "<--------")
         if (isScrumMaster) {
             return (
                 <Grid item xs={2}>
@@ -73,47 +109,106 @@ const HandleScrumPoker = ({ location }) => {
         }
     }
 
-    const ScrumPoker = () => {
-        return (<div>
-            <Grid container spacing={2}>
-                <Grid item xs={8}>
-                    <Typography className={classes.gridItem} variant="h4">
-                        Room Name: {room}
-                    </Typography>
-                </Grid>
-                {renderExpandEstimates()}
-                <Grid item xs={2}>
-                    <Button className={classes.gridItem} onClick={exit} variant="contained">Exit room</Button>
-                </Grid>
-                {estimates.map(item => {
-                    return (
-                        <Grid key={`${item.users_name}${item.estimate}`} item xs={2}>
-                            <PokerCard name={item.users_name} estimate={item.estimate} isExpanded={expandAll}></PokerCard>
-                        </Grid>
-                    );
-                })}
+    return (<div>
+        {/**
+         * Main screen wrapper
+         */}
+        <Grid
+            container
+            direction="row"
+            justify="space-around"
+            alignItems="center"
+            spacing={1}
+        >
+            {/**
+             * Room name
+             */}
+            <Grid item xs={12}>
+                <Typography className={classes.gridItem} variant="h4">
+                    Room Name: {room}
+                </Typography>
+            </Grid>
+
+            {/**
+             * Cards & Estimate updater / dropdown
+             */}
+            <Grid container item xs={8}>
+
+                {estimates.map(item =>
+                    <Grid key={`${item.users_name}${item.estimate}`} item xs={2}>
+                        <PokerCard name={item.users_name} estimate={item.estimate} isExpanded={expandAll}></PokerCard>
+                    </Grid>
+                )}
+
                 <Grid item xs={2}>
                     <DropDownList estimate={estimate} numberList={config.numberList} setNumber={handleEstimate}></DropDownList>
                 </Grid>
-            </Grid>
-        </div>
-        );
-    };
 
-    return (
-        <div>
-            <ScrumPoker />
-        </div>
-    )
+            </Grid>
+
+            {/**
+             * Buttons & User list
+             */}
+            <Grid container item xs={4}>
+                <List
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                    subheader={
+                        <>
+                            <ListSubheader component="div" id="nested-list-subheader">
+                                General:
+                            </ListSubheader>
+                            {
+                            isScrumMaster ?
+                                <ListSubheader component="div" id="nested-list-subheader">
+                                    ScrumMaster Controls:
+                                </ListSubheader>
+                            : null
+                            }
+                        </>
+                    }
+                    className={classes.root}
+                >
+                    <ListItem button>
+                        <ListItemIcon>
+                            <ExitToAppIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Exit Room" onClick={exit} />
+                    </ListItem>
+                    { isScrumMaster ?
+                    <>
+                        <ListItem button>
+                            {!expandAll ?
+                                <>
+                                    <ListItemIcon>
+                                        <VisibilityIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText primary="Show Estimates" onClick={handleExpandClick} />
+                                </> 
+                                : 
+                                <>
+                                    <ListItemIcon>
+                                        <VisibilityOffIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText primary="Hide Estimates" onClick={handleExpandClick} />
+                                </> 
+                            }
+                        </ListItem>
+                    </>
+                        :
+                    null
+                    }
+                    <ListItem>
+
+                    </ListItem>
+                </List>
+
+            </Grid>
+        </Grid>
+    </div>
+    );
 };
 
 export default HandleScrumPoker;
 
-const useStyles = makeStyles((theme) => ({
-    gridItem: {
-        display: "flex",
-        justifyContent: "center",
-        margin: 20,
-        padding: 20
-    },
-}));
+
