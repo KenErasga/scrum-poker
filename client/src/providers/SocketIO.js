@@ -97,9 +97,14 @@ const Socket = props => {
         }
     };
 
-    const onScrumMasterUpdate = (setScrumMaster) => {
+    /**
+     * Updates Scrum Master, but additionally sends new estimates immediately
+     * afterwards, to ensure everyone is *absolutely* in sync.
+     */
+    const onScrumMasterUpdate = (setScrumMaster, handleEstimate) => {
         socket.on("scrum-master-update", (data) => {
             setScrumMaster(data);
+            handleEstimate("N/A"); // We reset their estimate on becoming the Scrum Master
             console.log("Scrum Master Updated.")
         })
     }
@@ -170,7 +175,8 @@ const Socket = props => {
             emitUpdateScrumMaster,
             onEstimate,
             onExpand,
-            onScrumMasterUpdate
+            onScrumMasterUpdate,
+            socket
         }}>
             {props.children}
         </SocketContext.Provider>

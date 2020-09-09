@@ -72,14 +72,14 @@ const HandleScrumPoker = ({ location }) => {
         emitDisconnect, 
         emitExpand, 
         onScrumMasterUpdate, 
-        emitUpdateScrumMaster } = useSocket();
+        emitUpdateScrumMaster, socket } = useSocket();
     
     useEffect(() => {
         const { name, room } = queryString.parse(location.search);
 
         initialiseSocket();
         emitJoin(setRoom, name, room, estimate, setScrumMaster);
-        onScrumMasterUpdate(setScrumMaster);
+        onScrumMasterUpdate(setScrumMaster, handleEstimate);
 
         // temporary fix for when a new user joins it automatically set the expanded card to not show
         emitExpand({ isExpanded: true });
@@ -91,7 +91,6 @@ const HandleScrumPoker = ({ location }) => {
     }, [config.SOCKET_IO_HOST, location.search]);
 
     const { estimate, estimates, handleEstimate } = useEstimate();
-    console.log(estimates)
 
     const { expandAll, handleExpandClick } = useExpand();
 
@@ -235,15 +234,17 @@ const HandleScrumPoker = ({ location }) => {
                     <Divider />
                     <List component="user-list">
                         { isScrumMaster ? estimates.map((user, i) => {
-                            return <UserListItem
-                                selectedUserIndex={selectedUserIndex}
-                                handleUserListClick={handleUserListClick}
-                                emitUpdateScrumMaster={emitUpdateScrumMaster}
-                                setScrumMaster={setScrumMaster}
-                                usersExpandState={usersExpandState}
-                                classes={classes} 
-                                index={i}
-                                user={user}/>
+                                if (user.scrum_master !== true) {
+                                    return <UserListItem
+                                        selectedUserIndex={selectedUserIndex}
+                                        handleUserListClick={handleUserListClick}
+                                        emitUpdateScrumMaster={emitUpdateScrumMaster}
+                                        setScrumMaster={setScrumMaster}
+                                        usersExpandState={usersExpandState}
+                                        classes={classes} 
+                                        index={i}
+                                        user={user}/>
+                                }
                             }
                         ) : null }
 
