@@ -66,7 +66,13 @@ const HandleScrumPoker = ({ location }) => {
     const history = useHistory();
     const classes = useStyles();
 
-    const { initialiseSocket, emitJoin, emitDisconnect, emitExpand, onScrumMasterUpdate } = useSocket();
+    const { 
+        initialiseSocket, 
+        emitJoin, 
+        emitDisconnect, 
+        emitExpand, 
+        onScrumMasterUpdate, 
+        emitUpdateScrumMaster } = useSocket();
     
     useEffect(() => {
         const { name, room } = queryString.parse(location.search);
@@ -203,7 +209,7 @@ const HandleScrumPoker = ({ location }) => {
                         {/**
                          * Expand estimates
                          */}
-                        {isScrumMaster ?
+                        { isScrumMaster ?
                             <>
                                 <ListItem button>
                                     {!expandAll ?
@@ -223,22 +229,23 @@ const HandleScrumPoker = ({ location }) => {
                                     }
                                 </ListItem>
                             </>
-                            :
-                            null
-                        }
+                            : null }
                         
                     </List>
                     <Divider />
                     <List component="user-list">
-                        {estimates.map((user, i) =>
-                            <UserListItem
+                        { isScrumMaster ? estimates.map((user, i) => {
+                            return <UserListItem
                                 selectedUserIndex={selectedUserIndex}
                                 handleUserListClick={handleUserListClick}
+                                emitUpdateScrumMaster={emitUpdateScrumMaster}
+                                setScrumMaster={setScrumMaster}
                                 usersExpandState={usersExpandState}
                                 classes={classes} 
                                 index={i}
                                 user={user}/>
-                        )}
+                            }
+                        ) : null }
 
                     </List>
                 </div>
@@ -251,7 +258,15 @@ const HandleScrumPoker = ({ location }) => {
 
 export default HandleScrumPoker;
 
-const UserListItem = ({ selectedUserIndex, handleUserListClick, usersExpandState, classes, index, user }) => {
+const UserListItem = ({ 
+    selectedUserIndex, 
+    handleUserListClick,
+    emitUpdateScrumMaster,
+    setScrumMaster, 
+    usersExpandState, 
+    classes, 
+    index, 
+    user }) => {
     return (
         <div key={user.id}>
             <ListItem
@@ -259,7 +274,7 @@ const UserListItem = ({ selectedUserIndex, handleUserListClick, usersExpandState
                 selected={selectedUserIndex === index}
                 onClick={(event) => handleUserListClick(event, index)}
             >
-                <ListItemText primary={user.users_name} />
+                <ListItemText primary={`${user.users_name}`} />
                 {usersExpandState[index] ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse 
@@ -272,7 +287,7 @@ const UserListItem = ({ selectedUserIndex, handleUserListClick, usersExpandState
                         <ListItemIcon>
                             <StarsIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Set Scrum Master" />
+                        <ListItemText primary="Set Scrum Master" onClick={() => emitUpdateScrumMaster(user, setScrumMaster)}/>
                     </ListItem>
                     <ListItem button className={classes.nested}>
                         <ListItemIcon>

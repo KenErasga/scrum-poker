@@ -56,6 +56,13 @@ const Socket = props => {
         }
     };
 
+    const emitUpdateScrumMaster = (user, setScrumMaster) => {
+        socket.emit("update-scrum-master", user, (data) => {
+            console.log(data); // SCRUM MASTER UPDATE ACKNOWLEDGEMENT
+            setScrumMaster(false);
+        });
+    } 
+
     const emitDisconnect = () => {
         try {
             socket.emit('disconnect');
@@ -160,6 +167,7 @@ const Socket = props => {
             emitDisconnect,
             emitExpand,
             emitSendEstimate,
+            emitUpdateScrumMaster,
             onEstimate,
             onExpand,
             onScrumMasterUpdate
