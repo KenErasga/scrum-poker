@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DropDownList = ({ estimate, numberList, setNumber }) => {
+const DropDownList = ({ estimate, numberList, setEstimate }) => {
   const classes = useStyles();
   return (
     <div>
@@ -19,11 +19,10 @@ const DropDownList = ({ estimate, numberList, setNumber }) => {
         <InputLabel id="estimateLabel">Estimate</InputLabel>
         <NativeSelect
           value={estimate}
-          onChange={e => setNumber(e.target.value)}
+          onChange={e => setEstimate(e.target.value)}
         >
-          <option key={`optionnone`} value=''></option>
           {numberList.map(estimate => {
-            return (<option key={`option${estimate}`} value={estimate}>{estimate}</option>)
+            return (<option key={`option-${estimate}`} value={estimate}>{estimate}</option>)
           })}
         </NativeSelect>
       </FormControl>

@@ -64,6 +64,21 @@ export default class UserHandler {
     }
 
     /**
+     * Broadcasts the empty estimates to all users in a room
+     *
+     * @fires UserHandler#broadcastResetEstimates:resetEstimate
+     * @param {socketio.Server} io : The socketio server instance
+     * @param {string} room : The room to broadcast to
+     * @returns {boolean} Whether or not the new estimates emitted successfully
+     */
+    public static broadcastResetEstimates(io: socketio.Server, room: string, reset: string): boolean {
+        return io.to(room).emit("resetEstimate", {
+            room,
+            reset
+        });
+    }
+
+    /**
      * Updates the expands or contracts the estimates view for all connected clients in
      * a given room
      *
@@ -117,13 +132,22 @@ export default class UserHandler {
      * Updates a given users *current* estimate
      *
      * @param {string} id : The users id, denoted by their socket id
-     * @param {string} estimate : The users *current* estimate
      */
     public static changeUserEstimate(id: string, estimate: string): void {
         const user = UserHandler._USER_STORE[UserHandler._USER_STORE.findIndex(u => u?.id === id)];
         if (user) {
             user.estimate = estimate;
-        }
+        };
+    }
+
+    /**
+     * Reset all users estimate
+     *
+     * @param {string} reset: The value we reset it to (currently an empty string)
+     * @param {string} room : The room we wish to filter users from
+     */
+    public static resetUsersEstimate(reset: string, room: string): void {
+       UserHandler._USER_STORE.filter(user => user?.room === room).forEach((i: any) => i.estimate = reset);
     }
 
     /**

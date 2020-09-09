@@ -9,6 +9,7 @@ import PokerCard from '../../commonComponents/PokerCard';
 import DropDownList from '../Dropdown/Dropdown';
 import useEstimate from './useEstimate';
 import useExpand from './useExpand';
+import useResetEstimate from './useResetEstimate'
 import { useSocket } from '../../providers/SocketIO';
 
 // List imports:
@@ -26,6 +27,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
+import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 
 // MUI Classes 
 const useStyles = makeStyles((theme) => ({
@@ -80,6 +82,7 @@ const HandleScrumPoker = ({ location }) => {
 
     const { estimate, estimates, handleEstimate } = useEstimate();
     const { expandAll, handleExpandClick } = useExpand();
+    const { handleResetEstimate } = useResetEstimate();
 
     const exit = async () => {
         logout();
@@ -90,26 +93,14 @@ const HandleScrumPoker = ({ location }) => {
         history.push('/');
     };
 
-    const renderExpandEstimates = () => {
-        console.log(expandAll, "<--------")
-        if (isScrumMaster) {
-            return (
-                <Grid item xs={2}>
-                    <Button
-                        className={classes.gridItem}
-                        onClick={handleExpandClick}
-                        variant="contained"
-                    >
-                        Show estimate
-                        </Button>
-                </Grid>
-            )
-        } else {
-            return (<Grid item xs={2}></Grid>)
-        }
-    }
-
     return (<div>
+
+        {/**
+         * Room name
+         */}
+        <Typography className={classes.gridItem} variant="h4">
+            Room Name: {room}
+        </Typography>
         {/**
          * Main screen wrapper
          */}
@@ -120,14 +111,6 @@ const HandleScrumPoker = ({ location }) => {
             alignItems="center"
             spacing={1}
         >
-            {/**
-             * Room name
-             */}
-            <Grid item xs={12}>
-                <Typography className={classes.gridItem} variant="h4">
-                    Room Name: {room}
-                </Typography>
-            </Grid>
 
             {/**
              * Cards & Estimate updater / dropdown
@@ -141,7 +124,7 @@ const HandleScrumPoker = ({ location }) => {
                 )}
 
                 <Grid item xs={2}>
-                    <DropDownList estimate={estimate} numberList={config.numberList} setNumber={handleEstimate}></DropDownList>
+                    <DropDownList estimate={estimate} numberList={config.numberList} setEstimate={handleEstimate}></DropDownList>
                 </Grid>
 
             </Grid>
@@ -159,11 +142,11 @@ const HandleScrumPoker = ({ location }) => {
                                 General:
                             </ListSubheader>
                             {
-                            isScrumMaster ?
-                                <ListSubheader component="div" id="nested-list-subheader">
-                                    ScrumMaster Controls:
+                                isScrumMaster ?
+                                    <ListSubheader component="div" id="nested-list-subheader">
+                                        ScrumMaster Controls:
                                 </ListSubheader>
-                            : null
+                                    : null
                             }
                         </>
                     }
@@ -171,36 +154,42 @@ const HandleScrumPoker = ({ location }) => {
                 >
                     <ListItem button>
                         <ListItemIcon>
-                            <ExitToAppIcon/>
+                            <ExitToAppIcon />
                         </ListItemIcon>
                         <ListItemText primary="Exit Room" onClick={exit} />
                     </ListItem>
-                    { isScrumMaster ?
-                    <>
-                        <ListItem button>
-                            {!expandAll ?
-                                <>
-                                    <ListItemIcon>
-                                        <VisibilityIcon/>
-                                    </ListItemIcon>
-                                    <ListItemText primary="Show Estimates" onClick={handleExpandClick} />
-                                </> 
-                                : 
-                                <>
-                                    <ListItemIcon>
-                                        <VisibilityOffIcon/>
-                                    </ListItemIcon>
-                                    <ListItemText primary="Hide Estimates" onClick={handleExpandClick} />
-                                </> 
-                            }
-                        </ListItem>
-                    </>
+                    {isScrumMaster ?
+                        <>
+                            <ListItem button>
+                                {!expandAll ?
+                                    <>
+                                        <ListItemIcon>
+                                            <VisibilityIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Show Estimates" onClick={handleExpandClick} />
+                                    </>
+                                    :
+                                    <>
+                                        <ListItemIcon>
+                                            <VisibilityOffIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Hide Estimates" onClick={handleExpandClick} />
+                                    </>
+                                }
+                            </ListItem>
+                        </>
                         :
-                    null
+                        null
                     }
-                    <ListItem>
-
-                    </ListItem>
+                    {isScrumMaster ?
+                        <ListItem button>
+                            <ListItemIcon>
+                                <RotateLeftIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Reset Estimates" onClick={handleResetEstimate} />
+                        </ListItem> :
+                        null
+                    }
                 </List>
 
             </Grid>

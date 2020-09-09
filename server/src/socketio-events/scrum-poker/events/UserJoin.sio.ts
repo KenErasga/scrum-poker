@@ -26,8 +26,8 @@ export default class UserJoin extends SocketIOEvent {
                  * SM or not.
                  */
                 UserHandler.addUserToLocalStore(new User(
-                    users_name.trim().toLowerCase(),
-                    room.trim().toLowerCase(),
+                    users_name,
+                    room,
                     estimate,
                     !roomExistedPrior,
                     socket.id),

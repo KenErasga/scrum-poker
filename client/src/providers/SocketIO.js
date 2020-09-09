@@ -76,15 +76,38 @@ const Socket = props => {
         }
     };
 
-    const emitSendEstimate = (setNumber, e) => {
+    const emitSendEstimate = (setEstimate, e) => {
         try {
-            setNumber(e);
+            setEstimate(e);
             if (e) {
                 socket.emit('sendEstimate', e, (data) => {
                     console.log(data);
-                    socketError(data)
+                    socketError(data);
                 });
             };
+        } catch (error) {
+            disconnectError(error);
+        }
+    };
+
+    const emitResetEstimate = (setEstimate, e) => {
+        try {
+            setEstimate(e);
+                socket.emit('resetEstimates', e, (data) => {
+                    console.log(data);
+                    socketError(data);
+                });
+        } catch (error) {
+            disconnectError(error);
+        }
+    };
+
+    const onResetEstimate = async (setEstimate) => {
+        try {
+            await socket.on('resetEstimate', ({ reset }) => {
+                setEstimate('N/A');
+                console.log('something Change')
+            });
         } catch (error) {
             disconnectError(error);
         }
@@ -98,7 +121,6 @@ const Socket = props => {
         } catch (error) {
             disconnectError(error);
         }
-
     };
 
     const onExpand = (setExpandAll) => {
@@ -152,6 +174,8 @@ const Socket = props => {
             emitDisconnect,
             emitExpand,
             emitSendEstimate,
+            emitResetEstimate,
+            onResetEstimate,
             onEstimate,
             onExpand
         }}>
