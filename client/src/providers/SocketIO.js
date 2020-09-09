@@ -90,9 +90,17 @@ const Socket = props => {
         }
     };
 
+    const onScrumMasterUpdate = (setScrumMaster) => {
+        socket.on("scrum-master-update", (data) => {
+            setScrumMaster(data);
+            console.log("Scrum Master Updated.")
+        })
+    }
+
     const onEstimate = (setEstimates) => {
         try {
             socket.once('estimate', ({ users }) => {
+                console.log("our socket id is: ", socket.id)
                 setEstimates(users);
             });
         } catch (error) {
@@ -153,7 +161,8 @@ const Socket = props => {
             emitExpand,
             emitSendEstimate,
             onEstimate,
-            onExpand
+            onExpand,
+            onScrumMasterUpdate
         }}>
             {props.children}
         </SocketContext.Provider>
