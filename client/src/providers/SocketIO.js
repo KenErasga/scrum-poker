@@ -90,10 +90,9 @@ const Socket = props => {
         }
     };
 
-    const emitResetEstimate = (setEstimate, e) => {
+    const emitResetEstimate = () => {
         try {
-            setEstimate(e);
-                socket.emit('resetEstimates', e, (data) => {
+                socket.emit('resetEstimates', "N/A", (data) => {
                     console.log(data);
                     socketError(data);
                 });
@@ -102,9 +101,9 @@ const Socket = props => {
         }
     };
 
-    const onResetEstimate = async (setEstimate) => {
+    const onResetEstimate = (setEstimate) => {
         try {
-            await socket.on('resetEstimate', ({ reset }) => {
+            socket.once('resetEstimate', ({ reset }) => {
                 setEstimate('N/A');
                 console.log('something Change')
             });

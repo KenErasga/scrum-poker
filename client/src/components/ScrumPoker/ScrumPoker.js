@@ -72,7 +72,7 @@ const HandleScrumPoker = ({ location }) => {
         emitJoin(setRoom, name, room, estimate, setScrumMaster);
 
         // temporary fix for when a new user joins it automatically set the expanded card to not show
-        emitExpand({ isExpanded: true });
+        emitExpand(true);
 
         return () => {
             emitDisconnect();
@@ -80,9 +80,9 @@ const HandleScrumPoker = ({ location }) => {
 
     }, [config.SOCKET_IO_HOST, location.search]);
 
-    const { estimate, estimates, handleEstimate } = useEstimate();
+    const { estimate, estimates, handleEstimate, setEstimate } = useEstimate();
     const { expandAll, handleExpandClick } = useExpand();
-    const { handleResetEstimate } = useResetEstimate();
+    const { handleResetEstimate } = useResetEstimate(estimate, estimates, setEstimate);
 
     const exit = async () => {
         logout();
@@ -186,7 +186,11 @@ const HandleScrumPoker = ({ location }) => {
                             <ListItemIcon>
                                 <RotateLeftIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Reset Estimates" onClick={handleResetEstimate} />
+                            <ListItemText primary="Reset Estimates" onClick={(e) => {
+                                setEstimate("N/A")
+                                handleResetEstimate(e)
+                                emitExpand(true)
+                            }} />
                         </ListItem> :
                         null
                     }
