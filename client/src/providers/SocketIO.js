@@ -83,13 +83,13 @@ const Socket = props => {
         }
     };
 
-    const emitSendEstimate = (setNumber, e) => {
+    const emitSendEstimate = (setEstimate, e) => {
         try {
-            setNumber(e);
+            setEstimate(e);
             if (e) {
                 socket.emit('sendEstimate', e, (data) => {
                     console.log(data);
-                    socketError(data)
+                    socketError(data);
                 });
             };
         } catch (error) {
@@ -108,6 +108,27 @@ const Socket = props => {
             console.log("Scrum Master Updated.")
         })
     }
+    const emitResetEstimate = () => {
+        try {
+                socket.emit('resetEstimates', "N/A", (data) => {
+                    console.log(data);
+                    socketError(data);
+                });
+        } catch (error) {
+            disconnectError(error);
+        }
+    };
+
+    const onResetEstimate = (setEstimate) => {
+        try {
+            socket.once('resetEstimate', ({ reset }) => {
+                setEstimate('N/A');
+                console.log('something Change')
+            });
+        } catch (error) {
+            disconnectError(error);
+        }
+    };
 
     const onEstimate = (setEstimates) => {
         try {
@@ -118,7 +139,6 @@ const Socket = props => {
         } catch (error) {
             disconnectError(error);
         }
-
     };
 
     const onExpand = (setExpandAll) => {
@@ -173,6 +193,8 @@ const Socket = props => {
             emitExpand,
             emitSendEstimate,
             emitUpdateScrumMaster,
+            emitResetEstimate,
+            onResetEstimate,
             onEstimate,
             onExpand,
             onScrumMasterUpdate,

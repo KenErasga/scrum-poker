@@ -13,7 +13,7 @@ const useExpand = () => {
 
     const handleExpandClick = async (e) => {
         e.preventDefault();
-
+        
         setIsExpanded(!isExpanded);
 
         emitExpand(isExpanded);

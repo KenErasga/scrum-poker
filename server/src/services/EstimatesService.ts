@@ -5,7 +5,7 @@
  * @class
  * @static
  */
-export default class EstimatesSerivce {
+export default class EstimatesService {
     /**
      * Evaluates a given estimate to see if it is within the acceptable range
      *
