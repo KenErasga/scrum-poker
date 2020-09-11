@@ -70,12 +70,6 @@ const HandleRooms = () => {
   const [tabIndex, setTabIndex] = React.useState(0);
   const { listCognitoUsers } = useContext(CognitoAccessContext);
 
-  const dateSort = (dateArr) => {
-    return dateArr.sort((a, b) => {
-        
-    });
-  }
-
   useEffect(() => {
     listCognitoUsers().then(data => {
       data.Users = data.Users
