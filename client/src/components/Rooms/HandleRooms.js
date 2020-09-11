@@ -70,8 +70,24 @@ const HandleRooms = () => {
   const [tabIndex, setTabIndex] = React.useState(0);
   const { listCognitoUsers } = useContext(CognitoAccessContext);
 
+  const dateSort = (dateArr) => {
+    return dateArr.sort((a, b) => {
+        
+    });
+  }
+
   useEffect(() => {
     listCognitoUsers().then(data => {
+      data.Users = data.Users
+      .map(u => {
+         u.UserCreateDate = Date.parse(u.UserCreateDate)
+         return u;
+      })
+      .sort((a, b) => (a.UserCreateDate < b.UserCreateDate) ? 1 : -1)
+      .map(u => {
+        u.UserCreateDate = new Date(u.UserCreateDate).toLocaleDateString();
+        return u;
+      });
       setUserList(data)
     });
   }, [Object.keys(userList).length])
@@ -117,13 +133,13 @@ const HandleRooms = () => {
          */}
         <TabPanel value={tabIndex} index={2} className={classes.tabContainer}>
           <List component="view-rooms" className={classes.root} aria-label="mailbox folders">
-            {userList.Users?.map(({ Username, UserCreateDate}, i) => {
+            {userList.Users?.map(({ Username, UserCreateDate }, i) => {
               if (i === userList.length - 1) {
                 console.log("mhm?", Username)
               } else {
                 return (
                   <ListItem key={i} button divider dense onClick={() => console.log(userList)}>
-                    <ListItemText primary={Username} secondary={`Created at: ${new Date(UserCreateDate)}`} />
+                    <ListItemText primary={Username} secondary={`Created at: ${UserCreateDate}`} />
                   </ListItem>
                 );
               }
