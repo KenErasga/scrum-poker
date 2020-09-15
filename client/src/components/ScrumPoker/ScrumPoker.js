@@ -10,6 +10,7 @@ import DropDownList from '../Dropdown/Dropdown';
 import useEstimate from './useEstimate';
 import useExpand from './useExpand';
 import useResetEstimate from './useResetEstimate'
+import useDeleteRoom from './useDeleteRoom'
 import { useSocket } from '../../providers/SocketIO';
 
 // List imports:
@@ -56,13 +57,13 @@ const HandleScrumPoker = ({ location }) => {
      */
     const [room, setRoom] = useState('');
 
-    const { logout } = useContext(AccountContext);
+    const { logout, deleteUser, globalSignOut } = useContext(AccountContext);
     const { setIsAuthenticated } = useContext(AuthContext);
 
     const history = useHistory();
     const classes = useStyles();
 
-    const { initialiseSocket, emitJoin, emitDisconnect, emitExpand } = useSocket();
+    const { initialiseSocket, emitJoin, emitDisconnect, emitExpand, onDeleteRoom, emitDeleteRoom } = useSocket();
 
     useEffect(() => {
         const { name, room } = queryString.parse(location.search);
@@ -83,6 +84,7 @@ const HandleScrumPoker = ({ location }) => {
     const { estimate, estimates, handleEstimate, setEstimate } = useEstimate();
     const { expandAll, handleExpandClick } = useExpand();
     const { handleResetEstimate } = useResetEstimate(estimate, estimates, setEstimate);
+    const { wipeRoom } = useDeleteRoom(room, setIsAuthenticated, history);
 
     const exit = async () => {
         logout();
@@ -182,6 +184,7 @@ const HandleScrumPoker = ({ location }) => {
                         null
                     }
                     {isScrumMaster ?
+                    <div>
                         <ListItem button>
                             <ListItemIcon>
                                 <RotateLeftIcon />
@@ -191,7 +194,15 @@ const HandleScrumPoker = ({ location }) => {
                                 handleResetEstimate(e)
                                 emitExpand(true)
                             }} />
-                        </ListItem> :
+                        </ListItem>
+                            <ListItem button>
+                            <ListItemIcon>
+                                <RotateLeftIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Wipe Room" onClick={wipeRoom} />
+                        </ListItem> 
+                        </div> 
+                                            :
                         null
                     }
                 </List>

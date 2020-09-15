@@ -9,7 +9,7 @@ const useResetEstimate = (estimate, estimates, setEstimate) => {
         onResetEstimate(setEstimate);
     }, [estimates]);
 
-    const handleResetEstimate =  () => {
+    const handleResetEstimate = () => {
         emitResetEstimate();
     };
 

@@ -2,8 +2,7 @@ import io from 'socket.io-client';
 import { useErrorHandler } from '../components/Error/ErrorHandler'
 import React, { createContext, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-
-const ENDPOINT = process.env.REACT_APP_SOCKETIO_HOST || '192.168.99.101:30001';
+import {AccountContext, AuthContext} from './Cognito';
 
 const SocketContext = createContext();
 
@@ -12,7 +11,8 @@ const Socket = props => {
     let socket
 
     const { setErrorMessage, setIsError, socketError, disconnectError } = useErrorHandler();
-
+    const { logout } = useContext(AccountContext);
+    const { setIsAuthenticated } = useContext(AuthContext);
     const history = useHistory();
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const Socket = props => {
 
     const initialiseSocket = () => {
         try {
-            socket = io(ENDPOINT, { transports: ['websocket', 'polling'] });
+            socket = io(process.env.REACT_APP_SOCKETIO_HOST, { transports: ['websocket', 'polling'] });
 
             onConnectionError();
             onError();
@@ -35,7 +35,6 @@ const Socket = props => {
         try {
             setRoom(room);
             socket.emit('join', { users_name: name, room, estimate }, (data) => {
-                console.log(data);
                 socketError(data)
                 /**
                  * As we're aware we joined, we'll now query the scrum master endpoint
@@ -81,7 +80,6 @@ const Socket = props => {
             setEstimate(e);
             if (e) {
                 socket.emit('sendEstimate', e, (data) => {
-                    console.log(data);
                     socketError(data);
                 });
             };
@@ -101,11 +99,37 @@ const Socket = props => {
         }
     };
 
+    const emitDeleteRoom = () => {
+        try {
+                socket.emit('deleteRoom', "test101", (data) => {
+                    console.log(data, '<<<<<<<<<<<<<<<<<');
+                    socketError(data);
+                });
+        } catch (error) {
+            disconnectError(error);
+        }
+    };
+
+    const onDeleteRoom = (logout, setIsAuthenticated, emitDisconnect, history) => {
+        try {
+            socket.once('deleteUser', ({ test, testing }) => {
+                logout();
+                setIsAuthenticated(false);
+        
+                localStorage.clear();
+                emitDisconnect();
+                history.push('/');
+            });
+            
+        } catch (error) {
+            disconnectError(error);
+        }
+    };
+
     const onResetEstimate = (setEstimate) => {
         try {
             socket.once('resetEstimate', ({ reset }) => {
                 setEstimate('N/A');
-                console.log('something Change')
             });
         } catch (error) {
             disconnectError(error);
@@ -174,6 +198,8 @@ const Socket = props => {
             emitExpand,
             emitSendEstimate,
             emitResetEstimate,
+            emitDeleteRoom,
+            onDeleteRoom,
             onResetEstimate,
             onEstimate,
             onExpand
