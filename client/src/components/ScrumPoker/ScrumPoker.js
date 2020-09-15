@@ -12,6 +12,7 @@ import useExpand from './useExpand';
 import useResetEstimate from './useResetEstimate'
 import useDeleteRoom from './useDeleteRoom'
 import { useSocket } from '../../providers/SocketIO';
+import ListItemButton from '../../commonComponents/ListItemButton'
 
 // List imports:
 import ListSubheader from '@material-ui/core/ListSubheader';
@@ -29,6 +30,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 // MUI Classes 
 const useStyles = makeStyles((theme) => ({
@@ -135,78 +137,33 @@ const HandleScrumPoker = ({ location }) => {
              * Buttons & User list
              */}
             <Grid container item xs={4}>
-                <List
-                    component="nav"
-                    aria-labelledby="nested-list-subheader"
-                    subheader={
-                        <>
-                            <ListSubheader component="div" id="nested-list-subheader">
+                <List className={classes.root}>
+                    <ListSubheader id="nested-list-subheader">
                                 General:
-                            </ListSubheader>
-                            {
-                                isScrumMaster ?
-                                    <ListSubheader component="div" id="nested-list-subheader">
-                                        ScrumMaster Controls:
-                                </ListSubheader>
-                                    : null
-                            }
-                        </>
+                    </ListSubheader>
+                    <ListItemButton description="Exit Room" onClick={exit} Icon={ExitToAppIcon} />
+                    {
+                        isScrumMaster ?
+                        <ListSubheader component="div" id="nested-list-subheader">
+                                ScrumMaster Controls:
+                        </ListSubheader>
+                            : null
                     }
-                    className={classes.root}
-                >
-                    <ListItem button>
-                        <ListItemIcon>
-                            <ExitToAppIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Exit Room" onClick={exit} />
-                    </ListItem>
-                    {isScrumMaster ?
-                        <>
-                            <ListItem button>
-                                {!expandAll ?
-                                    <>
-                                        <ListItemIcon>
-                                            <VisibilityIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Show Estimates" onClick={handleExpandClick} />
-                                    </>
-                                    :
-                                    <>
-                                        <ListItemIcon>
-                                            <VisibilityOffIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Hide Estimates" onClick={handleExpandClick} />
-                                    </>
-                                }
-                            </ListItem>
-                        </>
-                        :
-                        null
+                    { isScrumMaster ? 
+                    !expandAll ? 
+                        <ListItemButton description="Show Estimates" onClick={handleExpandClick} Icon={VisibilityIcon} /> :
+                        <ListItemButton description="Hide Estimates" onClick={handleExpandClick} Icon={VisibilityOffIcon} /> 
+                        : null
                     }
                     {isScrumMaster ?
-                    <div>
-                        <ListItem button>
-                            <ListItemIcon>
-                                <RotateLeftIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Reset Estimates" onClick={(e) => {
-                                setEstimate("N/A")
-                                handleResetEstimate(e)
-                                emitExpand(true)
-                            }} />
-                        </ListItem>
-                            <ListItem button>
-                            <ListItemIcon>
-                                <RotateLeftIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Wipe Room" onClick={wipeRoom} />
-                        </ListItem> 
-                        </div> 
+                        <div>
+                        <ListItemButton description="Reset Estimates" onClick={handleResetEstimate} Icon={RotateLeftIcon} />
+                        <ListItemButton description="Wipe Room" onClick={wipeRoom} Icon={DeleteForeverIcon} />
+                        </div>
                                             :
                         null
                     }
                 </List>
-
             </Grid>
         </Grid>
     </div>

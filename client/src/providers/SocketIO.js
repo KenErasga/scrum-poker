@@ -45,7 +45,6 @@ const Socket = props => {
                     res => res.json()
                 ).then(d => {
                     if (d.scrum_master) {
-                        console.log(d);
                         setScrumMaster(true)
                     }
                 });
@@ -91,7 +90,6 @@ const Socket = props => {
     const emitResetEstimate = () => {
         try {
                 socket.emit('resetEstimates', "N/A", (data) => {
-                    console.log(data);
                     socketError(data);
                 });
         } catch (error) {
@@ -102,7 +100,6 @@ const Socket = props => {
     const emitDeleteRoom = () => {
         try {
                 socket.emit('deleteRoom', "test101", (data) => {
-                    console.log(data, '<<<<<<<<<<<<<<<<<');
                     socketError(data);
                 });
         } catch (error) {
@@ -181,7 +178,6 @@ const Socket = props => {
     const onTimeout = () => {
         try {
             socket.on('connect_timeout', function (timeout) {
-                console.log(timeout);
                 socketError('Connection Timeout')
             });
         } catch (error) {
