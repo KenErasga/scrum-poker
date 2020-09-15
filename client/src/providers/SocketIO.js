@@ -10,9 +10,7 @@ const Socket = props => {
 
     let socket
 
-    const { setErrorMessage, setIsError, socketError, disconnectError } = useErrorHandler();
-    const { logout } = useContext(AccountContext);
-    const { setIsAuthenticated } = useContext(AuthContext);
+    const { setErrorMessage, socketError, disconnectError } = useErrorHandler();
     const history = useHistory();
 
     useEffect(() => {
@@ -56,7 +54,6 @@ const Socket = props => {
 
     const emitUpdateScrumMaster = (user, setScrumMaster) => {
         socket.emit("update-scrum-master", user, (data) => {
-            console.log(data); // SCRUM MASTER UPDATE ACKNOWLEDGEMENT
             setScrumMaster(false);
         });
     } 
@@ -102,7 +99,6 @@ const Socket = props => {
         socket.on("scrum-master-update", (data) => {
             setScrumMaster(data);
             handleEstimate("N/A"); // We reset their estimate on becoming the Scrum Master
-            console.log("Scrum Master Updated.")
         })
     }
     const emitResetEstimate = () => {
@@ -154,7 +150,6 @@ const Socket = props => {
     const onEstimate = (setEstimates) => {
         try {
             socket.once('estimate', ({ users }) => {
-                console.log("our socket id is: ", socket.id)
                 setEstimates(users);
             });
         } catch (error) {

@@ -75,8 +75,8 @@ const HandleScrumPoker = ({ location }) => {
         initialiseSocket,
         emitJoin,
         emitDisconnect,
-        emitExpand, 
-        onDeleteRoom, 
+        emitExpand,
+        onDeleteRoom,
         emitDeleteRoom,
         onScrumMasterUpdate,
         emitUpdateScrumMaster, socket } = useSocket();
@@ -182,40 +182,41 @@ const HandleScrumPoker = ({ location }) => {
              */}
             <Grid container item xs={4}>
                 <div className={classes.root}>
-                <List component="scrum-controls" className={classes.root}>
-                    <ListSubheader component="div" id="nested-list-subheader-1">
-                        General:
+                    <List component="scrum-controls" className={classes.root}>
+                        <ListSubheader component="div" id="nested-list-subheader-1">
+                            General:
                     </ListSubheader>
-                    <ListItemButton description="Exit Room" onClick={exit} Icon={ExitToAppIcon} />
-                </List>
-                <List className={classes.root}>
-                    {
-                        isScrumMaster ?
-                            <ListSubheader component="div" id="nested-list-subheader-2">
-                                ScrumMaster Controls:
+                        <ListItemButton description="Exit Room" onClick={exit} Icon={ExitToAppIcon} />
+                    </List>
+                    <List className={classes.root}>
+                        {
+                            isScrumMaster ?
+                                <ListSubheader component="div" id="nested-list-subheader-2">
+                                    ScrumMaster Controls:
                             </ListSubheader>
+                                : null
+                        }
+                        {isScrumMaster ?
+                            !expandAll ?
+                                <ListItemButton description="Show Estimates" onClick={handleExpandClick} Icon={VisibilityIcon} /> :
+                                <ListItemButton description="Hide Estimates" onClick={handleExpandClick} Icon={VisibilityOffIcon} />
                             : null
-                    }
-                    {isScrumMaster ?
-                        !expandAll ?
-                            <ListItemButton description="Show Estimates" onClick={handleExpandClick} Icon={VisibilityIcon} /> :
-                            <ListItemButton description="Hide Estimates" onClick={handleExpandClick} Icon={VisibilityOffIcon} />
-                        : null
-                    }
-                    {isScrumMaster ?
-                        <div>
-                            <ListItemButton description="Reset Estimates" onClick={handleResetEstimate} Icon={RotateLeftIcon} />
-                            <ListItemButton description="Wipe Room" onClick={wipeRoom} Icon={DeleteForeverIcon} />
-                        </div>
-                        :
-                        null
-                    }
-                </List>
+                        }
+                        {isScrumMaster ?
+                            <div>
+                                <ListItemButton description="Reset Estimates" onClick={handleResetEstimate} Icon={RotateLeftIcon} />
+                                <ListItemButton description="Wipe Room" onClick={wipeRoom} Icon={DeleteForeverIcon} />
+                            </div>
+                            :
+                            null
+                        }
+                    </List>
                     <Divider />
                     <List component="user-list">
                         {isScrumMaster ? estimates.map((user, i) => {
                             if (user.scrum_master !== true) {
                                 return <UserListItem
+                                    key={user.id}
                                     selectedUserIndex={selectedUserIndex}
                                     handleUserListClick={handleUserListClick}
                                     emitUpdateScrumMaster={emitUpdateScrumMaster}
