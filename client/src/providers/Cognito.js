@@ -1,5 +1,15 @@
 import { Auth } from 'aws-amplify'
 import React, { createContext } from 'react'
+import AWS, { CognitoIdentityServiceProvider, Credentials } from "aws-sdk";
+
+/**
+ * I wonder if this is the best place to setup our config, perhaps move this?
+ */
+AWS.config.update({
+    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY_ID,
+    region: process.env.REACT_APP_COGNITO_REGION
+});
 
 const AccountContext = createContext();
 
@@ -44,4 +54,31 @@ const Account = props => {
     );
 };
 
-export { Account, AccountContext, AuthContext }
+/* Holds the CognitoIdentityService object with the *correct* region */
+const CognitoAccessContext = createContext();
+const CISP = new CognitoIdentityServiceProvider();
+
+/**
+ * Grabs the entire User Pool within Cognito
+ */
+const listCognitoUsers = () => {
+    return new Promise((res, rej) => {
+        CISP.listUsers({
+            UserPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID
+        }, (err, data) => {
+            err ? rej(err) : res(data);
+        });
+    });
+}
+
+const CognitoAccess = ({ children }) => (
+    <CognitoAccessContext.Provider value={{
+        listCognitoUsers
+    }}>
+        {children}
+    </CognitoAccessContext.Provider>
+);
+
+
+
+export { Account, AccountContext, AuthContext, CognitoAccess, CognitoAccessContext }

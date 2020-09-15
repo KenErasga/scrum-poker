@@ -9,6 +9,7 @@ import PokerCard from '../../commonComponents/PokerCard';
 import DropDownList from '../Dropdown/Dropdown';
 import useEstimate from './useEstimate';
 import useExpand from './useExpand';
+import useResetEstimate from './useResetEstimate'
 import { useSocket } from '../../providers/SocketIO';
 
 // List imports:
@@ -29,6 +30,7 @@ import StarBorder from '@material-ui/icons/StarBorder';
 import Divider from '@material-ui/core/Divider';
 import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
 import StarsIcon from '@material-ui/icons/Stars';
+import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 
 // MUI Classes 
 const useStyles = makeStyles((theme) => ({
@@ -66,14 +68,14 @@ const HandleScrumPoker = ({ location }) => {
     const history = useHistory();
     const classes = useStyles();
 
-    const { 
-        initialiseSocket, 
-        emitJoin, 
-        emitDisconnect, 
-        emitExpand, 
-        onScrumMasterUpdate, 
+    const {
+        initialiseSocket,
+        emitJoin,
+        emitDisconnect,
+        emitExpand,
+        onScrumMasterUpdate,
         emitUpdateScrumMaster, socket } = useSocket();
-    
+
     useEffect(() => {
         const { name, room } = queryString.parse(location.search);
 
@@ -82,7 +84,7 @@ const HandleScrumPoker = ({ location }) => {
         onScrumMasterUpdate(setScrumMaster, handleEstimate);
 
         // temporary fix for when a new user joins it automatically set the expanded card to not show
-        emitExpand({ isExpanded: true });
+        emitExpand(true);
 
         return () => {
             emitDisconnect();
@@ -90,9 +92,9 @@ const HandleScrumPoker = ({ location }) => {
 
     }, [config.SOCKET_IO_HOST, location.search]);
 
-    const { estimate, estimates, handleEstimate } = useEstimate();
-
+    const { estimate, estimates, handleEstimate, setEstimate } = useEstimate();
     const { expandAll, handleExpandClick } = useExpand();
+    const { handleResetEstimate } = useResetEstimate(estimate, estimates, setEstimate);
 
     /**
      * Handles controlling the state of an 'expanded' user in the list.
@@ -134,6 +136,13 @@ const HandleScrumPoker = ({ location }) => {
     };
 
     return (<div>
+
+        {/**
+         * Room name
+         */}
+        <Typography className={classes.gridItem} variant="h4">
+            Room Name: {room}
+        </Typography>
         {/**
          * Main screen wrapper
          */}
@@ -144,14 +153,6 @@ const HandleScrumPoker = ({ location }) => {
             alignItems="center"
             spacing={1}
         >
-            {/**
-             * Room name
-             */}
-            <Grid item xs={12}>
-                <Typography className={classes.gridItem} variant="h4">
-                    Room Name: {room}
-                </Typography>
-            </Grid>
 
             {/**
              * Cards & Estimate updater / dropdown
@@ -165,7 +166,7 @@ const HandleScrumPoker = ({ location }) => {
                 )}
 
                 <Grid item xs={2}>
-                    <DropDownList estimate={estimate} numberList={config.numberList} setNumber={handleEstimate}></DropDownList>
+                    <DropDownList estimate={estimate} numberList={config.numberList} setEstimate={handleEstimate}></DropDownList>
                 </Grid>
 
             </Grid>
@@ -208,7 +209,7 @@ const HandleScrumPoker = ({ location }) => {
                         {/**
                          * Expand estimates
                          */}
-                        { isScrumMaster ?
+                        {isScrumMaster ?
                             <>
                                 <ListItem button>
                                     {!expandAll ?
@@ -227,26 +228,39 @@ const HandleScrumPoker = ({ location }) => {
                                         </>
                                     }
                                 </ListItem>
+                                {isScrumMaster ?
+                                    <ListItem button>
+                                        <ListItemIcon>
+                                            <RotateLeftIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Reset Estimates" onClick={(e) => {
+                                            setEstimate("N/A")
+                                            handleResetEstimate(e)
+                                            emitExpand(true)
+                                        }} />
+                                    </ListItem> :
+                                    null
+                                }
                             </>
-                            : null }
-                        
+                            : null}
+
                     </List>
                     <Divider />
                     <List component="user-list">
-                        { isScrumMaster ? estimates.map((user, i) => {
-                                if (user.scrum_master !== true) {
-                                    return <UserListItem
-                                        selectedUserIndex={selectedUserIndex}
-                                        handleUserListClick={handleUserListClick}
-                                        emitUpdateScrumMaster={emitUpdateScrumMaster}
-                                        setScrumMaster={setScrumMaster}
-                                        usersExpandState={usersExpandState}
-                                        classes={classes} 
-                                        index={i}
-                                        user={user}/>
-                                }
+                        {isScrumMaster ? estimates.map((user, i) => {
+                            if (user.scrum_master !== true) {
+                                return <UserListItem
+                                    selectedUserIndex={selectedUserIndex}
+                                    handleUserListClick={handleUserListClick}
+                                    emitUpdateScrumMaster={emitUpdateScrumMaster}
+                                    setScrumMaster={setScrumMaster}
+                                    usersExpandState={usersExpandState}
+                                    classes={classes}
+                                    index={i}
+                                    user={user} />
                             }
-                        ) : null }
+                        }
+                        ) : null}
 
                     </List>
                 </div>
@@ -259,14 +273,14 @@ const HandleScrumPoker = ({ location }) => {
 
 export default HandleScrumPoker;
 
-const UserListItem = ({ 
-    selectedUserIndex, 
+const UserListItem = ({
+    selectedUserIndex,
     handleUserListClick,
     emitUpdateScrumMaster,
-    setScrumMaster, 
-    usersExpandState, 
-    classes, 
-    index, 
+    setScrumMaster,
+    usersExpandState,
+    classes,
+    index,
     user }) => {
     return (
         <div key={user.id}>
@@ -278,9 +292,9 @@ const UserListItem = ({
                 <ListItemText primary={`${user.users_name}`} />
                 {usersExpandState[index] ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse 
-                in={usersExpandState[index]} 
-                timeout="auto" 
+            <Collapse
+                in={usersExpandState[index]}
+                timeout="auto"
                 style={{ borderBottom: "1px solid grey" }}
                 unmountOnExit>
                 <List component="div" disablePadding>
@@ -288,13 +302,13 @@ const UserListItem = ({
                         <ListItemIcon>
                             <StarsIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Set Scrum Master" onClick={() => emitUpdateScrumMaster(user, setScrumMaster)}/>
+                        <ListItemText primary="Set Scrum Master" onClick={() => emitUpdateScrumMaster(user, setScrumMaster)} />
                     </ListItem>
                     <ListItem button className={classes.nested}>
                         <ListItemIcon>
                             <PersonAddDisabledIcon />
                         </ListItemIcon>
-                        <ListItemText primary={`Kick User`}  />
+                        <ListItemText primary={`Kick User`} />
                     </ListItem>
                 </List>
             </Collapse>

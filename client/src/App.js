@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Auth } from 'aws-amplify'
-import { Account, AuthContext } from './providers/Cognito';
+import { Account, AuthContext, CognitoAccess } from './providers/Cognito';
 import PrivateRoute from './commonComponents/PrivateRoute';
 
 import NavBar from './components/NavBar/NavBar';
@@ -36,14 +36,16 @@ const App = () => {
       {!isAuthenticating &&
         <Account>
           <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+            <CognitoAccess>
               <NavBar />
               <Router>
-              <ErrorHandler>
-                <Route path='/' exact component={HandleRooms} />
-                <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated} />
-                <ErrorAlert />
-              </ErrorHandler>
+                <ErrorHandler>
+                  <Route path='/' exact component={HandleRooms} />
+                  <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated} />
+                  <ErrorAlert />
+                </ErrorHandler>
               </Router>
+            </CognitoAccess>
           </AuthContext.Provider>
         </Account>}
     </div>
