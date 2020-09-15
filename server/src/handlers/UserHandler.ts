@@ -105,7 +105,7 @@ export default class UserHandler {
      * @returns {boolean} Whether or not the expansion event emitted successfully
      */
     public static broadcastDeleteRoom(io: socketio.Server, room: string, test: string): boolean {
-        return io.to(room as string).emit("deleteUser", {
+        return io.to(room as string).emit('deleteUser', {
             room,
             testing: 'test purposes',
             test
@@ -154,7 +154,7 @@ export default class UserHandler {
         const user = UserHandler._USER_STORE[UserHandler._USER_STORE.findIndex(u => u?.id === id)];
         if (user) {
             user.estimate = estimate;
-        };
+        }
     }
 
     /**
