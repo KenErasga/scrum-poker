@@ -1,15 +1,11 @@
 import SocketIOEvent from "../../../abstracts/SocketIOEvent";
 import UserHandler from "../../../handlers/UserHandler";
-import IUser from "../../../interfaces/IUser";
-import User from "../../../dto/User.dto";
 import socketio, { Socket } from "socket.io";
 import { USER_DELETE_ROOM } from "../constants/EVENT_CONSTANTS";
 
 /**
- * The primary event for joining a room with a predetermined estimate
+ * This event is emited when scrum master deletes the room and kicks everyone out in the room
  *
- * Adds user to the room, if the room didn't exist prior, we dedicate
- * them as scrum master when adding them into the local store.
  *
  * @class
  * @event UserDeleteRoom#constructor:deleteRoom
