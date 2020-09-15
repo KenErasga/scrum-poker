@@ -15,7 +15,7 @@ const Socket = props => {
 
     useEffect(() => {
         return history.listen(() => setErrorMessage(undefined));
-    }, []);
+    });
 
     const initialiseSocket = () => {
         try {

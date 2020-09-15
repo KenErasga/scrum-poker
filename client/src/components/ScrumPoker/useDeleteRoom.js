@@ -9,7 +9,7 @@ const useDeleteRoom = (room, setIsAuthenticated, history) => {
 
     useEffect(() => {
         onDeleteRoom(logout, setIsAuthenticated, emitDisconnect, history);
-    }, []);
+    });
 
     const wipeRoom = (e) => {
         e.preventDefault();
