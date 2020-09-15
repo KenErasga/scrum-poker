@@ -123,7 +123,7 @@ const Socket = props => {
 
     const onDeleteRoom = (logout, setIsAuthenticated, emitDisconnect, history) => {
         try {
-            socket.once('deleteUser', ({ test, testing }) => {
+            socket.once('deleteUser', () => {
                 logout();
                 setIsAuthenticated(false);
         
