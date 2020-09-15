@@ -2,7 +2,6 @@ import io from 'socket.io-client';
 import { useErrorHandler } from '../components/Error/ErrorHandler'
 import React, { createContext, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import {AccountContext, AuthContext} from './Cognito';
 
 const SocketContext = createContext();
 
