@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { useSocket } from '../../providers/SocketIO';
 import { AccountContext } from '../../providers/Cognito';
 
