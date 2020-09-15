@@ -138,32 +138,35 @@ const HandleScrumPoker = ({ location }) => {
              */}
             <Grid container item xs={4}>
                 <List className={classes.root}>
-                    <ListSubheader id="nested-list-subheader">
-                                General:
+                    <ListSubheader id="nested-list-subheader-1">
+                        General:
                     </ListSubheader>
                     <ListItemButton description="Exit Room" onClick={exit} Icon={ExitToAppIcon} />
+                </List>
+                <List className={classes.root}>
                     {
                         isScrumMaster ?
-                        <ListSubheader component="div" id="nested-list-subheader">
+                            <ListSubheader component="div" id="nested-list-subheader-2">
                                 ScrumMaster Controls:
-                        </ListSubheader>
+                            </ListSubheader>
                             : null
                     }
-                    { isScrumMaster ? 
-                    !expandAll ? 
-                        <ListItemButton description="Show Estimates" onClick={handleExpandClick} Icon={VisibilityIcon} /> :
-                        <ListItemButton description="Hide Estimates" onClick={handleExpandClick} Icon={VisibilityOffIcon} /> 
+                    {isScrumMaster ?
+                        !expandAll ?
+                            <ListItemButton description="Show Estimates" onClick={handleExpandClick} Icon={VisibilityIcon} /> :
+                            <ListItemButton description="Hide Estimates" onClick={handleExpandClick} Icon={VisibilityOffIcon} />
                         : null
                     }
                     {isScrumMaster ?
                         <div>
-                        <ListItemButton description="Reset Estimates" onClick={handleResetEstimate} Icon={RotateLeftIcon} />
-                        <ListItemButton description="Wipe Room" onClick={wipeRoom} Icon={DeleteForeverIcon} />
+                            <ListItemButton description="Reset Estimates" onClick={handleResetEstimate} Icon={RotateLeftIcon} />
+                            <ListItemButton description="Wipe Room" onClick={wipeRoom} Icon={DeleteForeverIcon} />
                         </div>
-                                            :
+                        :
                         null
                     }
                 </List>
+
             </Grid>
         </Grid>
     </div>
@@ -171,5 +174,3 @@ const HandleScrumPoker = ({ location }) => {
 };
 
 export default HandleScrumPoker;
-
-
