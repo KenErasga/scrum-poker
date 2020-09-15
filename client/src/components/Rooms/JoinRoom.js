@@ -1,14 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core';
 
 import { AccountContext, AuthContext } from '../../providers/Cognito';
 import { FormInput, ButtonSubmit } from '../../commonComponents/index';
-import { useErrorHandler, useErrorStatus } from '../Error/ErrorHandler';
+import { useErrorHandler } from '../Error/ErrorHandler';
 
-const JoinRoom = () => {
+const JoinRoom = ({listJoin, listJoinRoomName}) => {
     const [name, setName] = useState('');
-    const [room, setRoom] = useState('');
+    const [room, setRoom] = useState(listJoinRoomName);
     const [password, setPassword] = useState('');
 
     const { signIn } = useContext(AccountContext);
@@ -31,7 +31,7 @@ const JoinRoom = () => {
             }).catch(error => {
                 validationError(error.message);
             });
-        };
+        }
 
     };
 
@@ -39,9 +39,21 @@ const JoinRoom = () => {
         <div>
             <Box style={{ display: "flex", justifyContent: "center", margin: 10, padding: 10 }} >
                 <form style={{ width: "70%" }} onSubmit={onSubmit}>
-                    <h4>Join a room</h4>
+                    {
+                        listJoin
+                            ?
+                        <h4>Joining room: {listJoinRoomName}</h4>
+                            :
+                        <h4>Join a room</h4>
+                    }
                     {FormInput({ InputLabel: 'Name', type: '', value: name, handleOnChange: setName })}
-                    {FormInput({ InputLabel: 'Room Name', type: '', value: room, handleOnChange: setRoom })}
+                    {
+                        listJoin 
+                            ? 
+                        null 
+                            :
+                        FormInput({ InputLabel: 'Room Name', type: '', value: room, handleOnChange: setRoom })
+                    }
                     {FormInput({ InputLabel: 'Password', type: 'password', value: password, handleOnChange: setPassword })}
                     {ButtonSubmit({ description: 'Join' })}
                 </form>
