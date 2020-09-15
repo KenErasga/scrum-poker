@@ -1,6 +1,6 @@
 import React from 'react'
-import CreateRoom from '../Rooms/CreateRoom';
-import JoinRoom from '../Rooms/JoinRoom';
+import CreateRoom from './CreateRoom';
+import JoinRoom from './JoinRoom';
 import { Paper, Grid, Container } from '@material-ui/core';
 
 const HandleRooms = () => (

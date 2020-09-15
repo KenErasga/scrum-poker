@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Auth } from 'aws-amplify'
-import { Account, AuthContext } from './components/Accounts/CognitoProvider';
+import { Account, AuthContext } from './providers/Cognito';
 import PrivateRoute from './commonComponents/PrivateRoute';
 
 import NavBar from './components/NavBar/NavBar';
 import HandleRooms from './components/Rooms/HandleRooms';
 import HandleScrumPoker from './components/ScrumPoker/ScrumPoker';
-
+import { ErrorHandler } from './components/Error/ErrorHandler'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { ErrorAlert } from './components/Error/ErrorAlert';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,15 +33,19 @@ const App = () => {
 
   return (
     <div>
-      {!isAuthenticating && <Account>
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-          <NavBar />
-          <Router>
-            <Route path='/' exact component={HandleRooms} />
-            <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated} />
-          </Router>
-        </AuthContext.Provider>
-      </Account>}
+      {!isAuthenticating &&
+        <Account>
+          <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+              <NavBar />
+              <Router>
+              <ErrorHandler>
+                <Route path='/' exact component={HandleRooms} />
+                <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated} />
+                <ErrorAlert />
+              </ErrorHandler>
+              </Router>
+          </AuthContext.Provider>
+        </Account>}
     </div>
   )
 }

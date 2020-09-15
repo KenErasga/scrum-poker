@@ -32,6 +32,7 @@ export default class UserJoin extends SocketIOEvent {
                     !roomExistedPrior,
                     socket.id),
                 );
+
                 UserHandler.broadcastNewEstimates(io, room)
                     ?
                     acknowledgeFn("user-join-successful")

@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const PokerCard = ({ name, number, isExpanded }) => {
+const PokerCard = ({ name, estimate, isExpanded }) => {
     const classes = useStyles();
     return (
         <Card className={classes.root}>
@@ -37,7 +37,7 @@ const PokerCard = ({ name, number, isExpanded }) => {
                     <Typography style={{
                         display: "flex",
                         justifyContent: "center"
-                    }} variant="h1" component="h1">{number}</Typography>
+                    }} variant="h1" component="h1">{estimate}</Typography>
                 </CardContent>
             </Collapse>
         </Card>
