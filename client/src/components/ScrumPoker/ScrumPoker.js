@@ -178,7 +178,7 @@ const HandleScrumPoker = ({ location }) => {
             </Grid>
 
             {/**
-             * Buttons & User list
+             * Buttons
              */}
             <Grid container item xs={4}>
                 <div className={classes.root}>
@@ -191,6 +191,7 @@ const HandleScrumPoker = ({ location }) => {
                     <List className={classes.root}>
                         {
                             isScrumMaster ?
+                                
                                 <ListSubheader component="div" id="nested-list-subheader-2">
                                     ScrumMaster Controls:
                             </ListSubheader>
@@ -212,24 +213,31 @@ const HandleScrumPoker = ({ location }) => {
                         }
                     </List>
                     <Divider />
-                    <List component="user-list">
-                        {isScrumMaster ? estimates.map((user, i) => {
-                            if (user.scrum_master !== true) {
-                                return <UserListItem
-                                    key={user.id}
-                                    selectedUserIndex={selectedUserIndex}
-                                    handleUserListClick={handleUserListClick}
-                                    emitUpdateScrumMaster={emitUpdateScrumMaster}
-                                    setScrumMaster={setScrumMaster}
-                                    usersExpandState={usersExpandState}
-                                    classes={classes}
-                                    index={i}
-                                    user={user} />
+                    {/**
+                     * User list
+                     */}
+                    {isScrumMaster ?
+                        <List component="user-list">
+                            <ListSubheader component="div" id="nested-list-subheader-1">
+                                Users:
+                            </ListSubheader>
+                            {estimates.map((user, i) => {
+                                if (user.scrum_master !== true) {
+                                    return <UserListItem
+                                        key={user.id}
+                                        selectedUserIndex={selectedUserIndex}
+                                        handleUserListClick={handleUserListClick}
+                                        emitUpdateScrumMaster={emitUpdateScrumMaster}
+                                        setScrumMaster={setScrumMaster}
+                                        usersExpandState={usersExpandState}
+                                        classes={classes}
+                                        index={i}
+                                        user={user} />
+                                }
                             }
-                        }
-                        ) : null}
-
-                    </List>
+                            )}
+                        </List>
+                        : null}
                 </div>
 
             </Grid>
