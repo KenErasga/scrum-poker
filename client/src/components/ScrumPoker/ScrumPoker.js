@@ -206,7 +206,7 @@ const HandleScrumPoker = ({ location }) => {
                         {isScrumMaster ?
                             <div>
                                 <ListItemButton description="Reset Estimates" onClick={handleResetEstimate} Icon={RotateLeftIcon} />
-                                <ListItemButton description="Wipe Room" onClick={wipeRoom} Icon={DeleteForeverIcon} />
+                                <ListItemButton description="Delete Room" onClick={wipeRoom} Icon={DeleteForeverIcon} />
                             </div>
                             :
                             null
