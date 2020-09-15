@@ -1,30 +1,32 @@
 import { Auth } from 'aws-amplify'
 import React, { createContext } from 'react'
-const AWS = require('aws-sdk');
-// import {AmazonCognitoIdentity} from 'amazon-cognito-identity-js'
+import AWS, { CognitoIdentityServiceProvider, Credentials } from "aws-sdk";
+
+/**
+ * I wonder if this is the best place to setup our config, perhaps move this?
+ */
+AWS.config.update({
+    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY_ID,
+    region: process.env.REACT_APP_COGNITO_REGION
+});
+
+const CISP = new CognitoIdentityServiceProvider();
+
 const AccountContext = createContext();
 
 const AuthContext = createContext();
 
-const deleteUser = async (room) => {
-    AWS.config.update({
-        accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-        secretAccessKey:process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-        region: process.env.REACT_APP_COGNITO_REGION,
-    });
-    
-    const cognito = new AWS.CognitoIdentityServiceProvider();
-
+const deleteUser = async (room) => { 
     try {
-        const test = await cognito.adminDeleteUser({
+        const test = await CISP.adminDeleteUser({
             UserPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
             Username: room,
         }).promise();
-    } catch (error) {
-        console.log(error.message);
-        throw error
+    } catch (e) {
+        console.log(e.message);
+        throw e
     }
-
 };
 
 const signUp = async (room, password) => {
@@ -78,4 +80,30 @@ const Account = props => {
     );
 };
 
-export { Account, AccountContext, AuthContext }
+/* Holds the CognitoIdentityService object with the *correct* region */
+const CognitoAccessContext = createContext();
+
+/**
+ * Grabs the entire User Pool within Cognito
+ */
+const listCognitoUsers = () => {
+    return new Promise((res, rej) => {
+        CISP.listUsers({
+            UserPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID
+        }, (err, data) => {
+            err ? rej(err) : res(data);
+        });
+    });
+}
+
+const CognitoAccess = ({ children }) => (
+    <CognitoAccessContext.Provider value={{
+        listCognitoUsers
+    }}>
+        {children}
+    </CognitoAccessContext.Provider>
+);
+
+
+
+export { Account, AccountContext, AuthContext, CognitoAccess, CognitoAccessContext }

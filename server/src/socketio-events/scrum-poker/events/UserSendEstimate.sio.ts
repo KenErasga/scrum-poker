@@ -14,10 +14,10 @@ export default class UserSendEstimate extends SocketIOEvent {
     constructor(io: socketio.Server, socket: Socket) {
         super(USER_SEND_ESTIMATE, (estimate, acknowledgeFn) => {
 
-            if(isNaN(parseInt(estimate))) {
+            if(isNaN(parseInt(estimate)) && estimate !== "N/A") {
                 acknowledgeFn("estimates-update-failed:incorrect-data-type");
             } else {
-                if (!EstimatesService.evaluateEstimate(parseInt(estimate))) {
+                if (!EstimatesService.evaluateEstimate(parseInt(estimate)) && estimate !== "N/A") {
                     acknowledgeFn("estimates-update-failed:number-out-of-range");
                 } else {
                     const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room;

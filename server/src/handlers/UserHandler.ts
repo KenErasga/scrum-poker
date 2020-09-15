@@ -27,7 +27,8 @@ export default class UserHandler {
      */
     public static addUserToRoom(socket: Socket, room: string, io: socketio.Server): boolean {
         /* Leave the pre-joined room with our socket ID */
-        socket.leave(socket.id);
+        // socket.leave(socket.id);
+        // Turns out we need this room to send individual messages to this client... ugh.
 
         /* Grab remaining rooms as array */
         const rooms = io.nsps["/"].adapter.rooms;

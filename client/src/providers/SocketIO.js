@@ -54,6 +54,13 @@ const Socket = props => {
         }
     };
 
+    const emitUpdateScrumMaster = (user, setScrumMaster) => {
+        socket.emit("update-scrum-master", user, (data) => {
+            console.log(data); // SCRUM MASTER UPDATE ACKNOWLEDGEMENT
+            setScrumMaster(false);
+        });
+    } 
+
     const emitDisconnect = () => {
         try {
             socket.emit('disconnect');
@@ -87,6 +94,17 @@ const Socket = props => {
         }
     };
 
+    /**
+     * Updates Scrum Master, but additionally sends new estimates immediately
+     * afterwards, to ensure everyone is *absolutely* in sync.
+     */
+    const onScrumMasterUpdate = (setScrumMaster, handleEstimate) => {
+        socket.on("scrum-master-update", (data) => {
+            setScrumMaster(data);
+            handleEstimate("N/A"); // We reset their estimate on becoming the Scrum Master
+            console.log("Scrum Master Updated.")
+        })
+    }
     const emitResetEstimate = () => {
         try {
                 socket.emit('resetEstimates', "N/A", (data) => {
@@ -136,6 +154,7 @@ const Socket = props => {
     const onEstimate = (setEstimates) => {
         try {
             socket.once('estimate', ({ users }) => {
+                console.log("our socket id is: ", socket.id)
                 setEstimates(users);
             });
         } catch (error) {
@@ -193,12 +212,15 @@ const Socket = props => {
             emitDisconnect,
             emitExpand,
             emitSendEstimate,
+            emitUpdateScrumMaster,
             emitResetEstimate,
             emitDeleteRoom,
             onDeleteRoom,
             onResetEstimate,
             onEstimate,
-            onExpand
+            onExpand,
+            onScrumMasterUpdate,
+            socket
         }}>
             {props.children}
         </SocketContext.Provider>
