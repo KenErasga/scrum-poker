@@ -16,8 +16,3 @@ const ListItemButton = ({ description, onClick, Icon }) => {
 };
 
 export default ListItemButton;
-
-
-
-
-

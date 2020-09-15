@@ -5,14 +5,14 @@ import { Typography, Button, Grid, makeStyles } from '@material-ui/core';
 import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import PokerCard from '../../commonComponents/PokerCard';
+import PokerCard from '../../common/PokerCard';
 import DropDownList from '../Dropdown/Dropdown';
 import useEstimate from './useEstimate';
 import useExpand from './useExpand';
 import useResetEstimate from './useResetEstimate'
 import useDeleteRoom from './useDeleteRoom'
 import { useSocket } from '../../providers/SocketIO';
-import ListItemButton from '../../commonComponents/ListItemButton'
+import ListItemButton from '../../common/ListItemButton'
 
 // List imports:
 import ListSubheader from '@material-ui/core/ListSubheader';
