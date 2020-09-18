@@ -6,7 +6,7 @@ import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import PokerCard from '../../common/PokerCard';
-import DropDownList from '../Dropdown/Dropdown';
+import DropDownList from '../../common/index';
 import useEstimate from './useEstimate';
 import useExpand from './useExpand';
 import useResetEstimate from './useResetEstimate'
