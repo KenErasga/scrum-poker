@@ -5,3 +5,4 @@ export const USER_DISCONNECT = "disconnect";
 export const SCRUM_MASTER_UPDATE = "update-scrum-master";
 export const USERS_RESET_ESTIMATES = "resetEstimates";
 export const USER_DELETE_ROOM = "deleteRoom";
+export const KICK_USER = "kickUser";

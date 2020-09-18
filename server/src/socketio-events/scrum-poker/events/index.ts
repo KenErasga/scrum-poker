@@ -5,6 +5,7 @@ import UserDisconnect from "./UserDisconnect.sio";
 import UpdateScrumMaster from "./UpdateScrumMaster";
 import UsersResetEstimate from "./UsersResetEstimate";
 import UserDeleteRoom from "./UserDeleteRoom";
+import KickUser from "./KickUser.sio";
 
 export default [
     UpdateScrumMaster,
@@ -13,5 +14,6 @@ export default [
     UsersResetEstimate,
     UserViewEstimates,
     UserDisconnect,
-    UserDeleteRoom
+    UserDeleteRoom,
+    KickUser
 ];

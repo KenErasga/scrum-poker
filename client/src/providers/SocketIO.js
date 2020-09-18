@@ -55,7 +55,13 @@ const Socket = props => {
         socket.emit("update-scrum-master", user, (data) => {
             setScrumMaster(false);
         });
-    } 
+    } ;
+
+    const emitKickUser = user => {
+        socket.emit("kickUser", user, (data) => {
+            console.log('it works!', data, '<<<<<<<<<<__________')
+        });
+    };
 
     const emitDisconnect = () => {
         try {
@@ -64,7 +70,6 @@ const Socket = props => {
         } catch (error) {
             disconnectError(error);
         }
-
     };
 
     const emitExpand = (isExpanded) => {
@@ -100,6 +105,18 @@ const Socket = props => {
             handleEstimate("N/A"); // We reset their estimate on becoming the Scrum Master
         })
     }
+
+    const onKickUser = (logout, setIsAuthenticated, emitDisconnect, history) => {
+        socket.on("user-kick", (data) => {
+            logout();
+            setIsAuthenticated(false);
+    
+            localStorage.clear();
+            emitDisconnect();
+            history.push('/');
+        })
+    }
+
     const emitResetEstimate = () => {
         try {
                 socket.emit('resetEstimates', "N/A", (data) => {
@@ -214,6 +231,8 @@ const Socket = props => {
             onEstimate,
             onExpand,
             onScrumMasterUpdate,
+            emitKickUser,
+            onKickUser,
             socket
         }}>
             {props.children}
