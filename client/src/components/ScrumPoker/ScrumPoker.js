@@ -1,18 +1,16 @@
 // General imports:
 import React, { useContext, useEffect, useState } from 'react';
 import { AccountContext, AuthContext } from '../../providers/Cognito';
-import { Typography, Button, Grid, makeStyles } from '@material-ui/core';
+import { Typography, Grid, makeStyles } from '@material-ui/core';
 import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import PokerCard from '../../common/PokerCard';
-import DropDownList from '../../common/index';
+import { DropDownList, ListItemButton, PokerCard } from '../../common/index';
 import useEstimate from './useEstimate';
 import useExpand from './useExpand';
 import useResetEstimate from './useResetEstimate'
 import useDeleteRoom from './useDeleteRoom'
 import { useSocket } from '../../providers/SocketIO';
-import ListItemButton from '../../common/ListItemButton'
 
 // List imports:
 import ListSubheader from '@material-ui/core/ListSubheader';
@@ -100,7 +98,7 @@ const HandleScrumPoker = ({ location }) => {
     const { estimate, estimates, handleEstimate, setEstimate } = useEstimate();
     const { expandAll, handleExpandClick } = useExpand();
     const { handleResetEstimate } = useResetEstimate(estimate, estimates, setEstimate);
-    const { wipeRoom } = useDeleteRoom(room, setIsAuthenticated, history);
+    const { deleteRoom } = useDeleteRoom(room, setIsAuthenticated, history);
 
     /**
      * Handles controlling the state of an 'expanded' user in the list.
@@ -206,7 +204,7 @@ const HandleScrumPoker = ({ location }) => {
                         {isScrumMaster ?
                             <div>
                                 <ListItemButton description="Reset Estimates" onClick={handleResetEstimate} Icon={RotateLeftIcon} />
-                                <ListItemButton description="Delete Room" onClick={wipeRoom} Icon={DeleteForeverIcon} />
+                                <ListItemButton description="Delete Room" onClick={deleteRoom} Icon={DeleteForeverIcon} />
                             </div>
                             :
                             null

@@ -11,14 +11,14 @@ const useDeleteRoom = (room, setIsAuthenticated, history) => {
         onDeleteRoom(logout, setIsAuthenticated, emitDisconnect, history);
     });
 
-    const wipeRoom = (e) => {
+    const deleteRoom = (e) => {
         e.preventDefault();
         deleteUser(room);
         emitDeleteRoom();
     };
 
     return {
-        wipeRoom
+        deleteRoom
     }
 };
 
