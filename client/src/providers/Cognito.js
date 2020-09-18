@@ -11,9 +11,23 @@ AWS.config.update({
     region: process.env.REACT_APP_COGNITO_REGION
 });
 
+const CISP = new CognitoIdentityServiceProvider();
+
 const AccountContext = createContext();
 
 const AuthContext = createContext();
+
+const deleteUser = async (room) => { 
+    try {
+        const test = await CISP.adminDeleteUser({
+            UserPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
+            Username: room,
+        }).promise();
+    } catch (e) {
+        console.log(e.message);
+        throw e
+    }
+};
 
 const signUp = async (room, password) => {
     try {
@@ -42,12 +56,24 @@ const logout = async () => {
     }
 };
 
+const globalSignOut = async () => {
+    try {
+        await Auth.signOut({ global: true });
+    } catch (error) {
+        console.log(error, 'working not');
+        // throw error
+    }
+} 
+
+
 const Account = props => {
     return (
         <AccountContext.Provider value={{
             signIn,
             signUp,
             logout,
+            globalSignOut,
+            deleteUser
         }}>
             {props.children}
         </AccountContext.Provider>
@@ -56,7 +82,6 @@ const Account = props => {
 
 /* Holds the CognitoIdentityService object with the *correct* region */
 const CognitoAccessContext = createContext();
-const CISP = new CognitoIdentityServiceProvider();
 
 /**
  * Grabs the entire User Pool within Cognito

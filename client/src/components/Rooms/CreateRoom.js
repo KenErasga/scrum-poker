@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core'
 import { AccountContext, AuthContext } from '../../providers/Cognito';
-import { FormInput, ButtonSubmit } from '../../commonComponents';
+import { FormInput, ButtonSubmit } from '../../common';
 import { useErrorHandler } from '../Error/ErrorHandler';
 
 const CreateRoom = () => {

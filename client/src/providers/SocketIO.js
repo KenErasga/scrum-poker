@@ -3,25 +3,22 @@ import { useErrorHandler } from '../components/Error/ErrorHandler'
 import React, { createContext, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const ENDPOINT = process.env.REACT_APP_SOCKETIO_HOST || '192.168.99.101:30001';
-
 const SocketContext = createContext();
 
 const Socket = props => {
 
     let socket
 
-    const { setErrorMessage, setIsError, socketError, disconnectError } = useErrorHandler();
-
+    const { setErrorMessage, socketError, disconnectError } = useErrorHandler();
     const history = useHistory();
 
     useEffect(() => {
         return history.listen(() => setErrorMessage(undefined));
-    }, []);
+    });
 
     const initialiseSocket = () => {
         try {
-            socket = io(ENDPOINT, { transports: ['websocket', 'polling'] });
+            socket = io(process.env.REACT_APP_SOCKETIO_HOST, { transports: ['websocket', 'polling'] });
 
             onConnectionError();
             onError();
@@ -35,7 +32,6 @@ const Socket = props => {
         try {
             setRoom(room);
             socket.emit('join', { users_name: name, room, estimate }, (data) => {
-                console.log(data);
                 socketError(data)
                 /**
                  * As we're aware we joined, we'll now query the scrum master endpoint
@@ -46,7 +42,6 @@ const Socket = props => {
                     res => res.json()
                 ).then(d => {
                     if (d.scrum_master) {
-                        console.log(d);
                         setScrumMaster(true)
                     }
                 });
@@ -58,7 +53,6 @@ const Socket = props => {
 
     const emitUpdateScrumMaster = (user, setScrumMaster) => {
         socket.emit("update-scrum-master", user, (data) => {
-            console.log(data); // SCRUM MASTER UPDATE ACKNOWLEDGEMENT
             setScrumMaster(false);
         });
     } 
@@ -88,7 +82,6 @@ const Socket = props => {
             setEstimate(e);
             if (e) {
                 socket.emit('sendEstimate', e, (data) => {
-                    console.log(data);
                     socketError(data);
                 });
             };
@@ -105,15 +98,39 @@ const Socket = props => {
         socket.on("scrum-master-update", (data) => {
             setScrumMaster(data);
             handleEstimate("N/A"); // We reset their estimate on becoming the Scrum Master
-            console.log("Scrum Master Updated.")
         })
     }
     const emitResetEstimate = () => {
         try {
                 socket.emit('resetEstimates', "N/A", (data) => {
-                    console.log(data);
                     socketError(data);
                 });
+        } catch (error) {
+            disconnectError(error);
+        }
+    };
+
+    const emitDeleteRoom = () => {
+        try {
+                socket.emit('deleteRoom', "test101", (data) => {
+                    socketError(data);
+                });
+        } catch (error) {
+            disconnectError(error);
+        }
+    };
+
+    const onDeleteRoom = (logout, setIsAuthenticated, emitDisconnect, history) => {
+        try {
+            socket.once('deleteUser', () => {
+                logout();
+                setIsAuthenticated(false);
+        
+                localStorage.clear();
+                emitDisconnect();
+                history.push('/');
+            });
+            
         } catch (error) {
             disconnectError(error);
         }
@@ -123,7 +140,6 @@ const Socket = props => {
         try {
             socket.once('resetEstimate', ({ reset }) => {
                 setEstimate('N/A');
-                console.log('something Change')
             });
         } catch (error) {
             disconnectError(error);
@@ -133,7 +149,6 @@ const Socket = props => {
     const onEstimate = (setEstimates) => {
         try {
             socket.once('estimate', ({ users }) => {
-                console.log("our socket id is: ", socket.id)
                 setEstimates(users);
             });
         } catch (error) {
@@ -176,7 +191,6 @@ const Socket = props => {
     const onTimeout = () => {
         try {
             socket.on('connect_timeout', function (timeout) {
-                console.log(timeout);
                 socketError('Connection Timeout')
             });
         } catch (error) {
@@ -194,6 +208,8 @@ const Socket = props => {
             emitSendEstimate,
             emitUpdateScrumMaster,
             emitResetEstimate,
+            emitDeleteRoom,
+            onDeleteRoom,
             onResetEstimate,
             onEstimate,
             onExpand,

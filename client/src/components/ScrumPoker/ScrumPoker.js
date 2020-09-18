@@ -1,15 +1,15 @@
 // General imports:
 import React, { useContext, useEffect, useState } from 'react';
 import { AccountContext, AuthContext } from '../../providers/Cognito';
-import { Typography, Button, Grid, makeStyles } from '@material-ui/core';
+import { Typography, Grid, makeStyles } from '@material-ui/core';
 import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import PokerCard from '../../commonComponents/PokerCard';
-import DropDownList from '../Dropdown/Dropdown';
+import { DropDownList, ListItemButton, PokerCard } from '../../common/index';
 import useEstimate from './useEstimate';
 import useExpand from './useExpand';
 import useResetEstimate from './useResetEstimate'
+import useDeleteRoom from './useDeleteRoom'
 import { useSocket } from '../../providers/SocketIO';
 
 // List imports:
@@ -31,6 +31,7 @@ import Divider from '@material-ui/core/Divider';
 import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
 import StarsIcon from '@material-ui/icons/Stars';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 // MUI Classes 
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +63,7 @@ const HandleScrumPoker = ({ location }) => {
      */
     const [room, setRoom] = useState('');
 
-    const { logout } = useContext(AccountContext);
+    const { logout, deleteUser, globalSignOut } = useContext(AccountContext);
     const { setIsAuthenticated } = useContext(AuthContext);
 
     const history = useHistory();
@@ -73,6 +74,8 @@ const HandleScrumPoker = ({ location }) => {
         emitJoin,
         emitDisconnect,
         emitExpand,
+        onDeleteRoom,
+        emitDeleteRoom,
         onScrumMasterUpdate,
         emitUpdateScrumMaster, socket } = useSocket();
 
@@ -95,6 +98,7 @@ const HandleScrumPoker = ({ location }) => {
     const { estimate, estimates, handleEstimate, setEstimate } = useEstimate();
     const { expandAll, handleExpandClick } = useExpand();
     const { handleResetEstimate } = useResetEstimate(estimate, estimates, setEstimate);
+    const { deleteRoom } = useDeleteRoom(room, setIsAuthenticated, history);
 
     /**
      * Handles controlling the state of an 'expanded' user in the list.
@@ -172,97 +176,66 @@ const HandleScrumPoker = ({ location }) => {
             </Grid>
 
             {/**
-             * Buttons & User list
+             * Buttons
              */}
             <Grid container item xs={4}>
                 <div className={classes.root}>
-                    <List
-                        component="scrum-controls"
-                        aria-labelledby="nested-list-subheader"
-                        subheader={
-                            <>
-                                <ListSubheader component="div" id="nested-list-subheader">
-                                    General:
-                                </ListSubheader>
-                                {
-                                    isScrumMaster ?
-                                        <ListSubheader component="div" id="nested-list-subheader">
-                                            ScrumMaster Controls:
-                                    </ListSubheader>
-                                        : null
-                                }
-                            </>
+                    <List component="scrum-controls" className={classes.root}>
+                        <ListSubheader component="div" id="nested-list-subheader-1">
+                            General:
+                    </ListSubheader>
+                        <ListItemButton description="Exit Room" onClick={exit} Icon={ExitToAppIcon} />
+                    </List>
+                    <List className={classes.root}>
+                        {
+                            isScrumMaster ?
+                                
+                                <ListSubheader component="div" id="nested-list-subheader-2">
+                                    ScrumMaster Controls:
+                            </ListSubheader>
+                                : null
                         }
-                        className={classes.root}
-                    >
-
-                        {/**
-                         * Exit room
-                         */}
-                        <ListItem button>
-                            <ListItemIcon>
-                                <ExitToAppIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Exit Room" onClick={exit} />
-                        </ListItem>
-
-                        {/**
-                         * Expand estimates
-                         */}
                         {isScrumMaster ?
-                            <>
-                                <ListItem button>
-                                    {!expandAll ?
-                                        <>
-                                            <ListItemIcon>
-                                                <VisibilityIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Show Estimates" onClick={handleExpandClick} />
-                                        </>
-                                        :
-                                        <>
-                                            <ListItemIcon>
-                                                <VisibilityOffIcon />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Hide Estimates" onClick={handleExpandClick} />
-                                        </>
-                                    }
-                                </ListItem>
-                                {isScrumMaster ?
-                                    <ListItem button>
-                                        <ListItemIcon>
-                                            <RotateLeftIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Reset Estimates" onClick={(e) => {
-                                            setEstimate("N/A")
-                                            handleResetEstimate(e)
-                                            emitExpand(true)
-                                        }} />
-                                    </ListItem> :
-                                    null
-                                }
-                            </>
-                            : null}
-
+                            !expandAll ?
+                                <ListItemButton description="Show Estimates" onClick={handleExpandClick} Icon={VisibilityIcon} /> :
+                                <ListItemButton description="Hide Estimates" onClick={handleExpandClick} Icon={VisibilityOffIcon} />
+                            : null
+                        }
+                        {isScrumMaster ?
+                            <div>
+                                <ListItemButton description="Reset Estimates" onClick={handleResetEstimate} Icon={RotateLeftIcon} />
+                                <ListItemButton description="Delete Room" onClick={deleteRoom} Icon={DeleteForeverIcon} />
+                            </div>
+                            :
+                            null
+                        }
                     </List>
                     <Divider />
-                    <List component="user-list">
-                        {isScrumMaster ? estimates.map((user, i) => {
-                            if (user.scrum_master !== true) {
-                                return <UserListItem
-                                    selectedUserIndex={selectedUserIndex}
-                                    handleUserListClick={handleUserListClick}
-                                    emitUpdateScrumMaster={emitUpdateScrumMaster}
-                                    setScrumMaster={setScrumMaster}
-                                    usersExpandState={usersExpandState}
-                                    classes={classes}
-                                    index={i}
-                                    user={user} />
+                    {/**
+                     * User list
+                     */}
+                    {isScrumMaster ?
+                        <List component="user-list">
+                            <ListSubheader component="div" id="nested-list-subheader-1">
+                                Users:
+                            </ListSubheader>
+                            {estimates.map((user, i) => {
+                                if (user.scrum_master !== true) {
+                                    return <UserListItem
+                                        key={user.id}
+                                        selectedUserIndex={selectedUserIndex}
+                                        handleUserListClick={handleUserListClick}
+                                        emitUpdateScrumMaster={emitUpdateScrumMaster}
+                                        setScrumMaster={setScrumMaster}
+                                        usersExpandState={usersExpandState}
+                                        classes={classes}
+                                        index={i}
+                                        user={user} />
+                                }
                             }
-                        }
-                        ) : null}
-
-                    </List>
+                            )}
+                        </List>
+                        : null}
                 </div>
 
             </Grid>

@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core';
 
 import { AccountContext, AuthContext } from '../../providers/Cognito';
-import { FormInput, ButtonSubmit } from '../../commonComponents/index';
+import { FormInput, ButtonSubmit } from '../../common/index';
 import { useErrorHandler } from '../Error/ErrorHandler';
 
 const JoinRoom = ({listJoin, listJoinRoomName}) => {

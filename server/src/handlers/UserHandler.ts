@@ -97,6 +97,22 @@ export default class UserHandler {
     }
 
     /**
+     * This emits when wipe button is clicked
+     *
+     * @fires UserHandler#broadcastDeleteRoom:deleteUser
+     * @param {socketio.Server} io : The socketio server instance
+     * @param {string} room : The room to broadcast to
+     * @returns {boolean} Whether or not the expansion event emitted successfully
+     */
+    public static broadcastDeleteRoom(io: socketio.Server, room: string, test: string): boolean {
+        return io.to(room as string).emit('deleteUser', {
+            room,
+            testing: 'test purposes',
+            test
+        });
+    }
+
+    /**
      * Finds the next available index for a given nulled array
      *
      * @returns The next available the index, if the index is -1, the store is full
@@ -138,7 +154,7 @@ export default class UserHandler {
         const user = UserHandler._USER_STORE[UserHandler._USER_STORE.findIndex(u => u?.id === id)];
         if (user) {
             user.estimate = estimate;
-        };
+        }
     }
 
     /**
