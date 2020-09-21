@@ -16,13 +16,9 @@ export default class KickUser extends SocketIOEvent {
             if (user) {
                 try {
                     const user_kick = UserHandler.getUserBySocketId(user.id as string);
-
                     if (user_kick) {
-
                         acknowledgeFn("kick-user-successful");
                         io.to(user_kick.id as string).emit("user-kick", true);
-                        console.log("Kicked User: ", user.id);
-
                     }
                 } catch (e) {
                     console.log("Something went wrong with kicking user");

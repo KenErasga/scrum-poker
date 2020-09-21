@@ -24,7 +24,6 @@ const JoinRoom = ({listJoin, listJoinRoomName}) => {
             setErrorMessage("Your name cannot be empty");
             setIsError(true);
         } else {
-            console.log(event.target);
             signIn(room, password).then(() => {
                 setIsAuthenticated(true);
                 history.push(`/scrum-poker?name=${name}&room=${room}`);

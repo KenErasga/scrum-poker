@@ -59,7 +59,7 @@ const Socket = props => {
 
     const emitKickUser = user => {
         socket.emit("kickUser", user, (data) => {
-            console.log('it works!', data, '<<<<<<<<<<__________')
+            socketError(data)
         });
     };
 
