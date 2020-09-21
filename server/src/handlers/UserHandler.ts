@@ -105,9 +105,9 @@ export default class UserHandler {
      * @returns {boolean} Whether or not the expansion event emitted successfully
      */
     public static broadcastDeleteRoom(io: socketio.Server, room: string, test: string): boolean {
-        return io.to(room as string).emit('deleteUser', {
+        return io.to(room as string).emit("deleteUser", {
             room,
-            testing: 'test purposes',
+            testing: "test purposes",
             test
         });
     }
@@ -164,6 +164,7 @@ export default class UserHandler {
      * @param {string} room : The room we wish to filter users from
      */
     public static resetUsersEstimate(reset: string, room: string): void {
+        /* tslint:disable */
        UserHandler._USER_STORE.filter(user => user?.room === room).forEach((i: any) => i.estimate = reset);
     }
 

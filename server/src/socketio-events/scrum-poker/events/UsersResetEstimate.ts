@@ -23,7 +23,7 @@ export default class UsersResetEstimate extends SocketIOEvent {
                         acknowledgeFn("estimates-reset-failed");
                 } else {
                     acknowledgeFn("user-has-no-room");
-                };
+                }
         });
     }
 }

@@ -14,12 +14,13 @@ export default class UserDeleteRoom extends SocketIOEvent {
     constructor(io: socketio.Server , socket: Socket) {
         super(USER_DELETE_ROOM, (test, acknowledgeFn) => {
                 const usersRoom = UserHandler.getUserBySocketId(socket.id)?.room as string;
+
                 if (usersRoom) {
                     UserHandler.broadcastDeleteRoom(io, usersRoom, test) ?
                     acknowledgeFn("user-delete-room-successful")
                     :
                     acknowledgeFn("user-delete-room-failed");
-                };
+                }
         });
     }
 }
