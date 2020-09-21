@@ -55,7 +55,6 @@ describe("UserSendEstimate", () => {
         socket?.emit("join", { users_name: "testing", room: "test", estimate: "1" }, (data: string) => {
             expect(data).toBe("user-join-successful");
             socket?.emit("sendEstimate", "d", (d: string) => {
-                console.log("working?");
                 expect(d).toBe("estimates-update-failed:incorrect-data-type");
                 done();
             });

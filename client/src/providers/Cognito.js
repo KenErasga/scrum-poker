@@ -24,7 +24,6 @@ const deleteUser = async (room) => {
             Username: room,
         }).promise();
     } catch (e) {
-        console.log(e.message);
         throw e
     }
 };
@@ -56,23 +55,12 @@ const logout = async () => {
     }
 };
 
-const globalSignOut = async () => {
-    try {
-        await Auth.signOut({ global: true });
-    } catch (error) {
-        console.log(error, 'working not');
-        // throw error
-    }
-} 
-
-
 const Account = props => {
     return (
         <AccountContext.Provider value={{
             signIn,
             signUp,
             logout,
-            globalSignOut,
             deleteUser
         }}>
             {props.children}

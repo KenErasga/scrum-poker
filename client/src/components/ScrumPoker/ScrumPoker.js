@@ -63,7 +63,7 @@ const HandleScrumPoker = ({ location }) => {
      */
     const [room, setRoom] = useState('');
 
-    const { logout, deleteUser, globalSignOut } = useContext(AccountContext);
+    const { logout } = useContext(AccountContext);
     const { setIsAuthenticated } = useContext(AuthContext);
 
     const history = useHistory();
@@ -74,10 +74,11 @@ const HandleScrumPoker = ({ location }) => {
         emitJoin,
         emitDisconnect,
         emitExpand,
-        onDeleteRoom,
-        emitDeleteRoom,
         onScrumMasterUpdate,
-        emitUpdateScrumMaster, socket } = useSocket();
+        emitUpdateScrumMaster,
+        emitKickUser,
+        onKickUser,
+        socket } = useSocket();
 
     useEffect(() => {
         const { name, room } = queryString.parse(location.search);
@@ -85,6 +86,7 @@ const HandleScrumPoker = ({ location }) => {
         initialiseSocket();
         emitJoin(setRoom, name, room, estimate, setScrumMaster);
         onScrumMasterUpdate(setScrumMaster, handleEstimate);
+        onKickUser(logout, setIsAuthenticated, emitDisconnect, history);
 
         // temporary fix for when a new user joins it automatically set the expanded card to not show
         emitExpand(true);
@@ -227,6 +229,7 @@ const HandleScrumPoker = ({ location }) => {
                                         handleUserListClick={handleUserListClick}
                                         emitUpdateScrumMaster={emitUpdateScrumMaster}
                                         setScrumMaster={setScrumMaster}
+                                        emitKickUser={emitKickUser}
                                         usersExpandState={usersExpandState}
                                         classes={classes}
                                         index={i}
@@ -251,6 +254,7 @@ const UserListItem = ({
     handleUserListClick,
     emitUpdateScrumMaster,
     setScrumMaster,
+    emitKickUser,
     usersExpandState,
     classes,
     index,
@@ -281,11 +285,10 @@ const UserListItem = ({
                         <ListItemIcon>
                             <PersonAddDisabledIcon />
                         </ListItemIcon>
-                        <ListItemText primary={`Kick User`} />
+                        <ListItemText primary={`Kick User`} onClick={() => emitKickUser(user)}/>
                     </ListItem>
                 </List>
             </Collapse>
         </div>
     );
 }
-
