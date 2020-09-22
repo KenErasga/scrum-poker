@@ -16,7 +16,7 @@ export default class App {
     /**
      * @property {number} _PORT : The port to run the server on
      */
-    private readonly _PORT: number = parseInt(process.env.PORT as string) || 3001;
+    private readonly _PORT: number = 5000;
     /**
      * @property {Express} _APP : Express app instance, note, we're only using this for the RequestListeners
      * -- We technically don't need it...
