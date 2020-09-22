@@ -4,6 +4,7 @@ import socketio, { Socket } from "socket.io";
 import http, { Server } from "http";
 import routes from "./routes";
 import sioEvents from "./socketio-events/scrum-poker/events";
+import path from "path";
 
 /**
  * Server entry point
@@ -33,6 +34,8 @@ export default class App {
     constructor() {
         console.log("Server constructed");
         this._APP.use(cors());
+        console.log(__dirname, "<----");
+        this._APP.use("/", express.static(path.join(__dirname, "/build")));
         this.registerHTTPRoutes();
         this.registerSocketIOEvents(this._IO);
     }

@@ -18,7 +18,14 @@ const Socket = props => {
 
     const initialiseSocket = () => {
         try {
-            socket = io(process.env.REACT_APP_SOCKETIO_HOST, { transports: ['websocket', 'polling'] });
+            switch(process.env.NODE_ENV) {
+                case "development":
+                    socket = io(process.env.REACT_APP_SOCKETIO_HOST_DEV, { transports: ['websocket', 'polling'] });
+                    break;
+                case "production":
+                    socket = io(process.env.REACT_APP_SOCKETIO_HOST, { transports: ['websocket', 'polling'] });
+                    break;
+            }
 
             onConnectionError();
             onError();

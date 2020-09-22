@@ -3,9 +3,7 @@ import { Router } from "express";
 import PublicController from "../controllers/PublicController";
 
 /**
- * The public tutorial route
- *
- * TODO: Remove IRoute, use Abstract Route instead.
+ * Public frontend route
  *
  * @author ale8k, KenErasga
  */
@@ -17,12 +15,12 @@ export default class PublicRoute implements IRoute {
     /**
      * Resource location
      */
-    public readonly RESOURCE_LOC: string = "/public";
+    public readonly RESOURCE_LOC: string = "/";
 
     /**
      * Middleware & controller setup
      */
     constructor() {
-        this.ROUTER.get(this.RESOURCE_LOC + "/health-check", PublicController.getHealthCheck);
+        this.ROUTER.get(this.RESOURCE_LOC + "health-check", PublicController.getHealthCheck);
     }
 }
