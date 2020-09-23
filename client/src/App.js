@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ErrorAlert } from './components/Error/ErrorAlert';
 
 const App = () => {
+  console.log("App running in mode: ", process.env.NODE_ENV)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
 

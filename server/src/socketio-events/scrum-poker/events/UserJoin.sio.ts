@@ -17,6 +17,7 @@ import { USER_JOIN } from "../constants/EVENT_CONSTANTS";
 export default class UserJoin extends SocketIOEvent {
     constructor(io: socketio.Server , socket: Socket) {
         super(USER_JOIN, ({ users_name, room, estimate }: IUser, acknowledgeFn) => {
+            console.log("UserJoin event hit");
             if (users_name && room && estimate) {
                 /* We could pass a the method ref here (addUserToLocalStore), but to keep it simple? No need. */
                 /* If we face async issues, we'll have to however. */
