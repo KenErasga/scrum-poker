@@ -22,5 +22,6 @@ export default class PublicRoute implements IRoute {
      */
     constructor() {
         this.ROUTER.get(this.RESOURCE_LOC + "health-check", PublicController.getHealthCheck);
+        this.ROUTER.get(this.RESOURCE_LOC + "*", PublicController.serveFrontEnd);
     }
 }

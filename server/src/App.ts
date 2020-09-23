@@ -35,7 +35,7 @@ export default class App {
         console.log("Server constructed");
         this._APP.use(cors());
         console.log(__dirname, "<----");
-        this._APP.use("/", express.static(path.join(__dirname, "/build")));
+        this._APP.use(express.static(path.join(__dirname, "../dist/build")));
         this.registerHTTPRoutes();
         this.registerSocketIOEvents(this._IO);
     }

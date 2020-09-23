@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-
+import fs from "fs";
+import path from "path";
 /**
  * PUublic route controller
  *
@@ -23,5 +24,12 @@ export default class PublicController {
      */
     public static getHealthCheck(req: Request, res: Response): void {
         res.send(`Server stats: ${JSON.stringify(PublicController.currentHealth)}`);
+    }
+
+    /**
+     * Serves the built frontend
+     */
+    public static serveFrontEnd(req: Request, res: Response): void {
+        res.sendFile(path.join(__dirname, "../../dist/build/index.html"));
     }
 }
