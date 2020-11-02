@@ -8,6 +8,7 @@ const ButtonSubmit = ({ description }) => {
                 type='submit' fullWidth
                 variant="contained"
                 color="primary"
+                aria-label={description}
                 >
                     {description}
             </Button>

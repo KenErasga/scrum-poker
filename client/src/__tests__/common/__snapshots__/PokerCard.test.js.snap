@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PokerCard PokerCard renders expanded correctly 1`] = `
+<div
+  className="MuiPaper-root MuiCard-root makeStyles-root-1 MuiPaper-elevation1 MuiPaper-rounded"
+>
+  <div
+    className="MuiCardContent-root"
+  >
+    <h4
+      className="MuiTypography-root MuiTypography-h4"
+    >
+      test-name
+    </h4>
+  </div>
+  <div
+    className="MuiCollapse-container MuiCollapse-entered"
+    style={
+      Object {
+        "minHeight": "0px",
+      }
+    }
+  >
+    <div
+      className="MuiCollapse-wrapper"
+    >
+      <div
+        className="MuiCollapse-wrapperInner"
+      >
+        <div
+          className="MuiCardContent-root"
+        >
+          <h1
+            className="MuiTypography-root MuiTypography-h1"
+            style={
+              Object {
+                "display": "flex",
+                "justifyContent": "center",
+              }
+            }
+          >
+            5
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PokerCard PokerCard renders not expanded correctly 1`] = `
+<div
+  className="MuiPaper-root MuiCard-root makeStyles-root-1 MuiPaper-elevation1 MuiPaper-rounded"
+>
+  <div
+    className="MuiCardContent-root"
+  >
+    <h4
+      className="MuiTypography-root MuiTypography-h4"
+    >
+      test-name
+    </h4>
+  </div>
+</div>
+`;

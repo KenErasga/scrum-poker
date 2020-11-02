@@ -165,7 +165,6 @@ const JoinRoomModal = ({ modalState, setModalState }) => {
   const classes = useStyles();
 
   return (
-
     <Modal 
       style={{ 
         width: "50vw",

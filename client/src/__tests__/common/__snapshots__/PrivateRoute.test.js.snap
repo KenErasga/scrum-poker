@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PrivateRoute PrivateRoute renders isAuthenticated=true correctly 1`] = `null`;
+
+exports[`PrivateRoute PrivateRoute renders when isAuthenticated=false correctly 1`] = `null`;

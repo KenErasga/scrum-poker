@@ -55,10 +55,8 @@ const Socket = props => {
                 /**
                  * As we're aware we joined, we'll now query the scrum master endpoint
                  */
-                console.log(data, "<----- Join response");
                 prodOrDevSMFetch().then(
                     res => { 
-                        console.log(res);
                         return res.json()
                     }
                 ).then(d => {
@@ -188,7 +186,6 @@ const Socket = props => {
     const onEstimate = (setEstimates) => {
         try {
             socket.once('estimate', ({ users }) => {
-                console.log(users, "<---- users")
                 setEstimates(users);
             });
         } catch (error) {
