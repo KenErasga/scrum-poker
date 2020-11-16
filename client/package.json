@@ -26,7 +26,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "REACT_APP_SOCKETIO_HOST=18.134.52.241 react-scripts build",
-    "test": "react-scripts test --coverage --watchAll=false",
+    "test": "react-scripts test --coverage --watchAll=false --detectOpenHandles",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
