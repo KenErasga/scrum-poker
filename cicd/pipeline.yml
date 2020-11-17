@@ -23,14 +23,16 @@ jobs:
             - name: scrum-poker
           run:
             path: /bin/sh
-            args:
-              - -c
-              - |
-                echo "Node Version: $(node --version)"
-                echo "NPM Version: $(npm --version)"
-                ls
-                cd scrum-poker/client
-                ls
-                yarn
-                yarn test
+            args: ["scrum-poker/cicd/run_test.sh"]
+            # path: scrum-poker/cicd/run_test.sh
+            # args:
+              # - -c
+              # - |
+              #   echo "Node Version: $(node --version)"
+              #   echo "NPM Version: $(npm --version)"
+              #   ls
+              #   cd scrum-poker/client
+              #   ls
+              #   yarn
+              #   yarn test
 
