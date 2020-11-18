@@ -13,7 +13,7 @@ jobs:
     plan:
       - get: scrum-poker
         trigger: true
-      - task: run-tests
+      - task: run-frontend-tests
         config:
           platform: linux
           image_resource:
@@ -23,16 +23,17 @@ jobs:
             - name: scrum-poker
           run:
             path: /bin/sh
-            args: ["scrum-poker/cicd/run_test.sh"]
-            # path: scrum-poker/cicd/run_test.sh
-            # args:
-              # - -c
-              # - |
-              #   echo "Node Version: $(node --version)"
-              #   echo "NPM Version: $(npm --version)"
-              #   ls
-              #   cd scrum-poker/client
-              #   ls
-              #   yarn
-              #   yarn test
+            args: ["scrum-poker/cicd/run_frontend_test.sh"]
+      - task: run-backend-tests
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: node, tag: "12" }
+          inputs:
+            - name: scrum-poker
+          run:
+            path: /bin/sh
+            args: ["scrum-poker/cicd/run_backend_test.sh"]
+
 
