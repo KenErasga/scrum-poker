@@ -7,23 +7,33 @@ resources:
       uri: https://github.com/KenErasga/scrum-poker.git
       branch: pipeline
 
+  - name: ecr-docker-reg
+    type: docker-image
+    icon: docker
+    source:
+      aws_access_key_id: ((aws-credential.aws-access-key))
+      aws_secret_access_key: ((aws-credential.aws-secret-key))
+      repository: ((aws-credential.aws-repo))/scrum-poker
+
 jobs:
-  - name: test
+  - name: tests
     public: true
     plan:
       - get: scrum-poker
         trigger: true
-      - task: run-frontend-tests
-        config:
-          platform: linux
-          image_resource:
-            type: registry-image
-            source: { repository: node, tag: "12" }
-          inputs:
-            - name: scrum-poker
-          run:
-            path: /bin/sh
-            args: ["scrum-poker/cicd/run_frontend_test.sh"]
+
+      # - task: run-frontend-tests
+      #   config:
+      #     platform: linux
+      #     image_resource:
+      #       type: registry-image
+      #       source: { repository: node, tag: "12" }
+      #     inputs:
+      #       - name: scrum-poker
+      #     run:
+      #       path: /bin/sh
+      #       args: ["scrum-poker/cicd/run_frontend_test.sh"]
+
       - task: run-backend-tests
         config:
           platform: linux
@@ -36,4 +46,13 @@ jobs:
             path: /bin/sh
             args: ["scrum-poker/cicd/run_backend_test.sh"]
 
-
+      - put: ecr-docker-reg
+        params:
+          build: ./scrum-poker
+          build_args:
+            COGNITO_REGION: ((react-app.cognito-region))
+            COGNITO_USER_POOL_ID: ((react-app.cognito-user-pool-id))
+            COGNITO_APP_CLIENT_ID: ((react-app.cognito-app-client-id))
+            SOCKETIO_HOST: ((react-app.socket-io-host))
+            AWS_ACCESS_KEY_ID: ((aws-credential.aws-access-key))
+            AWS_SECRET_KEY_ID: ((aws-credential.aws-secret-key))
