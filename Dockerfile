@@ -22,7 +22,6 @@ RUN cd server && npm run build
 
 FROM node:14 AS image
 WORKDIR '/app'
-# COPY --from=build /app /app
 COPY --from=build ./app/server/dist ./dist/
 COPY --from=build ./app/server/package.json ./dist/package.json
 RUN ls
