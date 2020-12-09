@@ -7,6 +7,7 @@ ARG AWS_ACCESS_KEY_ID
 ARG AWS_SECRET_KEY_ID
 WORKDIR '/app'
 COPY . /app
+RUN sysctl -w fs.inotify.max_user_watches=524288
 RUN ls
 RUN cd client && yarn
 RUN cd server && npm i
@@ -18,7 +19,7 @@ RUN cd client echo "REACT_APP_SOCKETIO_HOST=$SOCKETIO_HOST" >> .env
 RUN cd client echo "REACT_APP_AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> .env
 RUN cd client echo "REACT_APP_AWS_SECRET_KEY_ID=$AWS_SECRET_KEY_ID" >> .env
 RUN echo $COGNITO_REGION
-RUN cd server && npm run build
+RUN sysctl -w fs.inotify.max_user_watches=524288 && cd server && npm run build
 
 FROM node:14 AS image
 WORKDIR '/app'
