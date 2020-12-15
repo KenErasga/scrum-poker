@@ -5,7 +5,7 @@ resources:
     icon: github-circle
     source:
       uri: https://github.com/KenErasga/scrum-poker.git
-      branch: pipeline
+      branch: pipeline-test
 
   # - name: ecr-docker-reg
   #   type: docker-image
@@ -86,12 +86,21 @@ jobs:
               cp -r ./frontend-yarn/node_modules ./scrum-poker/client/
               cd ./scrum-poker/client 
               df -h
+              touch .env
+              echo "REACT_APP_COGNITO_REGION=((react-app-credentials.cognito-region))" >> .env
+              echo "REACT_APP_COGNITO_USER_POOL_ID=((react-app-credentials.cognito-user-pool-id))" >> .env
+              echo "REACT_APP_COGNITO_APP_CLIENT_ID=((react-app-credentials.cognito-app-client-id))" >> .env
+              echo "REACT_APP_SOCKETIO_HOST=((react-app-credentials.socket-io-host))" >> .env
+              echo "REACT_APP_AWS_ACCESS_KEY_ID=((aws-credentials.aws-access-key))" >> .env
+              echo "REACT_APP_AWS_SECRET_KEY_ID=((aws-credentials.aws-secret-key))" >> .env
+              echo ((react-app-credentials.cognito-user-pool-id))
+              ls
               yarn run build
               df -h
               cp -r ./node_modules ../../frontend-build/node_modules
               cp -r ./build ../../frontend-build/build
 
-      - task: run-build-backend
+      - task: run-npm-install-and-build-backend
         config:
           platform: linux
           image_resource:
@@ -101,6 +110,7 @@ jobs:
             - name: backend-build
           inputs:
             - name: scrum-poker
+            - name: frontend-build
           run:
             path: /bin/sh
             args:
@@ -109,8 +119,10 @@ jobs:
               cd ./scrum-poker/server 
               npm i
               npm install -g typescript && tsc
-              cp -r ./node_modules ../../backend-build/node_modules
+              cp -r ../../frontend-build/build ./dist/build
+              cp -r ./package.json ./dist
               cp -r ./dist ../../backend-build/dist
+              cp -r ./node_modules ../../backend-build/dist/node_modules
 
       - task: build-workspace
         config:
@@ -134,7 +146,7 @@ jobs:
               
               ls
               cd ./backend-build/dist && ls
-              cd ../../scrum-poker && ls
+              cd .. && ls
 
       # - put: ecr-docker-reg
       #   params:
