@@ -122,6 +122,7 @@ jobs:
               cp -r ../../frontend-build/build ./dist/build
               cp -r ./package.json ./dist
               cp -r ./dist ../../backend-build/dist
+              cp -r ../../scrum-poker/Dockerfile ../../backend-build/
               cp -r ./node_modules ../../backend-build/dist/node_modules
 
       - task: build-workspace
@@ -145,12 +146,11 @@ jobs:
               output_dir=workspace
               
               ls
-              cd ./backend-build/dist && ls
-              cd .. && ls
+              cd ./backend-build && ls && cd dist && ls
 
       # - put: ecr-docker-reg
       #   params:
-      #     build: ./scrum-poker
+      #     build: ./backend-build
       #     build_args:
       #       COGNITO_REGION: ((react-app-credentials.cognito-region))
       #       COGNITO_USER_POOL_ID: ((react-app-credentials.cognito-user-pool-id))
