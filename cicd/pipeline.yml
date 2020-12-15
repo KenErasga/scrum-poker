@@ -7,13 +7,14 @@ resources:
       uri: https://github.com/KenErasga/scrum-poker.git
       branch: pipeline-test
 
-  # - name: ecr-docker-reg
-  #   type: docker-image
-  #   icon: docker
-  #   source:
-  #     aws_access_key_id: ((aws-credentials.aws-access-key))
-  #     aws_secret_access_key: ((aws-credentials.aws-secret-key))
-  #     repository: ((aws-credentials.aws-repo))/scrum-poker
+  - name: ecr-docker-reg
+    type: docker-image
+    icon: docker
+    source:
+      aws_access_key_id: ((aws-credentials.aws-access-key))
+      aws_secret_access_key: ((aws-credentials.aws-secret-key))
+      repository: ((aws-credentials.aws-repo))/scrum-poker
+      tag: v5
 
 jobs:
   - name: tests
@@ -158,3 +159,7 @@ jobs:
       #       SOCKETIO_HOST: ((react-app-credentials.socket-io-host))
       #       AWS_ACCESS_KEY_ID: ((aws-credentials.aws-access-key))
       #       AWS_SECRET_KEY_ID: ((aws-credentials.aws-secret-key))
+
+      - put: ecr-docker-reg
+        params:
+          build: ./backend-build
