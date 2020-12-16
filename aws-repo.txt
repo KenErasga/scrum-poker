@@ -1,1 +1,1 @@
-https://942485681790.dkr.ecr.eu-west-2.amazonaws.com
+942485681790.dkr.ecr.eu-west-2.amazonaws.com
