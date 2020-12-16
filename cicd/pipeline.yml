@@ -134,20 +134,15 @@ jobs:
           platform: linux
           image_resource:
             type: registry-image
-            source: { repository: node, tag: "12" }
-
-          outputs:
-          - name: workspace
-          inputs:
-          - name: scrum-poker
-          - name: backend-build
+            source: { repository: amazon/aws-cli, tag: latest }
 
           run:
             path: /bin/sh
             args:
             - -c
             - |
-              output_dir=workspace
-              
-              ls
-              cd ./backend-build && ls && cd dist && ls
+
+              export TERM=msys
+              aws configure set aws_access_key_id ((aws-credentials.aws-access-key)) 
+              aws configure set aws_secret_access_key ((aws-credentials.aws-secret-key))
+              aws configure set region eu-west-2 && aws ecs update-service --cluster schrum-pocher --service scrum-poker-service --force-new-deployment
