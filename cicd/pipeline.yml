@@ -7,23 +7,22 @@ resources:
       uri: https://github.com/KenErasga/scrum-poker.git
       branch: pipeline-test
 
-  - name: ecr-docker-reg
+  - name: build-and-publish-to-ecr
     type: docker-image
     icon: docker
     source:
       aws_access_key_id: ((aws-credentials.aws-access-key))
       aws_secret_access_key: ((aws-credentials.aws-secret-key))
       repository: ((aws-credentials.aws-repo))/scrum-poker
-      tag: v5
 
 jobs:
-  - name: tests
+  - name: build-and-deploy
     public: true
     plan:
       - get: scrum-poker
         trigger: true
 
-      # - task: run-frontend-tests
+      # - task: frontend-tests
       #   config:
       #     platform: linux
       #     image_resource:
@@ -35,7 +34,7 @@ jobs:
       #       path: /bin/sh
       #       args: ["scrum-poker/cicd/run_frontend_test.sh"]
 
-      # - task: run-backend-tests
+      # - task: backend-tests
       #   config:
       #     platform: linux
       #     image_resource:
@@ -126,7 +125,11 @@ jobs:
               cp -r ../../scrum-poker/Dockerfile ../../backend-build/
               cp -r ./node_modules ../../backend-build/dist/node_modules
 
-      - task: build-workspace
+      - put: build-and-publish-to-ecr
+        params:
+          build: ./backend-build
+
+      - task: deploy-to-ecs
         config:
           platform: linux
           image_resource:
@@ -148,18 +151,3 @@ jobs:
               
               ls
               cd ./backend-build && ls && cd dist && ls
-
-      # - put: ecr-docker-reg
-      #   params:
-      #     build: ./backend-build
-      #     build_args:
-      #       COGNITO_REGION: ((react-app-credentials.cognito-region))
-      #       COGNITO_USER_POOL_ID: ((react-app-credentials.cognito-user-pool-id))
-      #       COGNITO_APP_CLIENT_ID: ((react-app-credentials.cognito-app-client-id))
-      #       SOCKETIO_HOST: ((react-app-credentials.socket-io-host))
-      #       AWS_ACCESS_KEY_ID: ((aws-credentials.aws-access-key))
-      #       AWS_SECRET_KEY_ID: ((aws-credentials.aws-secret-key))
-
-      - put: ecr-docker-reg
-        params:
-          build: ./backend-build
