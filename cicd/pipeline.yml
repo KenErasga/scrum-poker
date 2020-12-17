@@ -48,24 +48,24 @@ jobs:
       #       path: /bin/sh
       #       args: ["scrum-poker/cicd/run_backend_test.sh"]
 
-      - task: run-npm-install-frontend
-        config:
-          platform: linux
-          image_resource:
-            type: registry-image
-            source: { repository: node, tag: "12" }
-          outputs:
-            - name: frontend-yarn
-          inputs:
-            - name: scrum-poker
-          run:
-            path: /bin/sh
-            args:
-            - -c
-            - |
-              cd ./scrum-poker/client 
-              yarn
-              cp -r ./node_modules ../../frontend-yarn/node_modules
+      # - task: run-npm-install-frontend
+      #   config:
+      #     platform: linux
+      #     image_resource:
+      #       type: registry-image
+      #       source: { repository: node, tag: "12" }
+      #     outputs:
+      #       - name: frontend-yarn
+      #     inputs:
+      #       - name: scrum-poker
+      #     run:
+      #       path: /bin/sh
+      #       args:
+      #       - -c
+      #       - |
+      #         cd ./scrum-poker/client 
+      #         yarn
+      #         cp -r ./node_modules ../../frontend-yarn/node_modules
 
       - task: run-build-frontend
         config:
@@ -83,8 +83,8 @@ jobs:
             args:
             - -c
             - |
-              cp -r ./frontend-yarn/node_modules ./scrum-poker/client/
               cd ./scrum-poker/client 
+              yarn
               df -h
               touch .env
               echo "REACT_APP_COGNITO_REGION=((react-app-credentials.cognito-region))" >> .env
@@ -142,7 +142,9 @@ jobs:
             - -c
             - |
 
-              export TERM=msys
+              echo $TERM
+              export TERM=xterm
+              echo $TERM
               aws configure set aws_access_key_id ((aws-credentials.aws-access-key)) 
               aws configure set aws_secret_access_key ((aws-credentials.aws-secret-key))
               aws configure set region eu-west-2 && aws ecs update-service --cluster schrum-pocher --service scrum-poker-service --force-new-deployment
