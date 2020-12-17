@@ -7,7 +7,7 @@ resources:
       uri: https://github.com/KenErasga/scrum-poker.git
       branch: pipeline-test
 
-  - name: build-and-publish-to-ecr
+  - name: docker-build-and-publish-to-ecr
     type: docker-image
     icon: docker
     source:
@@ -22,52 +22,33 @@ jobs:
       - get: scrum-poker
         trigger: true
 
-      # - task: frontend-tests
-      #   config:
-      #     platform: linux
-      #     image_resource:
-      #       type: docker-image
-      #       source: { repository: node, tag: "12" }
-      #     inputs:
-      #       - name: scrum-poker
-      #     run:
-      #       path: /bin/sh
-      #       args: ["scrum-poker/cicd/run_frontend_test.sh"]
+      - task: frontend-tests
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: { repository: node, tag: "12" }
+          inputs:
+            - name: scrum-poker
+          run:
+            path: /bin/sh
+            args: ["scrum-poker/cicd/run_frontend_test.sh"]
 
-      # - task: backend-tests
-      #   config:
-      #     platform: linux
-      #     image_resource:
-      #       type: docker-image
-      #       source: { repository: node, tag: "12" }
-      #     outputs:
-      #       - name: backend-node-modules
-      #     inputs:
-      #       - name: scrum-poker
-      #     run:
-      #       path: /bin/sh
-      #       args: ["scrum-poker/cicd/run_backend_test.sh"]
+      - task: backend-tests
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: { repository: node, tag: "12" }
+          outputs:
+            - name: backend-node-modules
+          inputs:
+            - name: scrum-poker
+          run:
+            path: /bin/sh
+            args: ["scrum-poker/cicd/run_backend_test.sh"]
 
-      # - task: run-npm-install-frontend
-      #   config:
-      #     platform: linux
-      #     image_resource:
-      #       type: registry-image
-      #       source: { repository: node, tag: "12" }
-      #     outputs:
-      #       - name: frontend-yarn
-      #     inputs:
-      #       - name: scrum-poker
-      #     run:
-      #       path: /bin/sh
-      #       args:
-      #       - -c
-      #       - |
-      #         cd ./scrum-poker/client 
-      #         yarn
-      #         cp -r ./node_modules ../../frontend-yarn/node_modules
-
-      - task: run-build-frontend
+      - task: build-frontend
         config:
           platform: linux
           image_resource:
@@ -99,7 +80,7 @@ jobs:
               cp -r ./node_modules ../../frontend-build/node_modules
               cp -r ./build ../../frontend-build/build
 
-      - task: run-npm-install-and-build-backend
+      - task: build-backend
         config:
           platform: linux
           image_resource:
@@ -124,7 +105,7 @@ jobs:
               cp -r ../../scrum-poker/Dockerfile ../../backend-build/
               cp -r ./node_modules ../../backend-build/dist/node_modules
 
-      - put: build-and-publish-to-ecr
+      - put: docker-build-and-publish-to-ecr
         params:
           build: ./backend-build
 
