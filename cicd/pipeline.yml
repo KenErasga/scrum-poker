@@ -77,7 +77,6 @@ jobs:
             - name: frontend-build
           inputs:
             - name: scrum-poker
-            - name: frontend-yarn
           run:
             path: /bin/sh
             args:
