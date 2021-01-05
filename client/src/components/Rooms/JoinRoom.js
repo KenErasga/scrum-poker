@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core';
 
-import { AccountContext, AuthContext } from '../../providers/Cognito';
+import { useAccountContext, useAuthContext } from '../../providers/Cognito';
 import { FormInput, ButtonSubmit } from '../../common/index';
 import { useErrorHandler } from '../Error/ErrorHandler';
 
@@ -11,8 +11,8 @@ const JoinRoom = ({listJoin, listJoinRoomName}) => {
     const [room, setRoom] = useState(listJoinRoomName);
     const [password, setPassword] = useState('');
 
-    const { signIn } = useContext(AccountContext);
-    const { setIsAuthenticated } = useContext(AuthContext);
+    const { signIn } = useAccountContext();
+    const { setIsAuthenticated } = useAuthContext();
     const { setErrorMessage, setIsError, validationError } = useErrorHandler();
 
     const history = useHistory();

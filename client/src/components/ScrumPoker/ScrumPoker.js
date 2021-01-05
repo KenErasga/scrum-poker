@@ -1,6 +1,6 @@
 // General imports:
-import React, { useContext, useEffect, useState } from 'react';
-import { AccountContext, AuthContext } from '../../providers/Cognito';
+import React, { useEffect, useState } from 'react';
+import { useAccountContext, useAuthContext } from '../../providers/Cognito';
 import { Typography, Grid, makeStyles } from '@material-ui/core';
 import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
@@ -63,8 +63,8 @@ const HandleScrumPoker = ({ location }) => {
      */
     const [room, setRoom] = useState('');
 
-    const { logout } = useContext(AccountContext);
-    const { setIsAuthenticated } = useContext(AuthContext);
+    const { logout } = useAccountContext();
+    const { setIsAuthenticated } = useAuthContext();
 
     const history = useHistory();
     const classes = useStyles();

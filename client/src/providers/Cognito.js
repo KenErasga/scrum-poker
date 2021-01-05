@@ -1,5 +1,5 @@
 import { Auth } from 'aws-amplify'
-import React, { createContext } from 'react'
+import React, { createContext, useContext } from 'react'
 import AWS, { CognitoIdentityServiceProvider, Credentials } from "aws-sdk";
 
 /**
@@ -92,6 +92,7 @@ const CognitoAccess = ({ children }) => (
     </CognitoAccessContext.Provider>
 );
 
+const useAccountContext = () => useContext(AccountContext);
+const useAuthContext = () => useContext(AuthContext);
 
-
-export { Account, AccountContext, AuthContext, CognitoAccess, CognitoAccessContext }
+export { useAccountContext, useAuthContext, Account, AccountContext, AuthContext, CognitoAccess, CognitoAccessContext }

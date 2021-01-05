@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DropDownList renders correctly 1`] = `
+<div>
+  <div
+    className="MuiFormControl-root makeStyles-formControl-1"
+  >
+    <label
+      className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
+      data-shrink={true}
+      id="estimateLabel"
+    >
+      Estimate
+    </label>
+    <div
+      className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+      onClick={[Function]}
+    >
+      <select
+        aria-invalid={false}
+        className="MuiNativeSelect-root MuiNativeSelect-select MuiInputBase-input MuiInput-input"
+        disabled={false}
+        onAnimationStart={[Function]}
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        required={false}
+        value="1"
+      >
+        <option
+          value={1}
+        >
+          1
+        </option>
+        <option
+          value={2}
+        >
+          2
+        </option>
+        <option
+          value={3}
+        >
+          3
+        </option>
+      </select>
+      <svg
+        aria-hidden={true}
+        className="MuiSvgIcon-root MuiNativeSelect-icon"
+        focusable="false"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M7 10l5 5 5-5z"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+`;

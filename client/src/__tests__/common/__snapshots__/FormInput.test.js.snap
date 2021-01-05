@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FromInput FormInput renders correctly 1`] = `
+<div
+  className="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
+>
+  <label
+    className="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiFormLabel-filled"
+    data-shrink={true}
+    htmlFor="component-simple"
+  >
+    test-label
+  </label>
+  <div
+    aria-label="test-label-input"
+    className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl"
+    onClick={[Function]}
+  >
+    <input
+      aria-invalid={false}
+      className="MuiInputBase-input MuiInput-input"
+      disabled={false}
+      onAnimationStart={[Function]}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      required={false}
+      type="test"
+      value="value"
+    />
+  </div>
+</div>
+`;

@@ -1,0 +1,130 @@
+---
+resources:
+  - name: scrum-poker
+    type: git
+    icon: github-circle
+    source:
+      uri: https://github.com/KenErasga/scrum-poker.git
+      branch: master
+
+  - name: docker-build-and-publish-to-ecr
+    type: docker-image
+    icon: docker
+    source:
+      aws_access_key_id: ((aws-credentials.aws-access-key))
+      aws_secret_access_key: ((aws-credentials.aws-secret-key))
+      repository: ((aws-credentials.aws-repo))/scrum-poker
+
+jobs:
+  - name: build-and-deploy
+    public: true
+    plan:
+      - get: scrum-poker
+        trigger: true
+
+      - task: frontend-tests
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: { repository: node, tag: "12" }
+          inputs:
+            - name: scrum-poker
+          run:
+            path: /bin/sh
+            args: ["scrum-poker/cicd/run_frontend_test.sh"]
+
+      - task: backend-tests
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: { repository: node, tag: "12" }
+          outputs:
+            - name: backend-node-modules
+          inputs:
+            - name: scrum-poker
+          run:
+            path: /bin/sh
+            args: ["scrum-poker/cicd/run_backend_test.sh"]
+
+      - task: build-frontend
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: node, tag: "12" }
+          outputs:
+            - name: frontend-build
+          inputs:
+            - name: scrum-poker
+          run:
+            path: /bin/sh
+            args:
+            - -c
+            - |
+              cd ./scrum-poker/client 
+              yarn
+              df -h
+              touch .env
+              echo "REACT_APP_COGNITO_REGION=((react-app-credentials.cognito-region))" >> .env
+              echo "REACT_APP_COGNITO_USER_POOL_ID=((react-app-credentials.cognito-user-pool-id))" >> .env
+              echo "REACT_APP_COGNITO_APP_CLIENT_ID=((react-app-credentials.cognito-app-client-id))" >> .env
+              echo "REACT_APP_SOCKETIO_HOST=((react-app-credentials.socket-io-host))" >> .env
+              echo "REACT_APP_AWS_ACCESS_KEY_ID=((aws-credentials.aws-access-key))" >> .env
+              echo "REACT_APP_AWS_SECRET_KEY_ID=((aws-credentials.aws-secret-key))" >> .env
+              echo ((react-app-credentials.cognito-user-pool-id))
+              ls
+              yarn run build
+              df -h
+              cp -r ./node_modules ../../frontend-build/node_modules
+              cp -r ./build ../../frontend-build/build
+
+      - task: build-backend
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: node, tag: "12" }
+          outputs:
+            - name: backend-build
+          inputs:
+            - name: scrum-poker
+            - name: frontend-build
+          run:
+            path: /bin/sh
+            args:
+            - -c
+            - |
+              cd ./scrum-poker/server 
+              npm i
+              npm install -g typescript && tsc
+              cp -r ../../frontend-build/build ./dist/build
+              cp -r ./package.json ./dist
+              cp -r ./dist ../../backend-build/dist
+              cp -r ../../scrum-poker/Dockerfile ../../backend-build/
+              cp -r ./node_modules ../../backend-build/dist/node_modules
+
+      - put: docker-build-and-publish-to-ecr
+        params:
+          build: ./backend-build
+
+      - task: deploy-to-ecs
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: amazon/aws-cli, tag: latest }
+
+          run:
+            path: /bin/sh
+            args:
+            - -c
+            - |
+
+              echo $TERM
+              export TERM=xterm
+              echo $TERM
+              aws configure set aws_access_key_id ((aws-credentials.aws-access-key)) 
+              aws configure set aws_secret_access_key ((aws-credentials.aws-secret-key))
+              aws configure set region eu-west-2 && aws ecs update-service --cluster schrum-pocher --service scrum-poker-service --force-new-deployment

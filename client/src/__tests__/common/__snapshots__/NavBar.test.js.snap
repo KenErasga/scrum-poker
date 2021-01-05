@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavBar NavBar renders correctly 1`] = `
+<div>
+  <header
+    className="MuiPaper-root MuiAppBar-root MuiAppBar-positionStatic MuiAppBar-colorPrimary MuiPaper-elevation4"
+  >
+    <div
+      className="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
+    >
+      <h4
+        className="MuiTypography-root MuiTypography-h4"
+      >
+        Scrum Poker Online
+      </h4>
+    </div>
+  </header>
+</div>
+`;

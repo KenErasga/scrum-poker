@@ -1,13 +1,7 @@
-FROM node:14
-
+FROM node:14 AS image
 WORKDIR '/app'
-
 COPY . .
-
-RUN cd ./client && npm i
-RUN cd ./server && npm i
-RUN apt-get install curl
-
+RUN ls
+RUN cd dist
 EXPOSE 5000
-
-CMD cd ./server && npm run build && npm run start
+CMD cd dist && node Index.js

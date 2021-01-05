@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core'
-import { AccountContext, AuthContext } from '../../providers/Cognito';
+import { useAccountContext, useAuthContext } from '../../providers/Cognito';
 import { FormInput, ButtonSubmit } from '../../common';
 import { useErrorHandler } from '../Error/ErrorHandler';
 
@@ -10,8 +10,8 @@ const CreateRoom = () => {
     const [room, setRoom] = useState('');
     const [password, setPassword] = useState('');
 
-    const { signIn, signUp } = useContext(AccountContext);
-    const { setIsAuthenticated } = useContext(AuthContext);
+    const { signIn, signUp } = useAccountContext();
+    const { setIsAuthenticated } = useAuthContext();
 
     const {setIsError, setErrorMessage, validationError} = useErrorHandler();
 
@@ -34,6 +34,7 @@ const CreateRoom = () => {
             }).catch(error => {
                 validationError(error.message);
             })
+            
         }
     };
 
