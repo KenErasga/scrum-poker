@@ -42,6 +42,9 @@ const ErrorHandler = props => {
                 case "User already exists":
                     setErrorMessage('Room name already exists');
                     break
+                case "1 validation error detected: Value at 'password' failed to satisfy constraint: Member must have length greater than or equal to 6":
+                    setErrorMessage("Your password must have a length of 6 or more");
+                    break
                 default:
                     setErrorMessage(errorMessage);
             }

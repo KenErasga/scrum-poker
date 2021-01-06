@@ -2,15 +2,15 @@ import React from 'react';
 
 import { Button } from '@material-ui/core';
 
-const ButtonSubmit = ({ description }) => {
+const ButtonSubmit = ({ description, setAction }) => {
     return (
             <Button
-                type='submit' fullWidth
-                variant="contained"
+                type='submit'
                 color="primary"
                 aria-label={description}
-                >
-                    {description}
+                onClick={() => setAction(description)}
+            >
+                {description}
             </Button>
     );
 }
