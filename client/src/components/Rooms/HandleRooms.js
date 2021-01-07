@@ -2,13 +2,10 @@ import React, { useContext, useState, useEffect } from 'react'
 import { CognitoAccessContext } from '../../providers/Cognito';
 import JoinCreateRoom from './JoinCreateRoom';
 import JoinRoomModal from './JoinRoomModal';
-import { Container, Grid, Paper } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
 
 // MUI Imports:
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import { DataGrid } from '@material-ui/data-grid';
 
 const useStyles = makeStyles((theme) => ({

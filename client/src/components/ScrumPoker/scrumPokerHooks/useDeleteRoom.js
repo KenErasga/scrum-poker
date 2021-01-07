@@ -1,6 +1,6 @@
 import { useEffect, useContext } from 'react';
-import { useSocket } from '../../providers/SocketIO';
-import { AccountContext } from '../../providers/Cognito';
+import { useSocket } from '../../../providers/SocketIO';
+import { AccountContext } from '../../../providers/Cognito';
 
 const useDeleteRoom = (room, setIsAuthenticated, history) => {
     const { logout, deleteUser } = useContext(AccountContext);

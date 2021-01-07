@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSocket } from '../../providers/SocketIO';
+import { useSocket } from '../../../providers/SocketIO';
 
 const useExpand = () => {
     const [isExpanded, setIsExpanded] = useState(false);

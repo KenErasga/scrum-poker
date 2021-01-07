@@ -1,39 +1,40 @@
 // General imports:
 import React, { useEffect, useState } from 'react';
 import { useAccountContext, useAuthContext } from '../../providers/Cognito';
-import { Typography, Grid, makeStyles } from '@material-ui/core';
 import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
 import { DropDownList, ListItemButton, PokerCard } from '../../common/index';
-import useEstimate from './useEstimate';
-import useExpand from './useExpand';
-import useResetEstimate from './useResetEstimate'
-import useDeleteRoom from './useDeleteRoom'
+import {useEstimate, useExpand, useResetEstimate, useDeleteRoom } from './scrumPokerHooks';
 import { useSocket } from '../../providers/SocketIO';
 
-// List imports:
-import ListSubheader from '@material-ui/core/ListSubheader';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
+import {
+    CssBaseline,
+    Typography,
+    Grid,
+    makeStyles,
+    Paper,
+    ListSubheader,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Collapse,
+    Divider,
+} from '@material-ui/core';
+
+// Icons imports:
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
-import Divider from '@material-ui/core/Divider';
 import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
 import StarsIcon from '@material-ui/icons/Stars';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
-// MUI Classes 
+// MUI Classes
 const useStyles = makeStyles((theme) => ({
     gridItem: {
         display: "flex",
@@ -41,13 +42,13 @@ const useStyles = makeStyles((theme) => ({
         margin: 20,
         padding: 20
     },
-    root: {
-        width: '100%',
-        maxWidth: 360,
-        backgroundColor: theme.palette.background.paper,
-    },
-    nested: {
-        paddingLeft: theme.spacing(4),
+    paper: {
+        marginTop: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        elevation: 10,
+        variant: "outlined",
     },
 }));
 
@@ -146,9 +147,11 @@ const HandleScrumPoker = ({ location }) => {
         {/**
          * Room name
          */}
-        <Typography className={classes.gridItem} variant="h4">
-            Room Name: {room}
-        </Typography>
+        <Paper className={classes.paper}>
+            <Typography className={classes.gridItem} variant="h4">
+                Room Name: {room}
+            </Typography>
+        </Paper>
         {/**
          * Main screen wrapper
          */}
@@ -191,7 +194,7 @@ const HandleScrumPoker = ({ location }) => {
                     <List className={classes.root}>
                         {
                             isScrumMaster ?
-                                
+
                                 <ListSubheader component="div" id="nested-list-subheader-2">
                                     ScrumMaster Controls:
                             </ListSubheader>
@@ -285,7 +288,7 @@ const UserListItem = ({
                         <ListItemIcon>
                             <PersonAddDisabledIcon />
                         </ListItemIcon>
-                        <ListItemText primary={`Kick User`} onClick={() => emitKickUser(user)}/>
+                        <ListItemText primary={`Kick User`} onClick={() => emitKickUser(user)} />
                     </ListItem>
                 </List>
             </Collapse>
