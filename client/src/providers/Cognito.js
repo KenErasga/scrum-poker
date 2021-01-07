@@ -19,7 +19,7 @@ const AuthContext = createContext();
 
 const deleteUser = async (room) => { 
     try {
-        const test = await CISP.adminDeleteUser({
+        await CISP.adminDeleteUser({
             UserPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
             Username: room,
         }).promise();
@@ -74,14 +74,25 @@ const CognitoAccessContext = createContext();
 /**
  * Grabs the entire User Pool within Cognito
  */
-const listCognitoUsers = () => {
-    return new Promise((res, rej) => {
-        CISP.listUsers({
+const listCognitoUsers = async () => {
+
+    try {
+        let newData = [];
+        await CISP.listUsers({
             UserPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID
-        }, (err, data) => {
-            err ? rej(err) : res(data);
+        }).promise().then(data => {
+            data.Users.map((u, index) => {
+                u.UserCreateDate = Date.parse(u.UserCreateDate);
+                u.UserCreateDate = new Date(u.UserCreateDate).toLocaleDateString();
+                u.id = index;
+                newData.push({id: u.id, Username: u.Username, UserCreateDate: u.UserCreateDate})
+            });
         });
-    });
+
+        return newData
+    } catch (e) {
+        throw e
+    }
 }
 
 const CognitoAccess = ({ children }) => (
