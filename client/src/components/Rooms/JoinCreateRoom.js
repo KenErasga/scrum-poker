@@ -7,7 +7,7 @@ import { useErrorHandler } from '../Error/ErrorHandler';
 
 const JoinCreateRoom = ({ listJoin, listJoinRoomName }) => {
     const [name, setName] = useState('');
-    const [room, setRoom] = useState('');
+    const [room, setRoom] = useState(listJoinRoomName);
     const [password, setPassword] = useState('');
     const [action, setAction] = useState('');
 
@@ -52,7 +52,7 @@ const JoinCreateRoom = ({ listJoin, listJoinRoomName }) => {
                     {listJoin ? null : FormInput({ InputLabel: 'Room Name', type: '', value: room, handleOnChange: setRoom })}
                     {FormInput({ InputLabel: 'Password', type: 'password', value: password, handleOnChange: setPassword })}
                     <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group" fullWidth>
-                        {ButtonSubmit({ description: 'create', setAction })}
+                        {listJoin ? null : ButtonSubmit({ description: 'create', setAction }) }
                         {ButtonSubmit({ description: 'join', setAction })}
                     </ButtonGroup>
                 </form>
