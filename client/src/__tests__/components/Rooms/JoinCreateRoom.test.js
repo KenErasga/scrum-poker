@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateRoom from '../../../components/Rooms/CreateRoom';
+import JoinCreateRoom from '../../../components/Rooms/JoinCreateRoom';
 import { render, screen, fireEvent } from "@testing-library/react";
 
 jest.mock('../../../components/Error/ErrorHandler.js', () => ({
@@ -22,15 +22,15 @@ jest.mock('../../../providers/Cognito.js', () => ({
     })
 }));
 
-describe('CreateRoom', () => {
+describe('JoinCreateRoom', () => {
 
-    it('CreateRoom renders correctly', () => {
-        const tree = render(<CreateRoom />);
+    it('JoinCreateRoom renders correctly', () => {
+        const tree = render(<JoinCreateRoom />);
         expect(tree).toMatchSnapshot();
     });
 
-    it('CreateRoom fireEvent correctly', async () => {
-        const tree = render(<CreateRoom />);
+    it('JoinCreateRoom fireEvent correctly', async () => {
+        const tree = render(<JoinCreateRoom />);
         // const inputName = tree.getByLabelText('Name');
         // const submit = tree.getByLabelText('create');
         // const test = await tree.findAllByLabelText()
