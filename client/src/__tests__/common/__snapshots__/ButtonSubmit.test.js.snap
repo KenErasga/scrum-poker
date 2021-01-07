@@ -3,9 +3,10 @@
 exports[`ButtonSubmit renders correctly 1`] = `
 <button
   aria-label="test-description"
-  className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-fullWidth"
+  className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary"
   disabled={false}
   onBlur={[Function]}
+  onClick={[Function]}
   onDragLeave={[Function]}
   onFocus={[Function]}
   onKeyDown={[Function]}

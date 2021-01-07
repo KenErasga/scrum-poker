@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CreateRoom CreateRoom fireEvent correctly 1`] = `
+exports[`JoinCreateRoom JoinCreateRoom fireEvent correctly 1`] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body>
@@ -11,11 +11,13 @@ Object {
           style="display: flex; justify-content: center; margin: 10px; padding: 10px;"
         >
           <form
-            style="width: 70%;"
+            style="width: 100%;"
           >
-            <h4>
-              Create a room
-            </h4>
+            <h6
+              class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom"
+            >
+              Create or Join a room
+            </h6>
             <div
               class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
             >
@@ -82,21 +84,42 @@ Object {
                 />
               </div>
             </div>
-            <button
-              aria-label="create"
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-fullWidth"
-              tabindex="0"
-              type="submit"
+            <div
+              aria-label="contained primary button group"
+              class="MuiButtonGroup-root MuiButtonGroup-fullWidth MuiButtonGroup-contained"
+              role="group"
             >
-              <span
-                class="MuiButton-label"
+              <button
+                aria-label="create"
+                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary MuiButton-fullWidth"
+                tabindex="0"
+                type="submit"
               >
-                create
-              </span>
-              <span
-                class="MuiTouchRipple-root"
-              />
-            </button>
+                <span
+                  class="MuiButton-label"
+                >
+                  create
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+              <button
+                aria-label="join"
+                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary MuiButton-fullWidth"
+                tabindex="0"
+                type="submit"
+              >
+                <span
+                  class="MuiButton-label"
+                >
+                  join
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -109,11 +132,13 @@ Object {
         style="display: flex; justify-content: center; margin: 10px; padding: 10px;"
       >
         <form
-          style="width: 70%;"
+          style="width: 100%;"
         >
-          <h4>
-            Create a room
-          </h4>
+          <h6
+            class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom"
+          >
+            Create or Join a room
+          </h6>
           <div
             class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
           >
@@ -180,21 +205,42 @@ Object {
               />
             </div>
           </div>
-          <button
-            aria-label="create"
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-fullWidth"
-            tabindex="0"
-            type="submit"
+          <div
+            aria-label="contained primary button group"
+            class="MuiButtonGroup-root MuiButtonGroup-fullWidth MuiButtonGroup-contained"
+            role="group"
           >
-            <span
-              class="MuiButton-label"
+            <button
+              aria-label="create"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary MuiButton-fullWidth"
+              tabindex="0"
+              type="submit"
             >
-              create
-            </span>
-            <span
-              class="MuiTouchRipple-root"
-            />
-          </button>
+              <span
+                class="MuiButton-label"
+              >
+                create
+              </span>
+              <span
+                class="MuiTouchRipple-root"
+              />
+            </button>
+            <button
+              aria-label="join"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary MuiButton-fullWidth"
+              tabindex="0"
+              type="submit"
+            >
+              <span
+                class="MuiButton-label"
+              >
+                join
+              </span>
+              <span
+                class="MuiTouchRipple-root"
+              />
+            </button>
+          </div>
         </form>
       </div>
     </div>
@@ -253,7 +299,7 @@ Object {
 }
 `;
 
-exports[`CreateRoom CreateRoom renders correctly 1`] = `
+exports[`JoinCreateRoom JoinCreateRoom renders correctly 1`] = `
 Object {
   "asFragment": [Function],
   "baseElement": <body>
@@ -264,11 +310,13 @@ Object {
           style="display: flex; justify-content: center; margin: 10px; padding: 10px;"
         >
           <form
-            style="width: 70%;"
+            style="width: 100%;"
           >
-            <h4>
-              Create a room
-            </h4>
+            <h6
+              class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom"
+            >
+              Create or Join a room
+            </h6>
             <div
               class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
             >
@@ -335,21 +383,42 @@ Object {
                 />
               </div>
             </div>
-            <button
-              aria-label="create"
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-fullWidth"
-              tabindex="0"
-              type="submit"
+            <div
+              aria-label="contained primary button group"
+              class="MuiButtonGroup-root MuiButtonGroup-fullWidth MuiButtonGroup-contained"
+              role="group"
             >
-              <span
-                class="MuiButton-label"
+              <button
+                aria-label="create"
+                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary MuiButton-fullWidth"
+                tabindex="0"
+                type="submit"
               >
-                create
-              </span>
-              <span
-                class="MuiTouchRipple-root"
-              />
-            </button>
+                <span
+                  class="MuiButton-label"
+                >
+                  create
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+              <button
+                aria-label="join"
+                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary MuiButton-fullWidth"
+                tabindex="0"
+                type="submit"
+              >
+                <span
+                  class="MuiButton-label"
+                >
+                  join
+                </span>
+                <span
+                  class="MuiTouchRipple-root"
+                />
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -362,11 +431,13 @@ Object {
         style="display: flex; justify-content: center; margin: 10px; padding: 10px;"
       >
         <form
-          style="width: 70%;"
+          style="width: 100%;"
         >
-          <h4>
-            Create a room
-          </h4>
+          <h6
+            class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom"
+          >
+            Create or Join a room
+          </h6>
           <div
             class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth"
           >
@@ -433,21 +504,42 @@ Object {
               />
             </div>
           </div>
-          <button
-            aria-label="create"
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-fullWidth"
-            tabindex="0"
-            type="submit"
+          <div
+            aria-label="contained primary button group"
+            class="MuiButtonGroup-root MuiButtonGroup-fullWidth MuiButtonGroup-contained"
+            role="group"
           >
-            <span
-              class="MuiButton-label"
+            <button
+              aria-label="create"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary MuiButton-fullWidth"
+              tabindex="0"
+              type="submit"
             >
-              create
-            </span>
-            <span
-              class="MuiTouchRipple-root"
-            />
-          </button>
+              <span
+                class="MuiButton-label"
+              >
+                create
+              </span>
+              <span
+                class="MuiTouchRipple-root"
+              />
+            </button>
+            <button
+              aria-label="join"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedContained MuiButtonGroup-groupedContainedHorizontal MuiButtonGroup-groupedContainedPrimary MuiButton-containedPrimary MuiButton-fullWidth"
+              tabindex="0"
+              type="submit"
+            >
+              <span
+                class="MuiButton-label"
+              >
+                join
+              </span>
+              <span
+                class="MuiTouchRipple-root"
+              />
+            </button>
+          </div>
         </form>
       </div>
     </div>
