@@ -122,7 +122,7 @@ const Socket = props => {
     const onScrumMasterUpdate = (setScrumMaster, handleEstimate) => {
         socket.on("scrum-master-update", (data) => {
             setScrumMaster(data);
-            handleEstimate("N/A"); // We reset their estimate on becoming the Scrum Master
+            handleEstimate("?"); // We reset their estimate on becoming the Scrum Master
         })
     }
 
@@ -139,7 +139,7 @@ const Socket = props => {
 
     const emitResetEstimate = () => {
         try {
-                socket.emit('resetEstimates', "N/A", (data) => {
+                socket.emit('resetEstimates', "?", (data) => {
                     socketError(data);
                 });
         } catch (error) {
@@ -176,7 +176,7 @@ const Socket = props => {
     const onResetEstimate = (setEstimate) => {
         try {
             socket.once('resetEstimate', ({ reset }) => {
-                setEstimate('N/A');
+                setEstimate('?');
             });
         } catch (error) {
             disconnectError(error);

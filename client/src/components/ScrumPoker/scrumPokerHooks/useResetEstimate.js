@@ -9,7 +9,7 @@ const useResetEstimate = (estimate, estimates, setEstimate) => {
     }, [estimates]);
 
     const handleResetEstimate = () => {
-        setEstimate("N/A");
+        setEstimate("?");
         emitResetEstimate();
         emitExpand(true);
     };

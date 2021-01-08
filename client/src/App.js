@@ -38,7 +38,7 @@ const App = () => {
         <Account>
           <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
             <CognitoAccess>
-              <NavBar />
+              <NavBar isAuthenticated={isAuthenticated}/>
               <Router>
                 <ErrorHandler>
                   <Route path='/' exact component={HandleRooms} />

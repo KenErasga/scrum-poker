@@ -1,16 +1,17 @@
 import React from 'react'
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
 
-const NavBar = () => {
+const NavBar = ({ isAuthenticated }) => {
     return (
         <div>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h4" component="h4">
-                        Scrum Poker Online
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+            {isAuthenticated ? null :
+                <AppBar position="fixed">
+                    <Toolbar>
+                        <Typography variant="h4" component="h4">
+                            Scrum Poker Online
+        </Typography>
+                    </Toolbar>
+                </AppBar>}
         </div>
     )
 }
