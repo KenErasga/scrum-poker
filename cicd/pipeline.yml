@@ -127,4 +127,4 @@ jobs:
               echo $TERM
               aws configure set aws_access_key_id ((aws-credentials.aws-access-key)) 
               aws configure set aws_secret_access_key ((aws-credentials.aws-secret-key))
-              aws configure set region eu-west-2 && aws ecs update-service --cluster schrum-pocher --service scrum-poker-service --force-new-deployment
+              aws configure set region eu-west-2 && aws ecs update-service --cluster schrum-pocher --service scrum-poker-service --force-new-deployment &

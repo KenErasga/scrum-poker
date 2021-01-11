@@ -1,7 +1,7 @@
 const { exec } = require("child_process");
 
 module.exports = function addSecrets() {
-    exec("kubectl create secret generic aws-credentials -n my-release-main\
+    exec("kubectl create secret generic aws-credentials -n my-release-main \
     --from-file=aws-access-key=./aws-access-key.txt \
     --from-file=aws-secret-key=./aws-secret-key.txt \
     --from-file=aws-repo=./aws-repo.txt", (error, stdout, stderr) => {
@@ -16,7 +16,7 @@ module.exports = function addSecrets() {
     console.log(`aws-credentials secret creation is successful: ${stdout}`);
     });
 
-    exec("kubectl create secret generic react-app-credentials -n my-release-main\
+    exec("kubectl create secret generic react-app-credentials -n my-release-main \
     --from-file=cognito-region=./cognito-region.txt \
     --from-file=cognito-user-pool-id=./cognito-user-pool-id.txt \
     --from-file=cognito-app-client-id=./cognito-app-client-id.txt  \
