@@ -1,6 +1,6 @@
 const { exec } = require("child_process");
 
-    exec("minikube delete && minikube start --disk-size=250000mb --memory=4gb --driver=virtualbox", (error, stdout, stderr) => {
+    exec("minikube delete && minikube start --disk-size=100000mb --memory=6gb --driver=kvm2", (error, stdout, stderr) => {
         if (error) {
             console.log(`error on minikube: ${error.message}`);
             return;
