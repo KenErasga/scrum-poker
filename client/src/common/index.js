@@ -4,6 +4,6 @@ import PokerCard from './PokerCard';
 import PrivateRoute from './PrivateRoute';
 import ListItemButton from './ListItemButton';
 import DropDownList from './DropDownList';
-import NavBar from './NavBar';
+import HeaderBar from './HeaderBar';
 
-export { ButtonSubmit, FormInput, PokerCard, PrivateRoute, ListItemButton, DropDownList, NavBar }
+export { ButtonSubmit, FormInput, PokerCard, PrivateRoute, ListItemButton, DropDownList, HeaderBar }

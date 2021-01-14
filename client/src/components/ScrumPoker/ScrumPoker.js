@@ -4,18 +4,15 @@ import { useAccountContext, useAuthContext } from '../../providers/Cognito';
 import config from '../../config/config'
 import { useHistory } from 'react-router-dom';
 import queryString from 'query-string';
-import { DropDownList, ListItemButton, PokerCard } from '../../common/index';
+import { DropDownList, ListItemButton, PokerCard, HeaderBar } from '../../common/index';
 import { useEstimate, useExpand, useResetEstimate, useDeleteRoom } from './scrumPokerHooks';
 import { useSocket } from '../../providers/SocketIO';
 import UserListItem from './userListItem'
 
 // MAterial UI
-import PropTypes from 'prop-types';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -69,10 +66,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   appBar: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('sm')]: drawerWidth ? {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
-    },
+    } : null
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -201,7 +198,6 @@ const HandleScrumPoker = ({ location }, props) => {
           <DropDownList estimate={estimate} numberList={config.numberList} setEstimate={handleEstimate}></DropDownList>
         </ListItem>
         <ListItemButton description="Exit Room" onClick={exit} Icon={ExitToAppIcon} />
-
       </List>
       <List>
         <Divider />
@@ -209,7 +205,7 @@ const HandleScrumPoker = ({ location }, props) => {
           isScrumMaster ?
             <ListSubheader>
               Controls:
-                        </ListSubheader>
+            </ListSubheader>
             : null
         }
         {isScrumMaster ?
@@ -237,7 +233,7 @@ const HandleScrumPoker = ({ location }, props) => {
         <List>
           <ListSubheader>
             Users:
-                            </ListSubheader>
+          </ListSubheader>
           {estimates.map((user, i) => {
             if (user.scrum_master !== true) {
               return <UserListItem
@@ -264,22 +260,16 @@ const HandleScrumPoker = ({ location }, props) => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap align='center'>
-            Room Name: {room}
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <HeaderBar description={`Room Name: ${room}`} styling={classes.appBar}/>
+      <IconButton
+        color="inherit"
+        aria-label="open drawer"
+        edge="start"
+        onClick={handleDrawerToggle}
+        className={classes.menuButton}
+      >
+        <MenuIcon />
+      </IconButton>
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
@@ -333,14 +323,6 @@ const HandleScrumPoker = ({ location }, props) => {
       </main>
     </div>
   );
-};
-
-HandleScrumPoker.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
 };
 
 export default HandleScrumPoker;

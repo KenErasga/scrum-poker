@@ -3,7 +3,7 @@ import { Auth } from 'aws-amplify'
 import { Account, AuthContext, CognitoAccess } from './providers/Cognito';
 import PrivateRoute from './common/PrivateRoute';
 
-import { NavBar } from './common/index';
+import { HeaderBar } from './common/index';
 import HandleRooms from './components/Rooms/HandleRooms';
 import HandleScrumPoker from './components/ScrumPoker/ScrumPoker';
 import { ErrorHandler } from './components/Error/ErrorHandler'
@@ -38,7 +38,6 @@ const App = () => {
         <Account>
           <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
             <CognitoAccess>
-              <NavBar isAuthenticated={isAuthenticated}/>
               <Router>
                 <ErrorHandler>
                   <Route path='/' exact component={HandleRooms} />
