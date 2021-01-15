@@ -16,18 +16,18 @@ import ListItem from '@material-ui/core/ListItem';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import { ThemeProvider } from "@material-ui/core/styles";
+import {Switch } from '@material-ui/core';
+
 
 import {
-  Typography,
   Grid,
   makeStyles,
   useTheme,
-  Paper,
   ListSubheader,
   List,
   Divider,
+  Toolbar,
 } from '@material-ui/core';
 
 // Icons imports:
@@ -36,7 +36,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import AddBoxIcon from '@material-ui/icons/AddBox';
+import {useDarkTheme} from '../hooks/useDarkTheme';
 
 const drawerWidth = 240;
 
@@ -85,6 +85,11 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+  },
+  switch: {
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
   },
 }));
 
@@ -137,7 +142,9 @@ const HandleScrumPoker = ({ location }, props) => {
   const { expandAll, handleExpandClick } = useExpand();
   const { handleResetEstimate } = useResetEstimate(estimate, estimates, setEstimate);
   const { deleteRoom } = useDeleteRoom(room, setIsAuthenticated, history);
-
+  const { darkState,
+    setDarkState,
+    darkTheme } = useDarkTheme();
   /**
    * Handles controlling the state of an 'expanded' user in the list.
    * It corresponds to their index in the estimates
@@ -188,7 +195,7 @@ const HandleScrumPoker = ({ location }, props) => {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
+      <Toolbar className={classes.toolbar} />
       <List component="scrum-controls">
         <Divider />
         <ListSubheader>
@@ -258,7 +265,9 @@ const HandleScrumPoker = ({ location }, props) => {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
+    
     <div className={classes.root}>
+      <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <HeaderBar description={`Room Name: ${room}`} styling={classes.appBar}/>
       <IconButton
@@ -321,6 +330,14 @@ const HandleScrumPoker = ({ location }, props) => {
           </Grid>
         </Grid>
       </main>
+      <Switch 
+                    checked={darkState}
+                    onChange={e => setDarkState(!darkState)}
+                    color="primary"
+                    name="darkState"
+                    className={classes.switch}
+                  />
+      </ThemeProvider>
     </div>
   );
 };

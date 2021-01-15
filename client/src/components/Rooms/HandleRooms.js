@@ -4,17 +4,22 @@ import JoinCreateRoom from './JoinCreateRoom';
 import JoinRoomModal from './JoinRoomModal';
 import TabPanel from './TabPanel';
 import { HeaderBar } from '../../common/index'
-import { Grid, Paper, Tabs, Tab } from '@material-ui/core';
+import { Grid, Paper, Tabs, Tab, Box, Typography } from '@material-ui/core';
 
+import {useDarkTheme} from '../hooks/useDarkTheme';
 // MUI Imports:
 import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
+import {Switch } from '@material-ui/core';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
+import { ThemeProvider } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
+    height: 224,
   },
   appBar: {
     position: "static"
@@ -23,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
-    height: 224,
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -37,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    elevation: 10,
+    elevation: 100,
     variant: "outlined",
   },
   control: {
@@ -45,6 +49,11 @@ const useStyles = makeStyles((theme) => ({
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
+  },
+  switch: {
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
   },
 }));
 
@@ -61,7 +70,7 @@ const HandleRooms = () => {
 
   useEffect(() => {
     listCognitoUsers().then(data => setUserList(data));
-  }, [userList])
+  }, [userList.length])
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 100 },
@@ -80,11 +89,21 @@ const HandleRooms = () => {
     }))
   };
 
-  return (<div>
+  const { darkState,
+    setDarkState,
+    darkTheme } = useDarkTheme();
+
+  return (<ThemeProvider theme={darkTheme}>
+    
+    <div>
+    
     <HeaderBar description="Scrum Poker Online" styling={classes.appBar}/>
-    <div className={classes.vTabRoot}>
+    <CssBaseline>
+    <Box component= 'div' className={classes.vTabRoot}>
+    
+      <Paper>
       <Tabs
-        orientation="vertical"
+      orientation="vertical"
         variant="scrollable"
         value={tabIndex}
         onChange={handleChange}
@@ -92,30 +111,35 @@ const HandleRooms = () => {
         className={classes.tabs}
       >
         <Tab label="Join or Create Room" id="vertical-tab-0" aria-controls="vertical-tabpanel-0" />
-        <Tab label="List of Rooms" id="vertical-tab-1" aria-controls="vertical-tabpanel-1" />
+        <Tab label="Find a room to join" id="vertical-tab-1" aria-controls="vertical-tabpanel-1" />
       </Tabs>
+      </Paper>
       <TabPanel value={tabIndex} index={0} className={classes.tabContainer}>
-        <Grid item xs={12}>
-          <Grid container justify='center' spacing={2}>
+          <Grid justify='center' spacing={2}>
             <Paper className={classes.paper}>
               <JoinCreateRoom />
             </Paper>
-          </Grid>
         </Grid>
       </TabPanel>
       <TabPanel value={tabIndex} index={1} className={classes.tabContainer}>
-        <Grid item xs={12}>
-          <Grid container className={classes.control}>
-            <blockquote>Note: You can click on a room to join it!</blockquote>
-            <div style={{ height: 400, width: '100%' }}>
+          <Grid className={classes.control}>
+            <Paper style={{ height: 400, width: '100%' }}>
               <DataGrid rows={userList} columns={columns} pageSize={5} onRowClick={(event) => onRowClick(event)} />
-            </div>
+            </Paper>
             <JoinRoomModal modalState={modalState} setModalState={setModalState} />
           </Grid>
-        </Grid>
       </TabPanel>
-    </div>
+    </Box>
+    <Switch 
+                    checked={darkState}
+                    onChange={e => setDarkState(!darkState)}
+                    color="primary"
+                    name="darkState"
+                    className={classes.switch}
+                  />
+                  </CssBaseline>
   </div>
+  </ThemeProvider>
   )
 };
 

@@ -91,7 +91,7 @@ const listCognitoUsers = async () => {
 
         return newData
     } catch (e) {
-        throw e
+        throw new Error(e)
     }
 }
 

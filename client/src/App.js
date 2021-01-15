@@ -3,12 +3,14 @@ import { Auth } from 'aws-amplify'
 import { Account, AuthContext, CognitoAccess } from './providers/Cognito';
 import PrivateRoute from './common/PrivateRoute';
 
-import { HeaderBar } from './common/index';
 import HandleRooms from './components/Rooms/HandleRooms';
 import HandleScrumPoker from './components/ScrumPoker/ScrumPoker';
 import { ErrorHandler } from './components/Error/ErrorHandler'
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ErrorAlert } from './components/Error/ErrorAlert';
+
+
+import { DarkTheme } from './components/hooks/useDarkTheme';
 
 const App = () => {
   console.log("App running in mode: ", process.env.NODE_ENV)
@@ -40,14 +42,17 @@ const App = () => {
             <CognitoAccess>
               <Router>
                 <ErrorHandler>
-                  <Route path='/' exact component={HandleRooms} />
-                  <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated} />
+                  <DarkTheme>
+                    <Route path='/' exact component={HandleRooms} />
+                    <PrivateRoute path='/scrum-poker' component={HandleScrumPoker} isAuthenticated={isAuthenticated} />
+                  </DarkTheme>
                   <ErrorAlert />
                 </ErrorHandler>
               </Router>
             </CognitoAccess>
           </AuthContext.Provider>
-        </Account>}
+        </Account>
+      }
     </div>
   )
 }
