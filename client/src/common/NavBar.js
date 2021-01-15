@@ -8,7 +8,7 @@ const NavBar = ({ isAuthenticated }) => {
                 <AppBar position="fixed">
                     <Toolbar>
                         <Typography variant="h4" component="h4">
-                            Scrum Poker Online
+                            Scrum Poker Online - Version 1
         </Typography>
                     </Toolbar>
                 </AppBar>}
