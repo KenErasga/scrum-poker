@@ -4,7 +4,7 @@ import JoinCreateRoom from './JoinCreateRoom';
 import RoomList from './RoomList';
 import TabPanel from './TabPanel';
 import { HeaderBar } from '../../common/index'
-import { Grid, Paper, Tabs, Tab, CssBaseline, Container } from '@material-ui/core';
+import { Grid, Paper, Tabs, Tab, CssBaseline, Container, FormControlLabel } from '@material-ui/core';
 import JoinRoomModal from './JoinRoomModal';
 
 import {useDarkTheme} from '../hooks/useDarkTheme';
@@ -139,13 +139,13 @@ const HandleRooms = () => {
 
     <JoinRoomModal modalState={modalState} setModalState={setModalState} />
 
-    <Switch 
-        checked={darkState}
-        onChange={e => setDarkState(!darkState)}
-        color="primary"
-        name="darkState"
-        className={classes.switch}
-      />
+    <FormControlLabel control={      <Switch 
+                    checked={darkState}
+                    onChange={e => setDarkState(!darkState)}
+                    color="primary"
+                    name="darkState"
+                    className={classes.switch}
+        />} label="Dark Mode" className={classes.switch}/>
   </div>
   </ThemeProvider>
   )

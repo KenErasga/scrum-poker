@@ -17,7 +17,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from "@material-ui/core/styles";
-import {Switch } from '@material-ui/core';
+import {Button, Switch, FormControlLabel } from '@material-ui/core';
 
 
 import {
@@ -91,6 +91,14 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(2),
     right: theme.spacing(2),
   },
+  exit: {
+    position: 'absolute',
+    top: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  }
 }));
 
 
@@ -204,7 +212,6 @@ const HandleScrumPoker = ({ location }, props) => {
         <ListItem description="Send Estimate">
           <DropDownList estimate={estimate} numberList={config.numberList} setEstimate={handleEstimate}></DropDownList>
         </ListItem>
-        <ListItemButton description="Exit Room" onClick={exit} Icon={ExitToAppIcon} />
       </List>
       <List>
         <Divider />
@@ -269,7 +276,9 @@ const HandleScrumPoker = ({ location }, props) => {
     <div className={classes.root}>
       <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <HeaderBar description={`Room Name: ${room}`} styling={classes.appBar}/>
+      <HeaderBar description={`Room Name: ${room}`} styling={classes.appBar} title={classes.title}>
+        <Button  color='inherit' onClick={exit} endIcon={<ExitToAppIcon />}>Exit</Button>
+      </HeaderBar>
       <IconButton
         color="inherit"
         aria-label="open drawer"
@@ -329,14 +338,15 @@ const HandleScrumPoker = ({ location }, props) => {
 
           </Grid>
         </Grid>
+
       </main>
-      <Switch 
+      <FormControlLabel control={      <Switch 
                     checked={darkState}
                     onChange={e => setDarkState(!darkState)}
                     color="primary"
                     name="darkState"
-                    className={classes.switch}
-                  />
+                    className={classes.switch}         
+        />} label="Dark Mode" className={classes.switch}/>
       </ThemeProvider>
     </div>
   );

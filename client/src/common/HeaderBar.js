@@ -1,14 +1,15 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
 
-const HeaderBar = ({description, styling}) => {
+const HeaderBar = (props) => {
     return (
         <div>
-            <AppBar className={styling}>
+            <AppBar className={props.styling}>
                 <Toolbar>
-                    <Typography variant="h4" component="h4" noWrap>
-                        {description}
+                    <Typography variant="h4" component="h4" className={props.title}>
+                        {props.description}
                     </Typography>
+                    {props.children}
                 </Toolbar>
             </AppBar>
         </div>
