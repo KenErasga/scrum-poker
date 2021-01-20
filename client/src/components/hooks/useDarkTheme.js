@@ -14,7 +14,7 @@ const DarkTheme = (props) => {
 
     const palletType = darkState ? "dark" : "light";
     const mainPrimaryColor = darkState ? deepPurple[500] : blue[500];
-    const mainSecondaryColor = darkState ? deepPurple[900] : lightBlue[300];
+    const mainSecondaryColor = darkState ? deepPurple[300] : blue[900];
 
     const darkTheme = createMuiTheme({
       palette: {

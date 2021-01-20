@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         color: '#fff',
     },
     modalContainer: {
-        backgroundColor: "white"
+        backgroundColor: theme.palette.background.paper,
     },
     modalReset: {
         border: "none",

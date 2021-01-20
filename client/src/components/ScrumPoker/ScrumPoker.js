@@ -98,7 +98,7 @@ const HandleScrumPoker = ({ location }, props) => {
   /* Scrum master flag (determine if this user is SM) */
   const [isScrumMaster, setScrumMaster] = useState(false);
   /* User control list selected index tracker */
-  const [selectedUserIndex, setSelectedUserIndex] = React.useState(-1);
+  const [selectedUserIndex, setSelectedUserIndex] = useState(-1);
   /**
    * Could reduce the useState's here, the user based fields could be a single object
    * with all user state inside. Until then I've added a new state for scrummy above ^.

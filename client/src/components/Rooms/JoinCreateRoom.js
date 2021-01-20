@@ -1,15 +1,36 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Typography, ButtonGroup } from '@material-ui/core'
+import { Box, Typography, ButtonGroup, Paper, CssBaseline, makeStyles } from '@material-ui/core'
 import { useAccountContext, useAuthContext } from '../../providers/Cognito';
 import { FormInput, ButtonSubmit } from '../../common';
 import { useErrorHandler } from '../Error/ErrorHandler';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      flexGrow: 1,
+      backgroundColor: theme.palette.background.paper,
+    },
+    paper: {
+      marginTop: theme.spacing(6),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      elevation: 10,
+      variant: "outlined",
+      margin: 20,
+      padding: 20,
+    },
+    control: {
+      padding: theme.spacing(6),
+    },
+  }));
 
 const JoinCreateRoom = ({ listJoin, listJoinRoomName }) => {
     const [name, setName] = useState('');
     const [room, setRoom] = useState(listJoinRoomName);
     const [password, setPassword] = useState('');
     const [action, setAction] = useState('');
+    const classes = useStyles();
 
     const { signIn, signUp } = useAccountContext();
     const { setIsAuthenticated } = useAuthContext();
@@ -45,7 +66,7 @@ const JoinCreateRoom = ({ listJoin, listJoinRoomName }) => {
 
     return (
         <div>
-            <Box style={{ display: "flex", justifyContent: "center", margin: 10, padding: 10 }} >
+            <Paper className={classes.paper} >
                 <form style={{ width: "100%" }} onSubmit={event => onSubmit(event)}>
                     {listJoin ? <Typography variant="h6" component="h6" gutterBottom>Joining room: {listJoinRoomName}</Typography> : <Typography variant="h6" component="h6" gutterBottom>Create or Join a room</Typography>}
                     {FormInput({ InputLabel: 'Name', type: '', value: name, handleOnChange: setName })}
@@ -56,7 +77,7 @@ const JoinCreateRoom = ({ listJoin, listJoinRoomName }) => {
                         {ButtonSubmit({ description: 'join', setAction })}
                     </ButtonGroup>
                 </form>
-            </Box>
+            </Paper>
         </div>
     )
 }

@@ -5,7 +5,7 @@ resources:
     icon: github-circle
     source:
       uri: https://github.com/KenErasga/scrum-poker.git
-      branch: master
+      branch: refactor/scrum-poker
 
   - name: docker-build-and-publish-to-ecr
     type: docker-image

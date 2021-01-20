@@ -1,17 +1,16 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { CognitoAccessContext } from '../../providers/Cognito';
 import JoinCreateRoom from './JoinCreateRoom';
-import JoinRoomModal from './JoinRoomModal';
+import RoomList from './RoomList';
 import TabPanel from './TabPanel';
 import { HeaderBar } from '../../common/index'
-import { Grid, Paper, Tabs, Tab, Box, Typography } from '@material-ui/core';
+import { Grid, Paper, Tabs, Tab, CssBaseline, Container } from '@material-ui/core';
+import JoinRoomModal from './JoinRoomModal';
 
 import {useDarkTheme} from '../hooks/useDarkTheme';
 // MUI Imports:
 import { makeStyles } from '@material-ui/core/styles';
-import { DataGrid } from '@material-ui/data-grid';
-import {Switch } from '@material-ui/core';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { Switch } from '@material-ui/core';
 
 import { ThemeProvider } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
@@ -19,22 +18,21 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
-    height: 224,
   },
   appBar: {
-    position: "static"
+    position: "static",
   },
   vTabRoot: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    display: 'flex',
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
   tabContainer: {
-    width: "90%"
+    width: "100%",
+    backgroundColor: theme.palette.background.default,
   },
   paper: {
     marginTop: theme.spacing(6),
@@ -46,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   control: {
     padding: theme.spacing(6),
+    backgroundColor: theme.palette.background.default,
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
@@ -55,6 +54,14 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(2),
     right: theme.spacing(2),
   },
+  gridContainer: {
+    padding: theme.spacing(6),
+    spacing: 2,
+    backgroundColor: theme.palette.background.default,
+  },
+  containerTab: {
+    backgroundColor: theme.palette.background.default,
+  }
 }));
 
 const HandleRooms = () => {
@@ -64,13 +71,17 @@ const HandleRooms = () => {
   const [modalState, setModalState] = useState({
     username: "",
     open: false
-  });
+});
 
   const { listCognitoUsers } = useContext(CognitoAccessContext);
 
   useEffect(() => {
     listCognitoUsers().then(data => setUserList(data));
   }, [userList.length])
+
+  const { darkState,
+    setDarkState,
+    darkTheme } = useDarkTheme();
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 100 },
@@ -84,60 +95,57 @@ const HandleRooms = () => {
 
   const onRowClick = (event) => {
     setModalState((p) => ({
-      open: true,
-      username: event.row.Username
+        open: true,
+        username: event.row.Username
     }))
-  };
-
-  const { darkState,
-    setDarkState,
-    darkTheme } = useDarkTheme();
+};
 
   return (<ThemeProvider theme={darkTheme}>
-    
+    <CssBaseline/>
     <div>
     
     <HeaderBar description="Scrum Poker Online" styling={classes.appBar}/>
-    <CssBaseline>
-    <Box component= 'div' className={classes.vTabRoot}>
     
-      <Paper>
-      <Tabs
-      orientation="vertical"
-        variant="scrollable"
-        value={tabIndex}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        className={classes.tabs}
-      >
-        <Tab label="Join or Create Room" id="vertical-tab-0" aria-controls="vertical-tabpanel-0" />
-        <Tab label="Find a room to join" id="vertical-tab-1" aria-controls="vertical-tabpanel-1" />
-      </Tabs>
+    <div className={classes.vTabRoot}>
+    
+      <Paper variant="square" position="static">
+        <Tabs
+          variant="fullWidth"
+          value={tabIndex}
+          onChange={handleChange}
+          aria-label="Vertical tabs example"
+          className={classes.tabs}
+        >
+          <Tab label="Join or Create Room" id="vertical-tab-0" aria-controls="vertical-tabpanel-0" />
+          <Tab label="Find a room to join" id="vertical-tab-1" aria-controls="vertical-tabpanel-1" />
+        </Tabs>
       </Paper>
+
+      <Container classname={classes.containerTab}>
       <TabPanel value={tabIndex} index={0} className={classes.tabContainer}>
-          <Grid justify='center' spacing={2}>
-            <Paper className={classes.paper}>
+        <Grid container className={classes.gridContainer} justify='center'>
               <JoinCreateRoom />
-            </Paper>
         </Grid>
       </TabPanel>
-      <TabPanel value={tabIndex} index={1} className={classes.tabContainer}>
-          <Grid className={classes.control}>
-            <Paper style={{ height: 400, width: '100%' }}>
-              <DataGrid rows={userList} columns={columns} pageSize={5} onRowClick={(event) => onRowClick(event)} />
-            </Paper>
-            <JoinRoomModal modalState={modalState} setModalState={setModalState} />
+      </Container>
+
+      <TabPanel value={tabIndex} index={1} className={classes.tabContainer} >
+          <Grid className={classes.control} >
+            <RoomList userList={userList} onRowClick={onRowClick}></RoomList>
           </Grid>
       </TabPanel>
-    </Box>
+      
+    </div>
+
+    <JoinRoomModal modalState={modalState} setModalState={setModalState} />
+
     <Switch 
-                    checked={darkState}
-                    onChange={e => setDarkState(!darkState)}
-                    color="primary"
-                    name="darkState"
-                    className={classes.switch}
-                  />
-                  </CssBaseline>
+        checked={darkState}
+        onChange={e => setDarkState(!darkState)}
+        color="primary"
+        name="darkState"
+        className={classes.switch}
+      />
   </div>
   </ThemeProvider>
   )
